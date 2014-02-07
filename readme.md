@@ -4,6 +4,8 @@
 
 A good way to make sure your sites are responsive.
 
+It's speedy and generates 100 screenshots from 10 different websites in just over a minute.
+
 ![](screenshot.png)
 
 ![](screenshot-output.png)
