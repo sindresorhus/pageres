@@ -34,12 +34,12 @@ var opts = nopt({
 });
 
 var urls = opts.argv.remain;
-var sizes = opts.sizes.split(',');
+var sizes = opts.sizes && opts.size.split(',');
 
 //TODO: keep me up to date: http://www.w3counter.com/globalstats.php
 var defRes = '1366x768 1024x768 1280x800 1920x1080 1440x900 768x1024 1280x1024 1600x900 320x480 320x568';
 
-if (opts.help) {
+if (opts.help || urls.length === 0) {
 	return showHelp();
 }
 
