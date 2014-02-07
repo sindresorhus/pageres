@@ -1,0 +1,49 @@
+{
+  "name": "pageres",
+  "version": "0.0.0",
+  "description": "Get screenshots of websites in different resolutions",
+  "license": "MIT",
+  "repository": "sindresorhus/pageres",
+  "bin": {
+    "pageres": "cli.js"
+  },
+  "author": {
+    "name": "Sindre Sorhus",
+    "email": "sindresorhus@gmail.com",
+    "url": "http://sindresorhus.com"
+  },
+  "engines": {
+    "node": ">=0.10.0"
+  },
+  "scripts": {
+    "test": "mocha"
+  },
+  "files": [
+    "index.js",
+    "cli.js"
+  ],
+  "keywords": [
+    "page",
+    "website",
+    "site",
+    "web",
+    "url",
+    "resolution",
+    "size",
+    "screenshot",
+    "screen",
+    "responsive",
+    "cli"
+  ],
+  "dependencies": {
+    "each-async": "~0.1.2",
+    "chalk": "~0.4.0",
+    "nopt": "~2.1.2",
+    "webshot": "~0.10.0",
+    "slugify": "~0.1.0",
+    "slugify-url": "~1.0.1"
+  },
+  "devDependencies": {
+    "mocha": "*"
+  }
+}
