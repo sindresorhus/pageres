@@ -2,7 +2,7 @@
 
 > Get screenshots of the websites in different resolutions
 
-A good way to make sure your sites are responsive.
+A good way to make sure your websites are responsive.
 
 It's speedy and generates 100 screenshots from 10 different websites in just over a minute.
 
