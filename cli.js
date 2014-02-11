@@ -37,7 +37,7 @@ var urls = opts.argv.remain;
 var sizes = opts.sizes && opts.sizes.split(',');
 
 //TODO: keep me up to date: http://www.w3counter.com/globalstats.php
-var defRes = '1366x768 1024x768 1280x800 1920x1080 1440x900 768x1024 1280x1024 1600x900 320x480 320x568';
+var defRes = '1366x768,1024x768,1280x800,1920x1080,1440x900,768x1024,1280x1024,1600x900,320x480,320x568';
 
 if (opts.help || urls.length === 0) {
 	return showHelp();
@@ -57,8 +57,14 @@ if (!sizes) {
 		sizes = fs.readFileSync(opts.file, 'utf8').trim().split('\n');
 	} else {
 		console.log('Neither ' + chalk.underline('--sizes') + ' nor ' + chalk.underline('--file') + ' specified. Falling back to the ten most popular screen resolutions according to w3counter as of January 2014:\n' + defRes);
-		sizes = defRes.split(' ');
+		sizes = defRes.split(',');
 	}
+}
+
+// detect if the user inputed the sizes wrong. good UX ftw.
+if (urls.some(function (el) { return /^\d{3,4}x\d{3,4}$/.test(el) })) {
+	console.log(chalk.yellow('The --sizes needs to be comma separated, not space ;)'));
+	return showHelp();
 }
 
 pageres(urls, sizes, function (err) {
