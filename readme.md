@@ -71,7 +71,7 @@ You can use the most popular resolutions for your site with `pageres` by followi
 - Click the `Screen Resolution` link in the middle of the screen
 - Click the `Export` button at the top, then `Google Spreadsheets`, and select yes for importing
 - Select all the resolutions and copy them into a new file and save it
-- In your terminal run: `pageres website.com --file file-from-above-step.txt`
+- In your terminal run: `pageres website.com < file-from-above-step.txt`
 
 
 ## License
