@@ -26,14 +26,16 @@ $ pageres --help
 
 Get screenshots of websites in different resolutions.
 
+Specify urls and screen resolutions you want as arguments. Order doesn't matter.
+
 Usage
-  pageres <url> [<url> ...] --sizes <resolution>,[<resolution>,...]
+  pageres <url> <resolution> [<resolution> <url> ...]
   pageres <url> [<url> ...] --file <filepath>
 
 Example
-  pageres todomvc.com yeoman.io --sizes 1366x768,1600x900
+  pageres todomvc.com yeoman.io 1366x768 1600x900
 
-If --sizes is not specified it will fall back to the ten most popular screen resolutions according to w3counter.
+If no sizes are specified it will fall back to the ten most popular screen resolutions according to w3counter.
 
 The <filepath> file should be formatted to have one <resolution> on each line.
 ```
