@@ -3,6 +3,7 @@
 var fs = require('fs');
 var nopt = require('nopt');
 var chalk = require('chalk');
+var sudoBlock = require('sudo-block');
 var pageres = require('./index');
 
 function showHelp() {
@@ -33,6 +34,7 @@ var opts = nopt({
 	f: '--file'
 });
 
+sudoBlock();
 
 var args = opts.argv.remain;
 var urls = args.filter(/./.test.bind(/\./));

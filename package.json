@@ -40,7 +40,8 @@
     "chalk": "~0.4.0",
     "nopt": "~2.1.2",
     "webshot": "~0.10.0",
-    "slugify-url": "~1.0.1"
+    "slugify-url": "~1.0.1",
+    "sudo-block": "~0.3.0"
   },
   "devDependencies": {
     "mocha": "*"
