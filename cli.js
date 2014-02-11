@@ -51,7 +51,7 @@ function init(args) {
 	}
 
 	var urls = _.uniq(args.filter(/./.test.bind(/\./)));
-	var sizes = _.uniq(args.filter(/./.test.bind(/^\d{3,4}x\d{3,4}$/i)))
+	var sizes = _.uniq(args.filter(/./.test.bind(/^\d{3,4}x\d{3,4}$/i)));
 
 	if (urls.length === 0) {
 		console.error(chalk.yellow('Specify at least one url'));
