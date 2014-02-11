@@ -8,8 +8,7 @@ function generateSizes(url, sizes, cb) {
 		// strip `www.` and convert to valid filename
 		var filenameUrl = slugifyUrl(url.replace(/^(?:https?:\/\/)?www\./, ''));
 		var filename = filenameUrl + '-' + el + '.png';
-		var separator = ['x', 'X'];
-		var dim = el.split(new RegExp(separator.join('|'), 'g'));
+		var dim = el.split(/x/i);
 		var options = {
 			windowSize: {
 				width: dim[0],
