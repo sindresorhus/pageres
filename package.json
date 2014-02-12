@@ -1,6 +1,6 @@
 {
   "name": "pageres",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "Get screenshots of websites in different resolutions",
   "license": "MIT",
   "repository": "sindresorhus/pageres",
