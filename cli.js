@@ -60,7 +60,7 @@ function init(args) {
 
 	if (sizes.length === 0) {
 		console.log('No sizes specified. Falling back to the ten most popular screen resolutions according to w3counter as of January 2014:\n' + defRes);
-		sizes = defRes.split(',');
+		sizes = defRes.split(' ');
 	}
 
 	pageres(urls, sizes, function (err) {
