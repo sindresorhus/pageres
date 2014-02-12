@@ -37,7 +37,7 @@ Usage
   cat <file> | pageres [<url> <resolution> ...]
 
 Example
-  pageres todomvc.com yeoman.io 1366x768 1600x900
+  pageres todomvc.com yeoman.io 1366x768,1600x900
   pageres 1366x768 < urls.txt
   cat screen-resolutions.txt | pageres todomvc.com yeoman.io
 
