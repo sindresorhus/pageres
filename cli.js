@@ -4,6 +4,7 @@ var nopt = require('nopt');
 var chalk = require('chalk');
 var sudoBlock = require('sudo-block');
 var _ = require('lodash');
+var stdin = require('get-stdin');
 var pageres = require('./index');
 
 function showHelp() {
@@ -24,21 +25,6 @@ function showHelp() {
 	console.log('');
 	console.log('You can also pipe in a newline separated list of urls and screen resolutions which will get merged with the arguments.');
 	console.log('If no screen resolutions are specified it will fall back to the ten most popular ones according to w3counter.');
-}
-
-function getStdin(cb) {
-	var ret = '';
-
-	process.stdin.resume();
-	process.stdin.setEncoding('utf8');
-
-	process.stdin.on('data', function (data) {
-		ret += data;
-	});
-
-	process.stdin.on('end', function () {
-		cb(ret);
-	});
 }
 
 function init(args) {
@@ -94,7 +80,7 @@ var defRes = '1366x768 1024x768 1280x800 1920x1080 1440x900 768x1024 1280x1024 1
 if (process.stdin.isTTY) {
 	init(args);
 } else {
-	getStdin(function (data) {
+	stdin(function (data) {
 		[].push.apply(args, data.trim().split('\n'));
 		init(args);
 	});
