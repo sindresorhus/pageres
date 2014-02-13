@@ -1,10 +1,12 @@
 #!/usr/bin/env node
 'use strict';
+var fs = require('fs');
 var nopt = require('nopt');
 var chalk = require('chalk');
 var sudoBlock = require('sudo-block');
 var _ = require('lodash');
 var stdin = require('get-stdin');
+var eachAsync = require('each-async');
 var pageres = require('./index');
 
 function showHelp() {
@@ -49,15 +51,25 @@ function init(args) {
 		sizes = defRes.split(' ');
 	}
 
-	pageres(urls, sizes, function (err) {
+	pageres(urls, sizes, function (err, items) {
 		if (err) {
-			throw new Error(chalk.red('✗ ' + err.message));
+			throw err;
 		}
 
-		var u = urls.length;
-		var s = sizes.length;
+		eachAsync(items, function (el, i, next) {
+			var stream = el.pipe(fs.createWriteStream(el.filename));
+			stream.on('finish', next);
+			stream.on('error', next);
+		}, function (err) {
+			if (err) {
+				throw err;
+			}
 
-		console.log(chalk.green('\n✓ Successfully generated %d screenshots from %d %s and %d %s'), u * s, u, (u === 1 ? 'url' : 'urls'), s, (s === 1 ? 'resolution': 'resolutions'));
+			var u = urls.length;
+			var s = sizes.length;
+
+			console.log(chalk.green('\n✓ Successfully generated %d screenshots from %d %s and %d %s'), u * s, u, (u === 1 ? 'url' : 'urls'), s, (s === 1 ? 'resolution': 'resolutions'));
+		});
 	});
 }
 

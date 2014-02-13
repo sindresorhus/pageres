@@ -39,11 +39,12 @@
     "each-async": "~0.1.2",
     "chalk": "~0.4.0",
     "nopt": "~2.1.2",
-    "webshot": "~0.10.0",
     "slugify-url": "~1.0.1",
     "sudo-block": "~0.3.0",
     "lodash": "~2.4.1",
-    "get-stdin": "~0.1.0"
+    "get-stdin": "~0.1.0",
+    "phantomjs": "~1.9.7-1",
+    "base64-stream": "~0.1.2"
   },
   "devDependencies": {
     "mocha": "*",
