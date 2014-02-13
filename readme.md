@@ -1,6 +1,8 @@
-# pageres [![Build Status](https://travis-ci.org/sindresorhus/pageres.png?branch=master)](https://travis-ci.org/sindresorhus/pageres)
+# <img src="logo.png" width="500" alt="pageres">
 
 > Get screenshots of the websites in different resolutions
+
+[![Build Status](https://travis-ci.org/sindresorhus/pageres.png?branch=master)](https://travis-ci.org/sindresorhus/pageres)
 
 A good way to make sure your websites are responsive.
 
