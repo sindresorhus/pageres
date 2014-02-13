@@ -16,7 +16,7 @@
     "node": ">=0.10.0"
   },
   "scripts": {
-    "test": "mocha"
+    "test": "mocha --timeout 0"
   },
   "files": [
     "index.js",
@@ -45,6 +45,7 @@
     "lodash": "~2.4.1"
   },
   "devDependencies": {
-    "mocha": "*"
+    "mocha": "*",
+    "rimraf": "~2.2.6"
   }
 }
