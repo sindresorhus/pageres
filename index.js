@@ -3,12 +3,13 @@ var webshot = require('webshot');
 var eachAsync = require('each-async');
 var slugifyUrl = require('slugify-url');
 
-function generateSizes(url, sizes, cb) {
+function generateSizes(url, sizes, delay, cb) {
 	eachAsync(sizes, function (el, i, next) {
 		// strip `www.` and convert to valid filename
 		var filenameUrl = slugifyUrl(url.replace(/^(?:https?:\/\/)?www\./, ''));
 		var filename = filenameUrl + '-' + el + '.png';
 		var dim = el.split('x');
+		var delayTime = delay || 0;
 		var options = {
 			windowSize: {
 				width: dim[0],
@@ -17,14 +18,15 @@ function generateSizes(url, sizes, cb) {
 			shotSize: {
 				width: 'window',
 				height: 'all'
-			}
+			},
+			renderDelay: delayTime
 		};
 
 		webshot(url.toLowerCase(), filename, options, next);
 	}, cb);
 }
 
-module.exports = function (urls, sizes, cb) {
+module.exports = function (urls, sizes, delay, cb) {
 	cb = cb || function () {};
 
 	if (urls.length === 0) {
@@ -36,6 +38,6 @@ module.exports = function (urls, sizes, cb) {
 	}
 
 	eachAsync(urls, function (url, i, next) {
-		generateSizes(url, sizes, next);
+		generateSizes(url, sizes, delay, next);
 	}, cb);
 };

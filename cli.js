@@ -10,7 +10,7 @@ function showHelp() {
 	console.log('Get screenshots of websites in different resolutions.');
 	console.log('');
 	console.log(chalk.underline('Usage'));
-	console.log('  pageres <url> [<url> ...] --sizes <resolution>,[<resolution>,...]');
+	console.log('  pageres <url> [<url> ...] --sizes <resolution>,[<resolution>,...] --delay <delay>');
 	console.log('  pageres <url> [<url> ...] --file <filepath>');
 	console.log('');
 	console.log(chalk.underline('Example'));
@@ -30,6 +30,7 @@ var opts = nopt({
 	h: '--help',
 	v: '--version',
 	s: '--sizes',
+	d: '--delay',
 	f: '--file'
 });
 
@@ -61,7 +62,7 @@ if (!sizes) {
 	}
 }
 
-pageres(urls, sizes, function (err) {
+pageres(urls, sizes, delay, function (err) {
 	if (err) {
 		throw new Error(chalk.red('✗ ' + err.message));
 	}
