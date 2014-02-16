@@ -18,7 +18,8 @@ beforeEach(function (cb) {
 
 it('should generate screenshots', function (cb) {
 	this.timeout(20000);
-	pageres(['yeoman.io', 'todomvc.com'], ['1024x768', '640x480'], function () {
+	var outputDirectory = './';
+	pageres(['yeoman.io', 'todomvc.com'], ['1024x768', '640x480'], outputDirectory, function () {
 		assert(fs.existsSync('yeoman.io-640x480.png'));
 		assert(fs.existsSync('yeoman.io-1024x768.png'));
 		assert(fs.existsSync('todomvc.com-640x480.png'));

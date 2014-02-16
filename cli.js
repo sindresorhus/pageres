@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 'use strict';
 var nopt = require('nopt');
+var path = require('path');
 var chalk = require('chalk');
 var sudoBlock = require('sudo-block');
 var _ = require('lodash');
@@ -14,12 +15,12 @@ function showHelp() {
 	console.log('Specify urls and screen resolutions as arguments. Order doesn\'t matter.');
 	console.log('');
 	console.log(chalk.underline('Usage'));
-	console.log('  pageres <url> <resolution> [<resolution> <url> ...]');
+	console.log('  pageres <url> <resolution> [<resolution> <url> ...] --output <output directory>');
 	console.log('  pageres [<url> <resolution> ...] < <file>');
 	console.log('  cat <file> | pageres [<url> <resolution> ...]');
 	console.log('');
 	console.log(chalk.underline('Example'));
-	console.log('  pageres todomvc.com yeoman.io 1366x768 1600x900');
+	console.log('  pageres todomvc.com yeoman.io 1366x768 1600x900 --output ~/Downloads/');
 	console.log('  pageres 1366x768 < urls.txt');
 	console.log('  cat screen-resolutions.txt | pageres todomvc.com yeoman.io');
 	console.log('');
@@ -27,7 +28,7 @@ function showHelp() {
 	console.log('If no screen resolutions are specified it will fall back to the ten most popular ones according to w3counter.');
 }
 
-function init(args) {
+function init(args, output) {
 	if (opts.help) {
 		return showHelp();
 	}
@@ -38,7 +39,7 @@ function init(args) {
 
 	var urls = _.uniq(args.filter(/./.test, /\./));
 	var sizes = _.uniq(args.filter(/./.test, /^\d{3,4}x\d{3,4}$/i));
-
+	
 	if (urls.length === 0) {
 		console.error(chalk.yellow('Specify at least one url'));
 		return showHelp();
@@ -48,8 +49,8 @@ function init(args) {
 		console.log('No sizes specified. Falling back to the ten most popular screen resolutions according to w3counter as of January 2014:\n' + defRes);
 		sizes = defRes.split(' ');
 	}
-
-	pageres(urls, sizes, function (err) {
+	
+	pageres(urls, sizes, output, function (err) {
 		if (err) {
 			throw new Error(chalk.red('✗ ' + err.message));
 		}
@@ -66,10 +67,12 @@ sudoBlock();
 
 var opts = nopt({
 	help: Boolean,
-	version: Boolean
+	version: Boolean,
+	output: path
 }, {
 	h: '--help',
-	v: '--version'
+	v: '--version',
+	o: '--output'
 });
 
 var args = opts.argv.remain;
@@ -78,10 +81,10 @@ var args = opts.argv.remain;
 var defRes = '1366x768 1024x768 1280x800 1920x1080 1440x900 768x1024 1280x1024 1600x900 320x480 320x568';
 
 if (process.stdin.isTTY) {
-	init(args);
+	init(args, opts['output']);
 } else {
 	stdin(function (data) {
 		[].push.apply(args, data.trim().split('\n'));
-		init(args);
+		init(args, opts['output']);
 	});
 }

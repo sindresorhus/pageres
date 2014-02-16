@@ -3,7 +3,7 @@ var webshot = require('webshot');
 var eachAsync = require('each-async');
 var slugifyUrl = require('slugify-url');
 
-function generateSizes(url, sizes, cb) {
+function generateSizes(url, sizes, outputDirectory, cb) {
 	eachAsync(sizes, function (el, i, next) {
 		// strip `www.` and convert to valid filename
 		var filenameUrl = slugifyUrl(url.replace(/^(?:https?:\/\/)?www\./, ''));
@@ -19,13 +19,14 @@ function generateSizes(url, sizes, cb) {
 				height: 'all'
 			}
 		};
-
-		webshot(url.toLowerCase(), filename, options, next);
+		var fileLocation = outputDirectory + '/' + filename;
+		webshot(url.toLowerCase(), fileLocation, options, next);
 	}, cb);
 }
 
-module.exports = function (urls, sizes, cb) {
+module.exports = function (urls, sizes, outputDirectory, cb) {
 	cb = cb || function () {};
+	outputDirectory = outputDirectory || "./";
 
 	if (urls.length === 0) {
 		return cb(new Error('`urls` required'));
@@ -36,6 +37,6 @@ module.exports = function (urls, sizes, cb) {
 	}
 
 	eachAsync(urls, function (url, i, next) {
-		generateSizes(url, sizes, next);
+		generateSizes(url, sizes, outputDirectory, next);
 	}, cb);
 };
