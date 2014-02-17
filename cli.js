@@ -7,6 +7,7 @@ var sudoBlock = require('sudo-block');
 var _ = require('lodash');
 var stdin = require('get-stdin');
 var eachAsync = require('each-async');
+var getres = require('getres');
 var pageres = require('./index');
 
 function showHelp() {
@@ -29,28 +30,7 @@ function showHelp() {
 	console.log('If no screen resolutions are specified it will fall back to the ten most popular ones according to w3counter.');
 }
 
-function init(args) {
-	if (opts.help) {
-		return showHelp();
-	}
-
-	if (opts.version) {
-		return console.log(require('./package').version);
-	}
-
-	var urls = _.uniq(args.filter(/./.test, /\./));
-	var sizes = _.uniq(args.filter(/./.test, /^\d{3,4}x\d{3,4}$/i));
-
-	if (urls.length === 0) {
-		console.error(chalk.yellow('Specify at least one url'));
-		return showHelp();
-	}
-
-	if (sizes.length === 0) {
-		console.log('No sizes specified. Falling back to the ten most popular screen resolutions according to w3counter as of January 2014:\n' + defRes);
-		sizes = defRes.split(' ');
-	}
-
+function generate(urls, sizes) {
 	pageres(urls, sizes, function (err, items) {
 		if (err) {
 			throw err;
@@ -74,6 +54,42 @@ function init(args) {
 	});
 }
 
+function init(args) {
+	if (opts.help) {
+		return showHelp();
+	}
+
+	if (opts.version) {
+		return console.log(require('./package').version);
+	}
+
+	var urls = _.uniq(args.filter(/./.test, /\./));
+	var sizes = _.uniq(args.filter(/./.test, /^\d{3,4}x\d{3,4}$/i));
+
+	if (urls.length === 0) {
+		console.error(chalk.yellow('Specify at least one url'));
+		return showHelp();
+	}
+
+	if (sizes.length === 0) {
+		return getres(function (err, data) {
+			if (err) {
+				throw err;
+			}
+
+			if (data.length === 0) {
+				throw new Error('No sizes available');
+			}
+
+			sizes = data;
+			console.log('No sizes specified. Falling back to the ten most popular screen resolutions according to w3counter as of January 2014:\n' + sizes.join(' '));
+
+			generate(urls, sizes);
+		});
+	}
+
+	generate(urls, sizes);
+}
 
 sudoBlock();
 
@@ -86,9 +102,6 @@ var opts = nopt({
 });
 
 var args = opts.argv.remain;
-
-//TODO: keep me up to date: http://www.w3counter.com/globalstats.php
-var defRes = '1366x768 1024x768 1280x800 1920x1080 1440x900 768x1024 1280x1024 1600x900 320x480 320x568';
 
 if (process.stdin.isTTY) {
 	init(args);
