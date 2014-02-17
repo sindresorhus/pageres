@@ -47,7 +47,6 @@
     "base64-stream": "~0.1.2"
   },
   "devDependencies": {
-    "mocha": "*",
-    "rimraf": "~2.2.6"
+    "mocha": "*"
   }
 }

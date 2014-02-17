@@ -18,7 +18,7 @@ function runPhantomjs(options) {
 	process.stderr.setMaxListeners(0);
 	cp.stderr.on('data', function (data) {
 		// ignore phantomjs noise
-		if (/\*\*\* WARNING/.test(data)) {
+		if (/ phantomjs\[/.test(data)) {
 			return;
 		}
 
