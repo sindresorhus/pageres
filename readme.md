@@ -17,8 +17,8 @@ It's speedy and generates 100 screenshots from 10 different websites in just ove
 
 ### Install
 
-```
-npm install --global pageres
+```sh
+$ npm install --global pageres
 ```
 
 *PhantomJS, which is used for generating the screenshots, is installed automagically, but in some [rare cases](https://github.com/Obvious/phantomjs/issues/102) it might fail to and you'll get an `Error: spawn EACCES` error. [Download](http://phantomjs.org/download.html) PhantomJS manually and reinstall pageres if that happens.*
@@ -26,7 +26,7 @@ npm install --global pageres
 
 ### Usage
 
-```
+```sh
 $ pageres --help
 
 Get screenshots of websites in different resolutions.
@@ -52,8 +52,8 @@ If no screen resolutions are specified it will fall back to the ten most popular
 
 ### Install
 
-```
-npm install --save pageres
+```sh
+$ npm install --save pageres
 ```
 
 ### Example
