@@ -58,6 +58,7 @@ function init(args) {
 
 		eachAsync(items, function (el, i, next) {
 			var stream = el.pipe(fs.createWriteStream(el.filename));
+			el.on('error', next);
 			stream.on('finish', next);
 			stream.on('error', next);
 		}, function (err) {

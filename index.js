@@ -13,12 +13,19 @@ function runPhantomjs(options) {
 		JSON.stringify(options)
 	]);
 
+	var stream = cp.stdout.pipe(base64.decode());
+
 	process.stderr.setMaxListeners(0);
 	cp.stderr.on('data', function (data) {
-		cp.stdout.emit('error', data);
+		// ignore phantomjs noise
+		if (/\*\*\* WARNING/.test(data)) {
+			return;
+		}
+
+		stream.emit('error', data);
 	});
 
-	return cp.stdout.pipe(base64.decode());
+	return stream;
 }
 
 function generateSizes(url, size) {
