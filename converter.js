@@ -35,6 +35,10 @@ page.open(options.url, function (status) {
 		height: options.height
 	};
 
+	page.evaluate(function () {
+		document.body.bgColor = 'white';
+	});
+
 	window.setTimeout(function () {
 		log.call(console, page.renderBase64('png'));
 		phantom.exit(0);
