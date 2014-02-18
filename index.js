@@ -34,7 +34,8 @@ function generateSizes(url, size) {
 	url = url.replace(/^(?:https?:\/\/)?www\./, '');
 
 	var filenameUrl = slugifyUrl(url);
-	var filename = filenameUrl + '-' + size + '.png';
+  // Remove | ? : * " < > \ characters that are not removed by slugify-url and are invalid file names.
+	var filename = filenameUrl.replace(/\||\?|\:|\*|\"|\<|\>|\\/g, '') + '-' + size + '.png';
 	var dim = size.split(/x/i);
 	var options = {
 		url: url.toLowerCase(),
