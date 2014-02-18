@@ -17,7 +17,7 @@ It's speedy and generates 100 screenshots from 10 different websites in just ove
 
 ### Install
 
-```sh
+```bash
 $ npm install --global pageres
 ```
 
@@ -26,7 +26,7 @@ $ npm install --global pageres
 
 ### Usage
 
-```sh
+```bash
 $ pageres --help
 
 Get screenshots of websites in different resolutions.
@@ -52,7 +52,7 @@ If no screen resolutions are specified it will fall back to the ten most popular
 
 ### Install
 
-```sh
+```bash
 $ npm install --save pageres
 ```
 
