@@ -45,7 +45,8 @@
     "get-stdin": "~0.1.0",
     "phantomjs": "1.9.2-6",
     "base64-stream": "~0.1.2",
-    "pageres": "~0.1.0"
+    "pageres": "~0.1.0",
+    "object-assign": "~0.2.0"
   },
   "devDependencies": {
     "mocha": "*"

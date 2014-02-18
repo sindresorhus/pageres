@@ -31,7 +31,7 @@ function showHelp() {
 }
 
 function generate(urls, sizes) {
-	pageres(urls, sizes, function (err, items) {
+	pageres(urls, sizes, null, function (err, items) {
 		if (err) {
 			throw err;
 		}
