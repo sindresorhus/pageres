@@ -11,7 +11,7 @@ it('should generate screenshots', function (cb) {
 		assert(!err);
 		assert.strictEqual(streams.length, 6);
 		assert.strictEqual(streams[0].filename, 'yeoman.io-1024x768.png');
-    assert.strictEqual(streams[4].filename, 'microsoft.com!query=pageres-1024x768.png');
+		assert.strictEqual(streams[4].filename, 'microsoft.com!query=pageres-1024x768.png');
 
 		streams[0].once('data', function (data) {
 			assert(data.length > 1000);
