@@ -29,12 +29,16 @@ function runPhantomjs(options) {
 
 function generateSizes(url, size) {
 	url = urlMod.parse(url).protocol ? url : 'http://' + url;
-	// strip `www.` and convert to valid filename
+
+	// strip `www.`
 	url = url.replace(/^(?:https?:\/\/)?www\./, '');
 
-	var filenameUrl = slugifyUrl(url);
-	// Remove | ? : * " < > \ characters that are not removed by slugify-url and are invalid file names.
-	var filename = filenameUrl.replace(/\||\?|\:|\*|\"|\<|\>|\\/g, '') + '-' + size + '.png';
+	// make it a valid filename
+	// remove | ? : * " < > \ characters that are not
+	// removed by slugify-url and are invalid file names
+	var filenameUrl = slugifyUrl(url).replace(/\||\?|\:|\*|\"|\<|\>|\\/g, '');
+
+	var filename = filenameUrl + '-' + size + '.png';
 	var dim = size.split(/x/i);
 	var options = {
 		url: url,
@@ -51,11 +55,11 @@ module.exports = function (urls, sizes, cb) {
 	cb = cb || function () {};
 
 	if (urls.length === 0) {
-		return cb(new Error('`urls` required'));
+		return cb(new Error('URLs required'));
 	}
 
 	if (sizes.length === 0) {
-		return cb(new Error('`sizes` required'));
+		return cb(new Error('Sizes required'));
 	}
 
 	var items = [];
