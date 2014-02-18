@@ -37,7 +37,7 @@ function generateSizes(url, size) {
 	var filename = filenameUrl.replace(/\||\?|\:|\*|\"|\<|\>|\\/g, '') + '-' + size + '.png';
 	var dim = size.split(/x/i);
 	var options = {
-		url: url.toLowerCase(),
+		url: url,
 		width: dim[0],
 		height: dim[0]
 	};
