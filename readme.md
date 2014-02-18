@@ -47,6 +47,16 @@ You can also pipe in a newline separated list of urls and screen resolutions whi
 If no screen resolutions are specified it will fall back to the ten most popular ones according to w3counter.
 ```
 
+### Cookies
+
+You can add cookies to the web request in order to view pages that are behind a login wall. 
+
+Modify the "cookies.json" file with the cookies you need, then call pageres with the following:
+
+```sh
+$ pageres todomvc.com 1920x1080 cookies.json
+```
+
 
 ## Programmatic API
 

@@ -1,4 +1,4 @@
-#!/usr/bin/env node
+﻿#!/usr/bin/env node
 'use strict';
 var fs = require('fs');
 var nopt = require('nopt');
@@ -38,8 +38,17 @@ function init(args) {
 		return console.log(require('./package').version);
 	}
 
-	var urls = _.uniq(args.filter(/./.test, /\./));
+	var urls = _.uniq(args.filter(/./.test, /\.(?!json$)/));
 	var sizes = _.uniq(args.filter(/./.test, /^\d{3,4}x\d{3,4}$/i));
+	var cookieFileArray = _.uniq(args.filter(/./.test, /\.json/));
+	var cookies = [];
+	
+	if(cookieFileArray.length === 1) {
+		// parse cookie file into JSON
+		var fileName = cookieFileArray[0];
+		var cookieFile = fs.readFileSync(fileName, 'utf8');
+		cookies = JSON.parse(cookieFile.toString()).cookies;
+	}
 
 	if (urls.length === 0) {
 		console.error(chalk.yellow('Specify at least one url'));
@@ -51,7 +60,7 @@ function init(args) {
 		sizes = defRes.split(' ');
 	}
 
-	pageres(urls, sizes, function (err, items) {
+	pageres(urls, sizes, cookies, function (err, items) {
 		if (err) {
 			throw err;
 		}
@@ -69,7 +78,7 @@ function init(args) {
 			var u = urls.length;
 			var s = sizes.length;
 
-			console.log(chalk.green('\n✓ Successfully generated %d screenshots from %d %s and %d %s'), u * s, u, (u === 1 ? 'url' : 'urls'), s, (s === 1 ? 'resolution': 'resolutions'));
+			console.log(chalk.green('\n? Successfully generated %d screenshots from %d %s and %d %s'), u * s, u, (u === 1 ? 'url' : 'urls'), s, (s === 1 ? 'resolution': 'resolutions'));
 		});
 	});
 }

@@ -7,6 +7,12 @@ var log = console.log;
 // make sure phantom never outputs to stdout
 console.log = console.error;
 
+var cookies = options.cookies;
+
+for(var i = 0; i < cookies.length; i++) {
+	phantom.addCookie(cookies[i]);
+}
+
 phantom.onError = function(msg, trace) {
 	var msgStack = ['PHANTOM ERROR: ' + msg];
 
