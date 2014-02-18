@@ -32,6 +32,7 @@ $ pageres --help
 Get screenshots of websites in different resolutions.
 
 Specify urls and screen resolutions as arguments. Order doesn't matter.
+Screenshots are saved in the current directory.
 
 Usage
   pageres <url> <resolution> [<resolution> <url> ...]

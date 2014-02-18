@@ -15,6 +15,7 @@ function showHelp() {
 	console.log('Get screenshots of websites in different resolutions.');
 	console.log('');
 	console.log('Specify urls and screen resolutions as arguments. Order doesn\'t matter.');
+	console.log('Screenshots are saved in the current directory.');
 	console.log('');
 	console.log(chalk.underline('Usage'));
 	console.log('  pageres <url> <resolution> [<resolution> <url> ...]');
