@@ -64,7 +64,7 @@ function init(args) {
 		return console.log(require('./package').version);
 	}
 
-	var urls = _.uniq(args.filter(/./.test, /\./));
+	var urls = _.uniq(args.filter(/./.test, /\.|localhost/));
 	var sizes = _.uniq(args.filter(/./.test, /^\d{3,4}x\d{3,4}$/i));
 
 	if (urls.length === 0) {

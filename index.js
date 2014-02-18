@@ -16,6 +16,14 @@ function runPhantomjs(options) {
 	var stream = cp.stdout.pipe(base64.decode());
 
 	process.stderr.setMaxListeners(0);
+
+	cp.stdout.on('data', function (data) {
+		// stupid phantomjs outputs this on stdout...
+		if (/Couldn\'t load url/.test(data)) {
+			return stream.emit('error', new Error('Couldn\'t load url'));
+		}
+	});
+
 	cp.stderr.on('data', function (data) {
 		// ignore phantomjs noise
 		if (/ phantomjs\[/.test(data)) {
@@ -29,6 +37,7 @@ function runPhantomjs(options) {
 }
 
 function generateSizes(url, size, opts) {
+	url = url.replace(/^localhost/, 'http://$&');
 	url = urlMod.parse(url).protocol ? url : 'http://' + url;
 
 	// strip `www.`
