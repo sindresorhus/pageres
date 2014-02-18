@@ -28,7 +28,7 @@ function runPhantomjs(options) {
 	return stream;
 }
 
-function generateSizes(url, size) {
+function generateSizes(url, size, cookies) {
 	url = urlMod.parse(url).protocol ? url : 'http://' + url;
 	// strip `www.` and convert to valid filename
 	url = url.replace(/^(?:https?:\/\/)?www\./, '');
@@ -39,7 +39,8 @@ function generateSizes(url, size) {
 	var options = {
 		url: url.toLowerCase(),
 		width: dim[0],
-		height: dim[0]
+		height: dim[0],
+		cookies: cookies
 	};
 
 	var stream = runPhantomjs(options);
@@ -47,9 +48,9 @@ function generateSizes(url, size) {
 	return stream;
 }
 
-module.exports = function (urls, sizes, cb) {
+module.exports = function (urls, sizes, cookies, cb) {
 	cb = cb || function () {};
-
+	
 	if (urls.length === 0) {
 		return cb(new Error('`urls` required'));
 	}
@@ -62,7 +63,7 @@ module.exports = function (urls, sizes, cb) {
 
 	urls.forEach(function (url) {
 		sizes.forEach(function (size) {
-			items.push(generateSizes(url, size));
+			items.push(generateSizes(url, size, cookies));
 		});
 	});
 

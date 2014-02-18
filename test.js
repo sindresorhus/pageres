@@ -7,7 +7,7 @@ var pageres = require('./index');
 it('should generate screenshots', function (cb) {
 	this.timeout(20000);
 
-	pageres(['yeoman.io', 'todomvc.com'], ['1024x768', '640x480'], function (err, streams) {
+	pageres(['yeoman.io', 'todomvc.com'], ['1024x768', '640x480'], [], function (err, streams) {
 		assert(!err);
 		assert.strictEqual(streams.length, 4);
 		assert.strictEqual(streams[0].filename, 'yeoman.io-1024x768.png');
