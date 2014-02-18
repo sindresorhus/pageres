@@ -72,17 +72,12 @@ function init(args) {
 	}
 
 	if (sizes.length === 0) {
-		return getres(function (err, data) {
+		return getres(function (err, sizes) {
 			if (err) {
 				throw err;
 			}
 
-			if (data.length === 0) {
-				throw new Error('No sizes available');
-			}
-
-			sizes = data;
-			console.log('No sizes specified. Falling back to the ten most popular screen resolutions according to w3counter as of January 2014:\n' + sizes.join(' '));
+			console.log('No sizes specified. Falling back to the ten most popular screen resolutions according to w3counter:\n' + sizes.join(' '));
 
 			generate(urls, sizes);
 		});
