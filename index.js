@@ -1,7 +1,6 @@
 'use strict';
 var spawn = require('child_process').spawn;
 var path = require('path');
-var fs = require('fs');
 var urlMod = require('url');
 var slugifyUrl = require('slugify-url');
 var phantomjsBin = require('phantomjs').path;
