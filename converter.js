@@ -36,7 +36,7 @@ page.open(options.url, function (status) {
 	};
 
 	page.evaluate(function () {
-		document.body.bgColor = 'white';
+		document.body.style.background = 'white';
 	});
 
 	window.setTimeout(function () {
