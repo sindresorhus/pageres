@@ -38,14 +38,14 @@
   "dependencies": {
     "each-async": "~0.1.2",
     "chalk": "~0.4.0",
-    "nopt": "~2.1.2",
-    "slugify-url": "~1.0.1",
+    "nopt": "~2.2.0",
+    "slugify-url": "~1.1.1",
     "sudo-block": "~0.3.0",
     "lodash": "~2.4.1",
     "get-stdin": "~0.1.0",
     "phantomjs": "1.9.2-6",
     "base64-stream": "~0.1.2",
-    "pageres": "~0.1.0",
+    "getres": "~0.1.1",
     "object-assign": "~0.2.0"
   },
   "devDependencies": {

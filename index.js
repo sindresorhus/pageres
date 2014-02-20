@@ -44,9 +44,7 @@ function generateSizes(url, size, opts) {
 	url = url.replace(/^(?:https?:\/\/)?www\./, '');
 
 	// make it a valid filename
-	// remove | ? : * " < > \ characters that are not
-	// removed by slugify-url and are invalid file names
-	var filenameUrl = slugifyUrl(url).replace(/\||\?|\:|\*|\"|\<|\>|\\/g, '');
+	var filenameUrl = slugifyUrl(url);
 
 	var filename = filenameUrl + '-' + size + '.png';
 	var dim = size.split(/x/i);

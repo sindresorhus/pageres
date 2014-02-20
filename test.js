@@ -25,7 +25,7 @@ it('should remove special characters from the URL to create a valid filename', f
 	pageres(['http://microsoft.com/?query=pageres*|<>:"\\'], ['1024x768'], null, function (err, streams) {
 		assert(!err);
 		assert.strictEqual(streams.length, 1);
-		assert.strictEqual(streams[0].filename, 'microsoft.com!query=pageres-1024x768.png');
+		assert.strictEqual(streams[0].filename, 'microsoft.com!!query=pageres!!!!!!!-1024x768.png');
 		cb();
 	});
 });
