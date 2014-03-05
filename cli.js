@@ -8,27 +8,28 @@ var _ = require('lodash');
 var stdin = require('get-stdin');
 var eachAsync = require('each-async');
 var getres = require('getres');
+var multiline = require('multiline');
 var pageres = require('./index');
 
 function showHelp() {
-	console.log('');
-	console.log('Get screenshots of websites in different resolutions.');
-	console.log('');
-	console.log('Specify urls and screen resolutions as arguments. Order doesn\'t matter.');
-	console.log('Screenshots are saved in the current directory.');
-	console.log('');
-	console.log(chalk.underline('Usage'));
-	console.log('  pageres <url> <resolution> [<resolution> <url> ...]');
-	console.log('  pageres [<url> <resolution> ...] < <file>');
-	console.log('  cat <file> | pageres [<url> <resolution> ...]');
-	console.log('');
-	console.log(chalk.underline('Example'));
-	console.log('  pageres todomvc.com yeoman.io 1366x768 1600x900');
-	console.log('  pageres 1366x768 < urls.txt');
-	console.log('  cat screen-resolutions.txt | pageres todomvc.com yeoman.io');
-	console.log('');
-	console.log('You can also pipe in a newline separated list of urls and screen resolutions which will get merged with the arguments.');
-	console.log('If no screen resolutions are specified it will fall back to the ten most popular ones according to w3counter.');
+	console.log(multiline(function () {/*
+Get screenshots of websites in different resolutions.
+
+Specify urls and screen resolutions as arguments. Order doesn't matter.
+Screenshots are saved in the current directory.
+
+Usage
+  pageres <url> <resolution> [<resolution> <url> ...]
+  pageres [<url> <resolution> ...] < <file>
+  cat <file> | pageres [<url> <resolution> ...]
+
+Example
+  pageres todomvc.com yeoman.io 1366x768 1600x900
+  pageres 1366x768 < urls.txt
+  cat screen-resolutions.txt | pageres todomvc.com yeoman.io
+
+You can also pipe in a newline separated list of urls and screen resolutions which will get merged with the arguments. If no screen resolutions are specified it will fall back to the ten most popular ones according to w3counter.
+	*/}));
 }
 
 function generate(urls, sizes) {
