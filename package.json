@@ -20,7 +20,8 @@
   },
   "files": [
     "index.js",
-    "cli.js"
+    "cli.js",
+    "converter.js"
   ],
   "keywords": [
     "page",
