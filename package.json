@@ -46,7 +46,7 @@
     "get-stdin": "~0.1.0",
     "phantomjs": "1.9.2-6",
     "base64-stream": "~0.1.2",
-    "getres": "~0.1.2",
+    "get-res": "~0.1.3",
     "object-assign": "~0.2.0",
     "multiline": "^0.1.0"
   },

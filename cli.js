@@ -7,7 +7,7 @@ var sudoBlock = require('sudo-block');
 var _ = require('lodash');
 var stdin = require('get-stdin');
 var eachAsync = require('each-async');
-var getres = require('getres');
+var getRes = require('get-res');
 var multiline = require('multiline');
 var pageres = require('./index');
 
@@ -74,7 +74,7 @@ function init(args) {
 	}
 
 	if (sizes.length === 0) {
-		return getres(function (err, sizes) {
+		return getRes(function (err, sizes) {
 			if (err) {
 				throw err;
 			}
