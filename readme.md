@@ -2,7 +2,7 @@
 
 > Get screenshots of the websites in different resolutions
 
-[![Build Status](https://travis-ci.org/sindresorhus/pageres.png?branch=master)](https://travis-ci.org/sindresorhus/pageres)
+[![Build Status](https://travis-ci.org/sindresorhus/pageres.svg?branch=master)](https://travis-ci.org/sindresorhus/pageres)
 
 A good way to make sure your websites are responsive.
 
