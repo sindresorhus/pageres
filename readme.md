@@ -36,11 +36,13 @@ Screenshots are saved in the current directory.
 
 Usage
   pageres <url> <resolution> [<resolution> <url> ...]
+  pagesres [<url> <resolution>] [<url> <resolution>]
   pageres [<url> <resolution> ...] < <file>
   cat <file> | pageres [<url> <resolution> ...]
 
 Example
   pageres todomvc.com yeoman.io 1366x768 1600x900
+  pageres [yeoman.io 1366x768 1600x900] [todomvc.com 1024x768 480x320]
   pageres 1366x768 < urls.txt
   cat screen-resolutions.txt | pageres todomvc.com yeoman.io
 
@@ -62,7 +64,7 @@ $ npm install --save pageres
 ```js
 var pageres = require('pageres');
 
-pageres(['todomvc.com'], ['1366x768', '1600x900'], function () {
+pageres({ url: 'yeoman.io', sizes: ['1366x768', '1600x900']}, null, function (err, streams) {
 	console.log('done');
 });
 ```

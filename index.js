@@ -60,23 +60,27 @@ function generateSizes(url, size, opts) {
 	return stream;
 }
 
-module.exports = function (urls, sizes, opts, cb) {
+module.exports = function (args, opts, cb) {
+	var items = [];
+
+	args = args || [];
 	opts = opts || {};
 	cb = cb || function () {};
 
-	if (urls.length === 0) {
-		return cb(new Error('URLs required'));
-	}
+	args.forEach(function (arg) {
+		if (!arg.url || arg.url.length === 0) {
+			return cb(new Error('URLs required'));
+		}
 
-	if (sizes.length === 0) {
-		return cb(new Error('Sizes required'));
-	}
+		if (!arg.sizes || arg.sizes.length === 0) {
+			return cb(new Error('Sizes required'));
+		}
 
-	var items = [];
+		arg.url = Array.isArray(arg.url) ? arg.url.join('') : arg.url;
+		arg.sizes = Array.isArray(arg.sizes) ? arg.sizes : [arg.sizes];
 
-	urls.forEach(function (url) {
-		sizes.forEach(function (size) {
-			items.push(generateSizes(url, size, opts));
+		arg.sizes.forEach(function (size) {
+			items.push(generateSizes(arg.url, size, opts));
 		});
 	});
 
