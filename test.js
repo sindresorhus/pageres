@@ -14,7 +14,7 @@ it('should generate screenshots', function (cb) {
 		sizes: ['1280x1024', '1920x1080']
 	}];
 
-	pageres(items, null, function (err, streams) {
+	pageres(items, function (err, streams) {
 		assert(!err);
 		assert.strictEqual(streams.length, 4);
 		assert.strictEqual(streams[0].filename, 'yeoman.io-480x320.png');
@@ -34,7 +34,7 @@ it('should remove special characters from the URL to create a valid filename', f
 		sizes: '1024x768'
 	}];
 
-	pageres(items, null, function (err, streams) {
+	pageres(items, function (err, streams) {
 		assert(!err);
 		assert.strictEqual(streams.length, 1);
 		assert.strictEqual(streams[0].filename, 'microsoft.com!query=pageres-1024x768.png');

@@ -1,6 +1,7 @@
 'use strict';
 var spawn = require('child_process').spawn;
 var path = require('path');
+var _ = require('lodash');
 var urlMod = require('url');
 var slugifyUrl = require('slugify-url');
 var phantomjsBin = require('phantomjs').path;
@@ -62,6 +63,11 @@ function generateSizes(url, size, opts) {
 
 module.exports = function (args, opts, cb) {
 	var items = [];
+
+	if (!cb && _.isFunction(opts)) {
+	    cb = opts;
+	    opts = {};
+	}
 
 	args = args || [];
 	opts = opts || {};
