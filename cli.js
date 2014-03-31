@@ -1,4 +1,4 @@
-﻿#!/usr/bin/env node
+#!/usr/bin/env node
 'use strict';
 var fs = require('fs');
 var nopt = require('nopt');
@@ -30,6 +30,7 @@ function showHelp() {
 }
 
 function init(args) {
+	var cookieArg = [];
 	if (opts.help) {
 		return showHelp();
 	}
@@ -38,16 +39,52 @@ function init(args) {
 		return console.log(require('./package').version);
 	}
 
-	var urls = _.uniq(args.filter(/./.test, /\.(?!json$)/));
-	var sizes = _.uniq(args.filter(/./.test, /^\d{3,4}x\d{3,4}$/i));
-	var cookieFileArray = _.uniq(args.filter(/./.test, /\.json/));
-	var cookies = [];
+	if (opts.cookie) {
+		args = [];
+		for (var i = 0; i < opts.argv.original.length; i++) {
+			if(opts.argv.original[i] === "--cookie") {
+				i++;
+				cookieArg.push(opts.argv.original[i]);		
+			} else {
+				args.push(opts.argv.original[i]);
+			}
+		}
+	}
 	
-	if(cookieFileArray.length === 1) {
-		// parse cookie file into JSON
-		var fileName = cookieFileArray[0];
-		var cookieFile = fs.readFileSync(fileName, 'utf8');
-		cookies = JSON.parse(cookieFile.toString()).cookies;
+	var urls = _.uniq(args.filter(/./.test, /\./));
+	var sizes = _.uniq(args.filter(/./.test, /^\d{3,4}x\d{3,4}$/i));
+	
+	var cookieJSON = [],
+	    commonNames = ['domain', 'path', 'httponly', 'secure', 'expires'];
+
+	for (var caIndex = 0; caIndex < cookieArg.length; caIndex++) {
+		var cookieConstants = {},
+		    hasConstants = false,
+		    cookieArray = cookieArg[caIndex].split(';'),
+		    cookie, parts, name, value;
+
+		for (var i = 0; i < cookieArray.length; i++) {
+			cookie = {};
+			parts = cookieArray[i].split('=');
+			name = parts[0].toLowerCase().replace(/\s/g, '');
+			value = parts[1];
+			if(commonNames.indexOf(name) > -1) {
+				hasConstants = true;
+				cookieConstants[name] = value || true;
+			} else if (name !== ''){
+				cookie['name'] = name;
+				cookie['value'] = value || '';
+				cookieJSON.push(cookie);
+			}
+		}
+
+		if (hasConstants) {
+			for(var i = 0; i < cookieJSON.length; i++) {
+				for (var constantName in cookieConstants) {
+					cookieJSON[i][constantName] = cookieConstants[constantName];
+				}
+			}
+		}
 	}
 
 	if (urls.length === 0) {
@@ -60,7 +97,7 @@ function init(args) {
 		sizes = defRes.split(' ');
 	}
 
-	pageres(urls, sizes, cookies, function (err, items) {
+	pageres(urls, sizes, cookieJSON, function (err, items) {
 		if (err) {
 			throw err;
 		}
