@@ -49,7 +49,8 @@
     "phantomjs": "1.9.2-6",
     "slugify-url": "^1.2.0",
     "subarg": "^0.0.1",
-    "sudo-block": "^0.4.0"
+    "sudo-block": "^0.4.0",
+    "update-notifier": "^0.1.8"
   },
   "devDependencies": {
     "mocha": "*"

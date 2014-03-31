@@ -10,7 +10,9 @@ var eachAsync = require('each-async');
 var getRes = require('get-res');
 var multiline = require('multiline');
 var subarg = require('subarg');
+var updateNotifier = require('update-notifier');
 var pageres = require('./index');
+var notifier = updateNotifier();
 
 function showHelp() {
 	console.log(multiline.stripIndent(function () {/*
@@ -39,7 +41,7 @@ function generate(args) {
 	var sizes = [];
 	var urls = [];
 
-	pageres(args, null, function (err, items) {
+	pageres(args, function (err, items) {
 		if (err) {
 			throw err;
 		}
@@ -125,6 +127,10 @@ function init(args) {
 }
 
 sudoBlock();
+
+if (notifier.update) {
+	notifier.notify(true);
+}
 
 var opts = nopt({
 	help: Boolean,
