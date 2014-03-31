@@ -42,5 +42,5 @@ page.open(options.url, function (status) {
 	window.setTimeout(function () {
 		log.call(console, page.renderBase64('png'));
 		phantom.exit(0);
-	}, options.renderDelay);
+	}, options.delay * 1000);
 });

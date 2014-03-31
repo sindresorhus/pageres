@@ -30,18 +30,21 @@ function showHelp() {
 		Example
 		  pageres todomvc.com yeoman.io 1366x768 1600x900
 		  pageres [ yeoman.io 1366x768 1600x900 ] [ todomvc.com 1024x768 480x320 ]
-		  pageres 1366x768 < urls.txt
+		  pageres --delay 3 1366x768 < urls.txt
 		  cat screen-resolutions.txt | pageres todomvc.com yeoman.io
+
+		Options
+		  -d, --delay <seconds>    Delay capturing the screenshot
 
 		You can also pipe in a newline separated list of urls and screen resolutions which will get merged with the arguments. If no screen resolutions are specified it will fall back to the ten most popular ones according to w3counter.
 	*/}));
 }
 
-function generate(args) {
+function generate(args, opts) {
 	var sizes = [];
 	var urls = [];
 
-	pageres(args, function (err, items) {
+	pageres(args, opts, function (err, items) {
 		if (err) {
 			if (err instanceof Error) {
 				throw err;
@@ -77,7 +80,7 @@ function generate(args) {
 	});
 }
 
-function init(args) {
+function init(args, opts) {
 	var items = [];
 
 	if (opts.help) {
@@ -127,7 +130,7 @@ function init(args) {
 
 		next();
 	}, function () {
-		generate(items);
+		generate(items, opts);
 	});
 }
 
@@ -139,19 +142,21 @@ if (notifier.update) {
 
 var opts = nopt({
 	help: Boolean,
-	version: Boolean
+	version: Boolean,
+	delay: Number
 }, {
 	h: '--help',
-	v: '--version'
+	v: '--version',
+	d: '--delay'
 });
 
 var args = subarg(opts.argv.remain)._;
 
 if (process.stdin.isTTY) {
-	init(args);
+	init(args, opts);
 } else {
 	stdin(function (data) {
 		[].push.apply(args, data.trim().split('\n'));
-		init(args);
+		init(args, opts);
 	});
 }

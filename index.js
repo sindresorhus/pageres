@@ -50,7 +50,11 @@ function generateSizes(url, size, opts) {
 	var filename = filenameUrl + '-' + size + '.png';
 	var dim = size.split(/x/i);
 
-	var stream = runPhantomjs([{}, opts, {
+	var defaults = {
+		delay: 0
+	};
+
+	var stream = runPhantomjs([defaults, opts, {
 		url: url,
 		width: dim[0],
 		height: dim[0]
