@@ -13,25 +13,25 @@ var subarg = require('subarg');
 var pageres = require('./index');
 
 function showHelp() {
-	console.log(multiline(function () {/*
-Get screenshots of websites in different resolutions.
+	console.log(multiline.stripIndent(function () {/*
+		Get screenshots of websites in different resolutions.
 
-Specify urls and screen resolutions as arguments. Order doesn't matter.
-Screenshots are saved in the current directory.
+		Specify urls and screen resolutions as arguments. Order doesn't matter.
+		Screenshots are saved in the current directory.
 
-Usage
-  pageres <url> <resolution>
-  pagesres [<url> <resolution>] [<url> <resolution>]
-  pageres [<url> <resolution> ...] < <file>
-  cat <file> | pageres [<url> <resolution> ...]
+		Usage
+		  pageres <url> <resolution>
+		  pageres [ <url> <resolution> ] [ <url> <resolution> ]
+		  pageres [ <url> <resolution> ... ] < <file>
+		  cat <file> | pageres [ <url> <resolution> ... ]
 
-Example
-  pageres todomvc.com yeoman.io 1366x768 1600x900
-  pageres [yeoman.io 1366x768 1600x900] [todomvc.com 1024x768 480x320]
-  pageres 1366x768 < urls.txt
-  cat screen-resolutions.txt | pageres todomvc.com yeoman.io
+		Example
+		  pageres todomvc.com yeoman.io 1366x768 1600x900
+		  pageres [ yeoman.io 1366x768 1600x900 ] [ todomvc.com 1024x768 480x320 ]
+		  pageres 1366x768 < urls.txt
+		  cat screen-resolutions.txt | pageres todomvc.com yeoman.io
 
-You can also pipe in a newline separated list of urls and screen resolutions which will get merged with the arguments. If no screen resolutions are specified it will fall back to the ten most popular ones according to w3counter.
+		You can also pipe in a newline separated list of urls and screen resolutions which will get merged with the arguments. If no screen resolutions are specified it will fall back to the ten most popular ones according to w3counter.
 	*/}));
 }
 

@@ -65,8 +65,8 @@ module.exports = function (args, opts, cb) {
 	var items = [];
 
 	if (!cb && _.isFunction(opts)) {
-	    cb = opts;
-	    opts = {};
+		cb = opts;
+		opts = {};
 	}
 
 	args = args || [];
