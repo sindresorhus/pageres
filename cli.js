@@ -9,6 +9,7 @@ var stdin = require('get-stdin');
 var eachAsync = require('each-async');
 var getRes = require('get-res');
 var multiline = require('multiline');
+var subarg = require('subarg');
 var pageres = require('./index');
 
 function showHelp() {
@@ -19,12 +20,14 @@ Specify urls and screen resolutions as arguments. Order doesn't matter.
 Screenshots are saved in the current directory.
 
 Usage
-  pageres <url> <resolution> [<resolution> <url> ...]
+  pageres <url> <resolution>
+  pagesres [<url> <resolution>] [<url> <resolution>]
   pageres [<url> <resolution> ...] < <file>
   cat <file> | pageres [<url> <resolution> ...]
 
 Example
   pageres todomvc.com yeoman.io 1366x768 1600x900
+  pageres [yeoman.io 1366x768 1600x900] [todomvc.com 1024x768 480x320]
   pageres 1366x768 < urls.txt
   cat screen-resolutions.txt | pageres todomvc.com yeoman.io
 
@@ -32,11 +35,19 @@ You can also pipe in a newline separated list of urls and screen resolutions whi
 	*/}));
 }
 
-function generate(urls, sizes) {
-	pageres(urls, sizes, null, function (err, items) {
+function generate(args) {
+	var sizes = [];
+	var urls = [];
+
+	pageres(args, null, function (err, items) {
 		if (err) {
 			throw err;
 		}
+
+		args.forEach(function (arg) {
+			sizes = sizes.concat(arg.sizes);
+			urls = urls.concat(arg.url);
+		});
 
 		eachAsync(items, function (el, i, next) {
 			var stream = el.pipe(fs.createWriteStream(el.filename));
@@ -48,15 +59,20 @@ function generate(urls, sizes) {
 				throw err;
 			}
 
+			var i = sizes.length;
+			var s = sizes.filter(function (el, i, self) {
+				return self.indexOf(el) === i;
+			}).length;
 			var u = urls.length;
-			var s = sizes.length;
 
-			console.log(chalk.green('\n✓ Successfully generated %d screenshots from %d %s and %d %s'), u * s, u, (u === 1 ? 'url' : 'urls'), s, (s === 1 ? 'resolution': 'resolutions'));
+			console.log(chalk.green('\n✓ Successfully generated %d screenshots from %d %s and %d %s'), i, u, (u === 1 ? 'url' : 'urls'), s, (s === 1 ? 'resolution': 'resolutions'));
 		});
 	});
 }
 
 function init(args) {
+	var items = [];
+
 	if (opts.help) {
 		return showHelp();
 	}
@@ -65,27 +81,47 @@ function init(args) {
 		return console.log(require('./package').version);
 	}
 
-	var urls = _.uniq(args.filter(/./.test, /\.|localhost/));
-	var sizes = _.uniq(args.filter(/./.test, /^\d{3,4}x\d{3,4}$/i));
-
-	if (urls.length === 0) {
-		console.error(chalk.yellow('Specify at least one url'));
-		return showHelp();
+	if (!args.some(function (arr) { return arr._ !== undefined; })) {
+		args = [{ _: args }];
 	}
 
-	if (sizes.length === 0) {
-		return getRes(function (err, sizes) {
-			if (err) {
-				throw err;
-			}
+	eachAsync(args, function (el, i, next) {
+		el = el._;
 
-			console.log('No sizes specified. Falling back to the ten most popular screen resolutions according to w3counter:\n' + sizes.join(' '));
+		var url = _.uniq(el.filter(/./.test, /\.|localhost/));
+		var size = _.uniq(el.filter(/./.test, /^\d{3,4}x\d{3,4}$/i));
 
-			generate(urls, sizes);
-		});
-	}
+		if (url.length === 0) {
+			console.error(chalk.yellow('Specify a url'));
+			return showHelp();
+		}
 
-	generate(urls, sizes);
+		if (size.length === 0) {
+			return getRes(function (err, data) {
+				if (err) {
+					throw err;
+				}
+
+				size = data;
+				console.log('No sizes specified. Falling back to the ten most popular screen resolutions according to w3counter as of January 2014:\n' + size.join(' '));
+
+				items.push({ url: url, sizes: size });
+				next();
+			});
+		}
+
+		if (url.length > 1) {
+			url.forEach(function (el) {
+				items.push({ url: el, sizes: size });
+			});
+		} else {
+			items.push({ url: url, sizes: size });
+		}
+
+		next();
+	}, function () {
+		generate(items);
+	});
 }
 
 sudoBlock();
@@ -98,7 +134,7 @@ var opts = nopt({
 	v: '--version'
 });
 
-var args = opts.argv.remain;
+var args = subarg(opts.argv.remain)._;
 
 if (process.stdin.isTTY) {
 	init(args);
