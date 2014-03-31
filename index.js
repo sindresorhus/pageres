@@ -73,6 +73,10 @@ module.exports = function (args, opts, cb) {
 	opts = opts || {};
 	cb = cb || function () {};
 
+	if (!phantomjsBin) {
+		return cb('The automatic install of PhantomJS, which is used for generating the screenshots, seems to have failed.\nTry installing it manually: http://phantomjs.org/download.html');
+	}
+
 	args.forEach(function (arg) {
 		if (!arg.url || arg.url.length === 0) {
 			return cb(new Error('URLs required'));

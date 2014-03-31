@@ -43,7 +43,12 @@ function generate(args) {
 
 	pageres(args, function (err, items) {
 		if (err) {
-			throw err;
+			if (err instanceof Error) {
+				throw err;
+			} else {
+				console.error(err);
+				process.exit(1);
+			}
 		}
 
 		args.forEach(function (arg) {
