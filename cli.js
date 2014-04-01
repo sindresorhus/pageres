@@ -50,10 +50,10 @@ function init(args) {
 			}
 		}
 	}
-	
+
 	var urls = _.uniq(args.filter(/./.test, /\./));
 	var sizes = _.uniq(args.filter(/./.test, /^\d{3,4}x\d{3,4}$/i));
-	
+
 	var cookieJSON = [],
 	    commonNames = ['domain', 'path', 'httponly', 'secure', 'expires'];
 
@@ -97,7 +97,7 @@ function init(args) {
 		sizes = defRes.split(' ');
 	}
 
-	pageres(urls, sizes, cookieJSON, function (err, items) {
+	pageres(urls, sizes, function (err, items) {
 		if (err) {
 			throw err;
 		}
@@ -115,7 +115,7 @@ function init(args) {
 			var u = urls.length;
 			var s = sizes.length;
 
-			console.log(chalk.green('\n? Successfully generated %d screenshots from %d %s and %d %s'), u * s, u, (u === 1 ? 'url' : 'urls'), s, (s === 1 ? 'resolution': 'resolutions'));
+			console.log(chalk.green('\n✓ Successfully generated %d screenshots from %d %s and %d %s'), u * s, u, (u === 1 ? 'url' : 'urls'), s, (s === 1 ? 'resolution': 'resolutions'));
 		});
 	});
 }

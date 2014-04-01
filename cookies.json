@@ -1,9 +1,0 @@
-{
-	"cookies": [
-		{
-			"name": "Cookie Name",
-			"value": "Cookie Value",
-			"domain": "domain.com"
-		}
-	]
-}
