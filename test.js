@@ -35,7 +35,7 @@ it('should generate screenshots', function (cb) {
 
 it('should remove special characters from the URL to create a valid filename', function (cb) {
 	var items =[{
-		url: 'http://microsoft.com/?query=pageres*|<>:"\\',
+		url: 'http://www.microsoft.com/?query=pageres*|<>:"\\',
 		sizes: '1024x768'
 	}];
 

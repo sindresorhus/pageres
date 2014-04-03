@@ -41,11 +41,8 @@ function generateSizes(url, size, opts) {
 	url = url.replace(/^localhost/, 'http://$&');
 	url = urlMod.parse(url).protocol ? url : 'http://' + url;
 
-	// strip `www.`
-	url = url.replace(/^(?:https?:\/\/)?www\./, '');
-
 	// make it a valid filename
-	var filenameUrl = slugifyUrl(url);
+	var filenameUrl = slugifyUrl(url).replace(/^(?:https?:\/\/)?www\./, '');
 
 	var filename = filenameUrl + '-' + size + '.png';
 	var dim = size.split(/x/i);
