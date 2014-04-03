@@ -31,10 +31,13 @@ function showHelp() {
 		  pageres todomvc.com yeoman.io 1366x768 1600x900
 		  pageres [ yeoman.io 1366x768 1600x900 ] [ todomvc.com 1024x768 480x320 ]
 		  pageres --delay 3 1366x768 < urls.txt
+		  pageres unicorn.html 1366x768
 		  cat screen-resolutions.txt | pageres todomvc.com yeoman.io
 
 		Options
 		  -d, --delay <seconds>    Delay capturing the screenshot
+
+		<url> can also be a local file path.
 
 		You can also pipe in a newline separated list of urls and screen resolutions which will get merged with the arguments. If no screen resolutions are specified it will fall back to the ten most popular ones according to w3counter.
 	*/}));

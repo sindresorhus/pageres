@@ -1,6 +1,7 @@
 'use strict';
 var spawn = require('child_process').spawn;
 var path = require('path');
+var fs = require('fs');
 var _ = require('lodash');
 var urlMod = require('url');
 var slugifyUrl = require('slugify-url');
@@ -37,12 +38,32 @@ function runPhantomjs(options) {
 	return stream;
 }
 
+function toFileUrl(filename) {
+	var pathname = path.resolve(process.cwd(), filename).replace(/\\/g, '/');
+
+	if (pathname[0] !== '/') {
+		pathname = '/' + pathname;
+	}
+
+	return 'file://' + pathname;
+};
+
 function generateSizes(url, size, opts) {
-	url = url.replace(/^localhost/, 'http://$&');
-	url = urlMod.parse(url).protocol ? url : 'http://' + url;
+	var newUrl;
+
+	// check whether `url` is a local file since both local
+	// file `index.html` and url `todomvc.com` are supported
+	var isFile = fs.existsSync(url);
+
+	if (isFile) {
+		newUrl = toFileUrl(url);
+	} else {
+		newUrl = url.replace(/^localhost/, 'http://$&');
+		newUrl = urlMod.parse(newUrl).protocol ? newUrl : 'http://' + newUrl;
+	}
 
 	// make it a valid filename
-	var filenameUrl = slugifyUrl(url).replace(/^(?:https?:\/\/)?www\./, '');
+	var filenameUrl = slugifyUrl(isFile ? url : newUrl).replace(/^(?:https?:\/\/)?www\./, '');
 
 	var filename = filenameUrl + '-' + size + '.png';
 	var dim = size.split(/x/i);
@@ -52,7 +73,7 @@ function generateSizes(url, size, opts) {
 	};
 
 	var stream = runPhantomjs([defaults, opts, {
-		url: url,
+		url: newUrl,
 		width: dim[0],
 		height: dim[0]
 	}].reduce(assign));

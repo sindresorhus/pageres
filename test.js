@@ -34,7 +34,7 @@ it('should generate screenshots', function (cb) {
 });
 
 it('should remove special characters from the URL to create a valid filename', function (cb) {
-	var items =[{
+	var items = [{
 		url: 'http://www.microsoft.com/?query=pageres*|<>:"\\',
 		sizes: '1024x768'
 	}];
@@ -55,6 +55,24 @@ it('should have a `delay` option', function (cb) {
 
 		streams[0].once('data', function () {
 			assert((new Date()) - now > 2000);
+			cb();
+		});
+	});
+});
+
+it('should support local relative files', function (cb) {
+	var items = [{
+		url: 'fixture/fixture.html',
+		sizes: ['1024x768']
+	}];
+
+	pageres(items, function (err, streams) {
+		assert(!err, err);
+
+		assert.strictEqual(streams[0].filename, 'fixture!fixture.html-1024x768.png');
+
+		streams[0].once('data', function (data) {
+			assert(data.length > 1000);
 			cb();
 		});
 	});
