@@ -9,6 +9,8 @@ var phantomjsBin = require('phantomjs').path;
 var base64 = require('base64-stream');
 var assign = require('object-assign');
 var fileUrl = require('file-url');
+var viewport = require('viewport-list');
+var eachAsync = require('each-async');
 
 function runPhantomjs(options) {
 	var cp = spawn(phantomjsBin, [
@@ -90,22 +92,45 @@ module.exports = function (args, opts, cb) {
 		return cb('The automatic install of PhantomJS, which is used for generating the screenshots, seems to have failed.\nTry installing it manually: http://phantomjs.org/download.html');
 	}
 
-	args.forEach(function (arg) {
+	eachAsync(args, function (arg, i, next) {
 		if (!arg.url || arg.url.length === 0) {
-			return cb(new Error('URLs required'));
+			return next(new Error('URLs required'));
 		}
 
 		if (!arg.sizes || arg.sizes.length === 0) {
-			return cb(new Error('Sizes required'));
+			return next(new Error('Sizes required'));
 		}
 
 		arg.url = Array.isArray(arg.url) ? arg.url.join('') : arg.url;
 		arg.sizes = Array.isArray(arg.sizes) ? arg.sizes : [arg.sizes];
 
-		arg.sizes.forEach(function (size) {
+		var sizes = _.uniq(arg.sizes.filter(/./.test, /^\d{3,4}x\d{3,4}$/i));
+		var keywords = _.difference(arg.sizes, sizes);
+
+		if (keywords.length > 0) {
+			return viewport(keywords, function (err, data) {
+				if (err) {
+					return next(err);
+				}
+
+				data.forEach(function (item) {
+					sizes.push(item.size);
+				});
+
+				_.uniq(sizes).forEach(function (size) {
+					items.push(generateSizes(arg.url, size, opts));
+				});
+
+				next();
+			});
+		}
+
+		sizes.forEach(function (size) {
 			items.push(generateSizes(arg.url, size, opts));
 		});
-	});
 
-	cb(null, items);
+		next();
+	}, function (err) {
+		cb(err, items);
+	});
 };

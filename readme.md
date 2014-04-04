@@ -27,7 +27,7 @@ $ npm install --global pageres
 ```
 $ pageres --help
 
-Specify urls and screen resolutions as arguments. Order doesn't matter. Group arguments with [ ]
+Specify urls, screen resolutions and keywords as arguments. Order doesn't matter. Group arguments with [ ]
 Screenshots are saved in the current directory.
 
 Usage
@@ -37,10 +37,10 @@ Usage
   cat <file> | pageres [ <url> <resolution> ... ]
 
 Example
-  pageres todomvc.com yeoman.io 1366x768 1600x900
-  pageres [ yeoman.io 1366x768 1600x900 ] [ todomvc.com 1024x768 480x320 ]
+  pageres todomvc.com yeoman.io 1366x768 1600x900 iphone5
+  pageres [ yeoman.io 1366x768 1600x900 galaxys4 ] [ todomvc.com 1024x768 480x320 iphone5 ]
   pageres --delay 3 1366x768 < urls.txt
-  pageres unicorn.html 1366x768
+  pageres unicorn.html 1366x768 iphone5
   cat screen-resolutions.txt | pageres todomvc.com yeoman.io
 
 Options
