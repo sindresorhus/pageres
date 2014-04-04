@@ -8,6 +8,7 @@ var slugifyUrl = require('slugify-url');
 var phantomjsBin = require('phantomjs').path;
 var base64 = require('base64-stream');
 var assign = require('object-assign');
+var fileUrl = require('file-url');
 
 function runPhantomjs(options) {
 	var cp = spawn(phantomjsBin, [
@@ -38,16 +39,6 @@ function runPhantomjs(options) {
 	return stream;
 }
 
-function toFileUrl(filename) {
-	var pathname = path.resolve(process.cwd(), filename).replace(/\\/g, '/');
-
-	if (pathname[0] !== '/') {
-		pathname = '/' + pathname;
-	}
-
-	return 'file://' + pathname;
-};
-
 function generateSizes(url, size, opts) {
 	var newUrl;
 
@@ -56,7 +47,7 @@ function generateSizes(url, size, opts) {
 	var isFile = fs.existsSync(url);
 
 	if (isFile) {
-		newUrl = toFileUrl(url);
+		newUrl = fileUrl(url);
 	} else {
 		newUrl = url.replace(/^localhost/, 'http://$&');
 		newUrl = urlMod.parse(newUrl).protocol ? newUrl : 'http://' + newUrl;
