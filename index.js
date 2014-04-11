@@ -66,7 +66,7 @@ function generateSizes(url, size, opts) {
 	var stream = runPhantomjs([defaults, opts, {
 		url: newUrl,
 		width: dim[0],
-		height: dim[0]
+		height: dim[1]
 	}].reduce(assign));
 
 	stream.filename = filename;

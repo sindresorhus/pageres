@@ -1,6 +1,8 @@
 /*global it */
 'use strict';
 var assert = require('assert');
+var fs = require('fs');
+var imageSize = require('image-size');
 var pageres = require('./index');
 
 var def = [{
@@ -57,6 +59,18 @@ it('should have a `delay` option', function (cb) {
 			assert((new Date()) - now > 2000);
 			cb();
 		});
+	});
+});
+
+it('should crop image using the `crop` option', function (cb) {
+	pageres(def, {crop: true}, function (err, streams) {
+		assert(!err, err);
+
+		streams[0].pipe(fs.createWriteStream(streams[0].filename).on('finish', function () {
+			assert.strictEqual(imageSize(streams[0].filename).width, 1024);
+			assert.strictEqual(imageSize(streams[0].filename).height, 768);
+			fs.unlink(streams[0].filename, cb);
+		}));
 	});
 });
 

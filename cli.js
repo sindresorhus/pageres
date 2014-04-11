@@ -146,10 +146,12 @@ if (notifier.update) {
 var opts = nopt({
 	help: Boolean,
 	version: Boolean,
+	crop: Boolean,
 	delay: Number
 }, {
 	h: '--help',
 	v: '--version',
+	c: '--crop',
 	d: '--delay'
 });
 

@@ -35,6 +35,15 @@ page.open(options.url, function (status) {
 		height: options.height
 	};
 
+	if (options.crop) {
+		page.clipRect = {
+			top: 0,
+			left: 0,
+			width: options.width,
+			height: options.height
+		};
+	}
+
 	page.evaluate(function () {
 		document.body.style.background = 'white';
 	});
