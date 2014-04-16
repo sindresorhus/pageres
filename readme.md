@@ -77,6 +77,10 @@ var items = [{
 }];
 
 pageres(items, { delay: 2 }, function (err, shots) {
+	if (err) {
+		throw err;
+	}
+
 	eachAsync(shots, function (el, i, next) {
 		var stream = el.pipe(fs.createWriteStream(el.filename));
 		stream.on('finish', next);
