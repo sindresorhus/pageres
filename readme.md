@@ -45,6 +45,7 @@ Example
 
 Options
   -d, --delay <seconds>    Delay capturing the screenshot
+  -c, --crop               Crop to the set height
 
 <url> can also be a local file path.
 
@@ -105,6 +106,13 @@ Default: `0`
 Delay capturing the screenshot.
 
 Useful when the site does things after load that you want to capture.
+
+#### crop
+
+Type: `boolean`  
+Default: `false`
+
+Crop to the set height.
 
 
 ## Google Analytics screen resolutions

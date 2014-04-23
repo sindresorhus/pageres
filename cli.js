@@ -36,6 +36,7 @@ function showHelp() {
 
 		Options
 		  -d, --delay <seconds>    Delay capturing the screenshot
+		  -c, --crop               Crop to the set height
 
 		<url> can also be a local file path.
 
