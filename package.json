@@ -1,7 +1,7 @@
 {
   "name": "pageres",
   "version": "0.2.3",
-  "description": "Get screenshots of websites in different resolutions",
+  "description": "Responsive website screenshots",
   "license": "MIT",
   "repository": "sindresorhus/pageres",
   "bin": {

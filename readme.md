@@ -1,10 +1,10 @@
 # <img src="logo.png" width="500" alt="pageres">
 
-> Get screenshots of websites in different resolutions.
+> Responsive website screenshots
 
 [![Build Status](https://travis-ci.org/sindresorhus/pageres.svg?branch=master)](https://travis-ci.org/sindresorhus/pageres) ![](http://img.shields.io/badge/unicorn-approved-ff69b4.svg)
 
-A good way to make sure your websites are responsive.
+Takes screenshots of websites in various resolutions. A good way to make sure your websites are responsive.
 
 It's speedy and generates 100 screenshots from 10 different websites in just over a minute.
 
