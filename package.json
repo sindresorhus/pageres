@@ -54,6 +54,7 @@
     "update-notifier": "^0.1.8"
   },
   "devDependencies": {
+    "concat-stream": "^1.4.5",
     "image-size": "^0.2.3",
     "mocha": "*"
   }

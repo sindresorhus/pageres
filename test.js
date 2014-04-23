@@ -1,8 +1,7 @@
-/*global it */
 'use strict';
 var assert = require('assert');
-var fs = require('fs');
 var imageSize = require('image-size');
+var concat = require('concat-stream');
 var pageres = require('./index');
 
 var def = [{
@@ -66,10 +65,11 @@ it('should crop image using the `crop` option', function (cb) {
 	pageres(def, {crop: true}, function (err, streams) {
 		assert(!err, err);
 
-		streams[0].pipe(fs.createWriteStream(streams[0].filename).on('finish', function () {
-			assert.strictEqual(imageSize(streams[0].filename).width, 1024);
-			assert.strictEqual(imageSize(streams[0].filename).height, 768);
-			fs.unlink(streams[0].filename, cb);
+		streams[0].pipe(concat(function (data) {
+			var size = imageSize(data);
+			assert.strictEqual(size.width, 1024);
+			assert.strictEqual(size.height, 768);
+			cb();
 		}));
 	});
 });
