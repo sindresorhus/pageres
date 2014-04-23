@@ -54,6 +54,7 @@
     "update-notifier": "^0.1.8"
   },
   "devDependencies": {
+    "image-size": "^0.2.3",
     "mocha": "*"
   }
 }
