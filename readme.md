@@ -127,6 +127,13 @@ You can use the most popular resolutions for your site with `pageres` by followi
 - In your terminal run: `pageres website.com < file-from-above-step.txt`
 
 
+## Credit
+
+[![Sindre Sorhus](http://gravatar.com/avatar/d36a92237c75c5337c17b60d90686bf9?s=144)](http://sindresorhus.com) | [![Kevin Mårtensson](http://gravatar.com/avatar/48fa294e3cd41680b80d3ed6345c7b4d?s=144)](https://github.com/kevva)
+---|---
+[Sindre Sorhus](http://sindresorhus.com) (creator) | [Kevin Mårtensson](https://github.com/kevva) (maintainer)
+
+
 ## License
 
 MIT © [Sindre Sorhus](http://sindresorhus.com)
