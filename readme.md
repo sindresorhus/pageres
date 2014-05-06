@@ -66,33 +66,19 @@ $ npm install --save pageres
 ### Usage
 
 ```js
-var eachAsync = require('each-async');
-var pageres = require('pageres');
+var Pageres = require('pageres');
 
-var items = [{
-	url: 'yeoman.io',
-	sizes: ['480x320', '1024x768']
-}, {
-	url: 'todomvc.com',
-	sizes: ['1280x1024', '1920x1080']
-}];
+var pageres = new Pageres({ delay: 2 })
+	.src('yeoman.io', ['480x320', '1024x768', 'iphone5s'])
+	.src('todomvc.com', ['1280x1024', '1920x1080'])
+	.dest(__dirname)
 
-pageres(items, { delay: 2 }, function (err, shots) {
+pageres.run(function (err) {
 	if (err) {
 		throw err;
 	}
 
-	eachAsync(shots, function (el, i, next) {
-		var stream = el.pipe(fs.createWriteStream(el.filename));
-		stream.on('finish', next);
-		stream.on('error', next);
-	}, function (err) {
-		if (err) {
-			throw err;
-		}
-
-		console.log('done');
-	});
+	console.log('done');
 });
 ```
 
