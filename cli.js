@@ -28,10 +28,10 @@ function showHelp() {
 		  cat <file> | pageres [ <url> <resolution> ... ]
 
 		Example
-		  pageres todomvc.com yeoman.io 1366x768 1600x900
-		  pageres [ yeoman.io 1366x768 1600x900 ] [ todomvc.com 1024x768 480x320 ]
+		  pageres todomvc.com yeoman.io 1366x768 1600x900 iphone5
+		  pageres [ yeoman.io 1366x768 1600x900 galaxys4 ] [ todomvc.com 1024x768 480x320 iphone5 ]
 		  pageres --delay 3 1366x768 < urls.txt
-		  pageres unicorn.html 1366x768
+		  pageres unicorn.html 1366x768 iphone5
 		  cat screen-resolutions.txt | pageres todomvc.com yeoman.io
 
 		Options
@@ -58,11 +58,6 @@ function generate(args, opts) {
 			}
 		}
 
-		args.forEach(function (arg) {
-			sizes = sizes.concat(arg.sizes);
-			urls = urls.concat(arg.url);
-		});
-
 		eachAsync(items, function (el, i, next) {
 			var stream = el.pipe(fs.createWriteStream(el.filename));
 			el.on('error', next);
@@ -84,9 +79,52 @@ function generate(args, opts) {
 	});
 }
 
-function init(args, opts) {
-	var items = [];
+function fetch(args, opts, cb) {
+	var ret = [];
 
+	eachAsync(args, function (el, i, next) {
+		el = el._;
+
+		var url = _.uniq(el.filter(/./.test, /\.|localhost/));
+		var size = _.uniq(el.filter(/./.test, /^\d{3,4}x\d{3,4}$/i));
+		var keyword = _.difference(el, url.concat(size));
+
+		if (url.length === 0) {
+			console.error(chalk.yellow('Specify a url'));
+			return showHelp();
+		}
+
+		if (size.length === 0 && keyword.length === 0) {
+			return getRes(function (err, sizes) {
+				if (err) {
+					return next(err);
+				}
+
+				console.log('No sizes specified. Falling back to the ten most popular screen resolutions according to w3counter as of January 2014:\n' + size.join(' '));
+
+				url.forEach(function (el) {
+					ret.push({ url: el, sizes: sizes });
+				});
+
+				next();
+			});
+		}
+
+		if (keyword.length > 0) {
+			size = size.concat(keyword);
+		}
+
+		url.forEach(function (el) {
+			ret.push({ url: el, sizes: size });
+		});
+
+		next();
+	}, function (err) {
+		cb(err, ret);
+	});
+}
+
+function init(args, opts) {
 	if (opts.help) {
 		return showHelp();
 	}
@@ -99,41 +137,11 @@ function init(args, opts) {
 		args = [{ _: args }];
 	}
 
-	eachAsync(args, function (el, i, next) {
-		el = el._;
-
-		var url = _.uniq(el.filter(/./.test, /\.|localhost/));
-		var size = _.uniq(el.filter(/./.test, /^\d{3,4}x\d{3,4}$/i));
-
-		if (url.length === 0) {
-			console.error(chalk.yellow('Specify a url'));
-			return showHelp();
+	fetch(args, opts, function (err, items) {
+		if (err) {
+			throw err;
 		}
 
-		if (size.length === 0) {
-			return getRes(function (err, data) {
-				if (err) {
-					throw err;
-				}
-
-				size = data;
-				console.log('No sizes specified. Falling back to the ten most popular screen resolutions according to w3counter as of January 2014:\n' + size.join(' '));
-
-				items.push({ url: url, sizes: size });
-				next();
-			});
-		}
-
-		if (url.length > 1) {
-			url.forEach(function (el) {
-				items.push({ url: el, sizes: size });
-			});
-		} else {
-			items.push({ url: url, sizes: size });
-		}
-
-		next();
-	}, function () {
 		generate(items, opts);
 	});
 }

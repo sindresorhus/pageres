@@ -19,13 +19,14 @@ it('should generate screenshots', function (cb) {
 		sizes: ['480x320', '1024x768']
 	}, {
 		url: 'todomvc.com',
-		sizes: ['1280x1024', '1920x1080']
+		sizes: ['1280x1024', '1920x1080', 'iphone5']
 	}];
 
 	pageres(items, function (err, streams) {
 		assert(!err, err);
-		assert.strictEqual(streams.length, 4);
+		assert.strictEqual(streams.length, 5);
 		assert.strictEqual(streams[0].filename, 'yeoman.io-480x320.png');
+		assert.strictEqual(streams[4].filename, 'todomvc.com-320x568.png');
 
 		streams[0].once('data', function (data) {
 			assert(data.length > 1000);

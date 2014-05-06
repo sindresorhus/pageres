@@ -51,7 +51,8 @@
     "slugify-url": "^1.2.0",
     "subarg": "^0.0.1",
     "sudo-block": "^0.4.0",
-    "update-notifier": "^0.1.8"
+    "update-notifier": "^0.1.8",
+    "viewport-list": "^0.1.2"
   },
   "devDependencies": {
     "concat-stream": "^1.4.5",
