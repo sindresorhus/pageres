@@ -1,4 +1,4 @@
-# <img src="logo.png" width="500" alt="pageres">
+# <img src="media/logo.png" width="500" alt="pageres">
 
 > Responsive website screenshots
 
@@ -8,9 +8,9 @@ Takes screenshots of websites in various resolutions. A good way to make sure yo
 
 It's speedy and generates 100 screenshots from 10 different websites in just over a minute.
 
-![](screenshot.png)
+![](media/screenshot.png)
 
-![](screenshot-output.png)
+![](media/screenshot-output.png)
 
 
 ## Install
