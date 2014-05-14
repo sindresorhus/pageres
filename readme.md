@@ -1,4 +1,4 @@
-# <img src="media/logo.png" width="500" alt="pageres">
+# ![pageres](https://cdn.rawgit.com/sindresorhus/pageres/c68734fcb7b980d9d0a67f0ee84ab6226d236ba4/media/logo.svg)
 
 > Responsive website screenshots
 
