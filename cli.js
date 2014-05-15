@@ -1,18 +1,30 @@
 #!/usr/bin/env node
 'use strict';
-var fs = require('fs');
-var nopt = require('nopt');
-var chalk = require('chalk');
-var sudoBlock = require('sudo-block');
 var _ = require('lodash');
-var stdin = require('get-stdin');
+var chalk = require('chalk');
 var eachAsync = require('each-async');
-var getRes = require('get-res');
 var multiline = require('multiline');
-var subarg = require('subarg');
+var nopt = require('nopt');
 var updateNotifier = require('update-notifier');
-var pageres = require('./index');
+var stdin = require('get-stdin');
+var subarg = require('subarg');
+var sudoBlock = require('sudo-block');
+var Pageres = require('./');
 var notifier = updateNotifier();
+
+var options = nopt({
+	help: Boolean,
+	version: Boolean,
+	crop: Boolean,
+	delay: Number
+}, {
+	h: '--help',
+	v: '--version',
+	c: '--crop',
+	d: '--delay'
+});
+
+var args = subarg(options.argv.remain)._;
 
 function showHelp() {
 	console.log(multiline.stripIndent(function () {/*
@@ -45,10 +57,14 @@ function showHelp() {
 }
 
 function generate(args, opts) {
-	var sizes = [];
-	var urls = [];
+	var pageres = new Pageres(opts)
+		.dest(process.cwd());
 
-	pageres(args, opts, function (err, items) {
+	args.forEach(function (arg) {
+		pageres.src(arg.url, arg.sizes);
+	});
+
+	pageres.run(function (err) {
 		if (err) {
 			if (err instanceof Error) {
 				throw err;
@@ -58,111 +74,94 @@ function generate(args, opts) {
 			}
 		}
 
-		args.forEach(function (arg) {
-			sizes = sizes.concat(arg.sizes);
-			urls = urls.concat(arg.url);
-		});
+		var i = pageres.sizes.length;
+		var s = pageres.stats.screenshots;
+		var u = pageres.stats.urls;
 
-		eachAsync(items, function (el, i, next) {
-			var stream = el.pipe(fs.createWriteStream(el.filename));
-			el.on('error', next);
-			stream.on('finish', next);
-			stream.on('error', next);
-		}, function (err) {
-			if (err) {
-				throw err;
-			}
-
-			var i = sizes.length;
-			var s = sizes.filter(function (el, i, self) {
-				return self.indexOf(el) === i;
-			}).length;
-			var u = urls.length;
-
-			console.log(chalk.green('\n✓ Successfully generated %d screenshots from %d %s and %d %s'), i, u, (u === 1 ? 'url' : 'urls'), s, (s === 1 ? 'resolution': 'resolutions'));
-		});
+		console.log(chalk.green('\n✓ Successfully generated %d screenshots from %d %s and %d %s'), i, u, (u === 1 ? 'url' : 'urls'), s, (s === 1 ? 'resolution': 'resolutions'));
 	});
 }
 
-function init(args, opts) {
-	var items = [];
+function get(args, options, cb) {
+	var ret = [];
 
-	if (opts.help) {
-		return showHelp();
-	}
-
-	if (opts.version) {
-		return console.log(require('./package').version);
-	}
-
-	if (!args.some(function (arr) { return arr._ !== undefined; })) {
-		args = [{ _: args }];
-	}
-
-	eachAsync(args, function (el, i, next) {
-		el = el._;
-
-		var url = _.uniq(el.filter(/./.test, /\.|localhost/));
-		var size = _.uniq(el.filter(/./.test, /^\d{3,4}x\d{3,4}$/i));
-
-		if (url.length === 0) {
+	eachAsync(args, function (arg, i, next) {
+		if (arg.url.length === 0) {
 			console.error(chalk.yellow('Specify a url'));
 			return showHelp();
 		}
 
-		if (size.length === 0) {
-			return getRes(function (err, data) {
-				if (err) {
-					throw err;
-				}
-
-				size = data;
-				console.log('No sizes specified. Falling back to the ten most popular screen resolutions according to w3counter as of January 2014:\n' + size.join(' '));
-
-				items.push({ url: url, sizes: size });
-				next();
-			});
+		if (arg.sizes.length === 0 && arg.keywords.length === 0) {
+			console.log('No sizes specified. Falling back to the ten most popular screen resolutions according to w3counter.');
 		}
 
-		if (url.length > 1) {
-			url.forEach(function (el) {
-				items.push({ url: el, sizes: size });
-			});
-		} else {
-			items.push({ url: url, sizes: size });
+		if (arg.keywords.length > 0) {
+			arg.sizes = arg.sizes.concat(arg.keywords);
 		}
+
+		arg.url.forEach(function (el) {
+			ret.push({ url: el, sizes: arg.sizes });
+		});
 
 		next();
-	}, function () {
-		generate(items, opts);
+	}, function (err) {
+		if (err) {
+			cb(err);
+		}
+
+		cb(null, ret);
 	});
 }
 
-sudoBlock();
+function parse(args) {
+	var ret = [];
+
+	args.forEach(function (arg) {
+		arg = arg._;
+
+		var url = _.uniq(arg.filter(/./.test, /\.|localhost/));
+		var sizes = _.uniq(arg.filter(/./.test, /^\d{3,4}x\d{3,4}$/i));
+		var keywords = _.difference(arg, url.concat(sizes));
+
+		ret.push({ url: url, sizes: sizes, keywords: keywords });
+	});
+
+	return ret;
+}
+
+function init(args, options) {
+	if (options.help || args.length === 0) {
+		return showHelp();
+	}
+
+	if (options.version) {
+		return console.log(require('./package').version);
+	}
+
+	if (args.some(function (arr) { return arr._ === undefined; })) {
+		args = [{ _: args }];
+	}
+
+	get(parse(args), options, function (err, items) {
+		if (err) {
+			throw err;
+		}
+
+		generate(items, options);
+	});
+}
 
 if (notifier.update) {
 	notifier.notify(true);
 }
 
-var opts = nopt({
-	help: Boolean,
-	version: Boolean,
-	crop: Boolean,
-	delay: Number
-}, {
-	h: '--help',
-	v: '--version',
-	c: '--crop',
-	d: '--delay'
-});
-
-var args = subarg(opts.argv.remain)._;
+sudoBlock();
 
 if (process.stdin.isTTY) {
-	init(args, opts);
+	init(args, options);
 } else {
 	stdin(function (data) {
 		[].push.apply(args, data.trim().split('\n'));
-		init(args, opts);
+		init(args, options);
 	});
 }
