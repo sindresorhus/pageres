@@ -78,7 +78,7 @@ function generate(args, opts) {
 		var s = pageres.stats.screenshots;
 		var u = pageres.stats.urls;
 
-		console.log(chalk.green('\n✓ Successfully generated %d screenshots from %d %s and %d %s'), i, u, (u === 1 ? 'url' : 'urls'), s, (s === 1 ? 'resolution': 'resolutions'));
+		console.log(chalk.green('\n✔') + ' Successfully generated %d screenshots from %d %s and %d %s', i, u, (u === 1 ? 'url' : 'urls'), s, (s === 1 ? 'resolution': 'resolutions'));
 	});
 }
 

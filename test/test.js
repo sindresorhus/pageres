@@ -3,7 +3,9 @@ var assert = require('assert');
 var fs = require('fs');
 var imageSize = require('image-size');
 var concat = require('concat-stream');
-var Pageres = require('./index');
+var Pageres = require('../');
+
+process.chdir(__dirname);
 
 before(function () {
 	this.timeout(20000);
@@ -58,7 +60,7 @@ it('should have a `delay` option', function (cb) {
 it('should crop image using the `crop` option', function (cb) {
 	var pageres = new Pageres({ crop: true })
 		.src('http://todomvc.com', ['1024x768']);
-		
+
 	pageres.run(function (err, streams) {
 		assert(!err, err);
 
@@ -73,12 +75,12 @@ it('should crop image using the `crop` option', function (cb) {
 
 it('should support local relative files', function (cb) {
 	var pageres = new Pageres()
-		.src('fixture/fixture.html', ['1024x768']);
+		.src('fixture.html', ['1024x768']);
 
 	pageres.run(function (err, streams) {
 		assert(!err, err);
 
-		assert.strictEqual(streams[0].filename, 'fixture!fixture.html-1024x768.png');
+		assert.strictEqual(streams[0].filename, 'fixture.html-1024x768.png');
 
 		streams[0].once('data', function (data) {
 			assert(data.length > 1000);

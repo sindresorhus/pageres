@@ -47,7 +47,7 @@
     "memoize-async": "^1.0.1",
     "multiline": "^0.3.0",
     "nopt": "^2.2.0",
-    "object-assign": "^0.2.0",
+    "object-assign": "^0.3.1",
     "phantomjs": "1.9.2-6",
     "slugify-url": "^1.2.0",
     "subarg": "^0.0.1",

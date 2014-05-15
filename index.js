@@ -1,6 +1,7 @@
 'use strict';
 var fs = require('fs');
 var path = require('path');
+var urlMod = require('url');
 var spawn = require('child_process').spawn;
 var _ = require('lodash');
 var assign = require('object-assign');
@@ -11,7 +12,6 @@ var getRes = require('get-res');
 var memoize = require('memoize-async');
 var phantomjs = require('phantomjs').path;
 var slugifyUrl = require('slugify-url');
-var urlMod = require('url');
 var viewport = require('viewport-list');
 
 /**
@@ -232,11 +232,11 @@ Pageres.prototype.generate = function (url, size) {
 	name = slugifyUrl(isFile ? url : newUrl).replace(/^(?:https?:\/\/)?www\./, '');
 	name = name + '-' + size + '.png';
 
-	var stream = this.phantom([{ delay: 0 }, this.options, {
+	var stream = this.phantom(assign({ delay: 0 }, this.options, {
 		url: newUrl,
 		width: size.split(/x/i)[0],
 		height: size.split(/x/i)[1]
-	}].reduce(assign));
+	}));
 
 	stream.filename = name;
 	return stream;
@@ -274,9 +274,5 @@ Pageres.prototype.phantom = function (options) {
 
 	return stream;
 };
-
-/**
- * Module exports
- */
 
 module.exports = Pageres;
