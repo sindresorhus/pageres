@@ -46,7 +46,7 @@
     "lodash": "^2.4.1",
     "memoize-async": "^1.0.1",
     "multiline": "^0.3.0",
-    "nopt": "^2.2.0",
+    "nopt": "^3.0.0",
     "object-assign": "^0.3.1",
     "phantomjs": "1.9.2-6",
     "slugify-url": "^1.2.0",
@@ -57,7 +57,7 @@
   },
   "devDependencies": {
     "concat-stream": "^1.4.5",
-    "image-size": "^0.2.3",
+    "image-size": "^0.3.0",
     "mocha": "*"
   }
 }
