@@ -41,7 +41,7 @@ function Pageres(options) {
  * Add a page to take screenshot of
  *
  * @param {String} url
- * @param {String|Array} sizes
+ * @param {Array} sizes
  * @api public
  */
 

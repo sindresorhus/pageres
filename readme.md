@@ -112,7 +112,7 @@ Type: `string`
 
 #### sizes
 
-Type: `string`, `array`
+Type: `array`
 
 Use a `<width>x<height>` notation or a keyword.
 
