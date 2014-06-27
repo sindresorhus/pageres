@@ -39,16 +39,16 @@ function Pageres(options) {
  * Add a page to take screenshot of
  *
  * @param {String} url
- * @param {String|Array} size
+ * @param {String|Array} sizes
  * @api public
  */
 
-Pageres.prototype.src = function (url, size) {
+Pageres.prototype.src = function (url, sizes) {
 	if (!arguments.length) {
 		return this._src;
 	}
 
-	this._src.push({ url: url, sizes: size });
+	this._src.push({ url: url, sizes: sizes });
 	return this;
 };
 

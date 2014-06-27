@@ -102,7 +102,7 @@ Default: `false`
 Crop to the set height.
 
 
-### pageres.src(url, size)
+### pageres.src(url, sizes)
 
 Add a page to screenshot.
 
@@ -110,7 +110,7 @@ Add a page to screenshot.
 
 Type: `string`
 
-#### size
+#### sizes
 
 Type: `string`, `array`
 
