@@ -53,7 +53,7 @@ Pageres.prototype.src = function (url, size) {
 };
 
 /**
-* Set or get the destination dir
+* Set or get the destination directory
 *
 * @param {String} dir
 * @api public

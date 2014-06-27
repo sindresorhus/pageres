@@ -55,8 +55,6 @@ You can also pipe in a newline separated list of urls and screen resolutions whi
 
 ## API
 
-*The API is still in flux and might change between minor versions. Feedback welcome!*
-
 ### Install
 
 ```sh
@@ -68,10 +66,10 @@ $ npm install --save pageres
 ```js
 var Pageres = require('pageres');
 
-var pageres = new Pageres({ delay: 2 })
+var pageres = new Pageres({delay: 2})
 	.src('yeoman.io', ['480x320', '1024x768', 'iphone5s'])
 	.src('todomvc.com', ['1280x1024', '1920x1080'])
-	.dest(__dirname)
+	.dest(__dirname);
 
 pageres.run(function (err) {
 	if (err) {
@@ -82,23 +80,62 @@ pageres.run(function (err) {
 });
 ```
 
-### Options
 
-#### delay
+### Pageres(options)
 
-Type: `number`  
+#### options
+
+##### delay
+
+Type: `number` *(seconds)*  
 Default: `0`
 
 Delay capturing the screenshot.
 
 Useful when the site does things after load that you want to capture.
 
-#### crop
+##### crop
 
 Type: `boolean`  
 Default: `false`
 
 Crop to the set height.
+
+
+### pageres.src(url, size)
+
+Add a page to screenshot.
+
+#### url
+
+Type: `string`
+
+#### size
+
+Type: `string`, `array`
+
+Use a `<width>x<height>` notation or a keyword.
+
+A keyword is a slugified (lowercase and spaces removed) version of a device from [this list](http://viewportsizes.com).  
+Example: `iPhone 5s` → `iphone5s`
+
+### pageres.dest(directory)
+
+Set the destination directory.
+
+#### directory
+
+Type: `string`
+
+### pageres.run(callback)
+
+Run pageres.
+
+#### callback(error, [items])
+
+Type: `function`
+
+If you don't set a `dest()` you'll get `items` in this callback, which is an array of streams.
 
 
 ## Google Analytics screen resolutions
