@@ -13,6 +13,7 @@ var memoize = require('memoize-async');
 var phantomjs = require('phantomjs').path;
 var slugifyUrl = require('slugify-url');
 var viewport = require('viewport-list');
+var mkdirp = require('mkdirp');
 
 /**
  * Initialize Pageres
@@ -194,12 +195,18 @@ Pageres.prototype.save = function (items, cb) {
 	var self = this;
 
 	eachAsync(items, function (item, i, next) {
-		var stream = item.pipe(fs.createWriteStream(path.join(self.dest(), item.filename)));
+		mkdirp(self.dest(), function (err) {
+			if (err) {
+				next(err);
+				return;
+			}
 
-		item.on('error', next);
+			var stream = item.pipe(fs.createWriteStream(path.join(self.dest(), item.filename)));
 
-		stream.on('finish', next);
-		stream.on('error', next);
+			item.on('error', next);
+			stream.on('finish', next);
+			stream.on('error', next);
+		});
 	}, function (err) {
 		if (err) {
 			return cb(err);
