@@ -77,8 +77,9 @@ function generate(args, opts) {
 		var i = pageres.sizes.length;
 		var s = pageres.stats.screenshots;
 		var u = pageres.stats.urls;
+		var checkmark = process.platform === 'win32' ? '√' : '✓';
 
-		console.log(chalk.green('\n✔') + ' Successfully generated %d screenshots from %d %s and %d %s', i, u, (u === 1 ? 'url' : 'urls'), s, (s === 1 ? 'resolution': 'resolutions'));
+		console.log('\n' + chalk.green(checkmark) + ' Successfully generated %d screenshots from %d %s and %d %s', i, u, (u === 1 ? 'url' : 'urls'), s, (s === 1 ? 'resolution': 'resolutions'));
 	});
 }
 
