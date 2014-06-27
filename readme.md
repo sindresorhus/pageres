@@ -53,6 +53,14 @@ You can also pipe in a newline separated list of urls and screen resolutions whi
 ```
 
 
+## Task runners
+
+Check out [grunt-pageres](https://github.com/sindresorhus/grunt-pageres) if you're using grunt. 
+
+For gulp and broccoli, just use the below API directly. No need for a wrapper plugin.  
+*(If you create a useless gulp/broccoli wrapper plugin for this, my cat will be very sad.)*
+
+
 ## API
 
 ### Install
@@ -108,10 +116,14 @@ Add a page to screenshot.
 
 #### url
 
+*Required*  
 Type: `string`
+
+URL or local path to the website you want to screenshot.
 
 #### sizes
 
+*Required*  
 Type: `array`
 
 Use a `<width>x<height>` notation or a keyword.
