@@ -24,6 +24,8 @@
     "converter.js"
   ],
   "keywords": [
+    "cli",
+    "bin",
     "page",
     "website",
     "site",
@@ -34,7 +36,10 @@
     "screenshot",
     "screen",
     "responsive",
-    "cli"
+    "gulpfriendly",
+    "phantom",
+    "phantomjs",
+    "image"
   ],
   "dependencies": {
     "base64-stream": "^0.1.2",
