@@ -92,9 +92,7 @@ Pageres.prototype.run = function (cb) {
 			return cb(new Error('URL required'));
 		}
 
-		self.urls.push(src.url);
-
-		if (sizes.length === 0 && keywords.length === 0) {
+		if (sizes.length === 0 && keywords.indexOf('w3counter') !== -1) {
 			return self.resolution(src.url, next);
 		}
 

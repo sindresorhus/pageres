@@ -89,6 +89,21 @@ it('should support local relative files', function (cb) {
 	});
 });
 
+it('should fetch resolutions from w3counter', function (cb) {
+	var pageres = new Pageres()
+		.src('yeoman.io', ['w3counter']);
+
+	pageres.run(function (err, streams) {
+		assert(!err, err);
+		assert.strictEqual(streams.length, 10);
+
+		streams[0].once('data', function (data) {
+			assert(data.length > 1000);
+			cb();
+		});
+	});
+});
+
 it('should save image', function (cb) {
 	var pageres = new Pageres()
 		.src('http://todomvc.com', ['1024x768'])
