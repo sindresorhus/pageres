@@ -13,7 +13,7 @@ before(function () {
 
 it('should generate screenshots', function (cb) {
 	var pageres = new Pageres()
-		.src('yeoman.io', ['480x320', '1024x768', 'iphone5s'])
+		.src('yeoman.io', ['480x320', '1024x768', 'iphone 5s'])
 		.src('todomvc.com', ['1280x1024', '1920x1080']);
 
 	pageres.run(function (err, streams) {

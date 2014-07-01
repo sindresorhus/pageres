@@ -75,7 +75,7 @@ $ npm install --save pageres
 var Pageres = require('pageres');
 
 var pageres = new Pageres({delay: 2})
-	.src('yeoman.io', ['480x320', '1024x768', 'iphone5s'])
+	.src('yeoman.io', ['480x320', '1024x768', 'iphone 5s'])
 	.src('todomvc.com', ['1280x1024', '1920x1080'])
 	.dest(__dirname);
 
@@ -128,8 +128,7 @@ Type: `array`
 
 Use a `<width>x<height>` notation or a keyword.
 
-A keyword is a slugified (lowercase and spaces removed) version of a device from [this list](http://viewportsizes.com).  
-Example: `iPhone 5s` → `iphone5s`
+A keyword is a version of a device from [this list](http://viewportsizes.com).
 
 ### pageres.dest(directory)
 
