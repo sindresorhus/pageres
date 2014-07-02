@@ -236,7 +236,7 @@ Pageres.prototype.generate = function (url, size) {
 	}
 
 	name = slugifyUrl(isFile ? url : newUrl).replace(/^(?:https?:\/\/)?www\./, '');
-	name = name + '-' + size + '.png';
+	name = name + '-' + size + (this.options.crop ? '-cropped' : '') + '.png';
 
 	var stream = this.phantom(assign({ delay: 0 }, this.options, {
 		url: newUrl,

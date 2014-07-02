@@ -63,6 +63,7 @@ it('should crop image using the `crop` option', function (cb) {
 
 	pageres.run(function (err, streams) {
 		assert(!err, err);
+		assert.strictEqual(streams[0].filename, 'todomvc.com-1024x768-cropped.png');
 
 		streams[0].pipe(concat(function (data) {
 			var size = imageSize(data);
