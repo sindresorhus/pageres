@@ -13,6 +13,8 @@ var memoize = require('memoize-async');
 var phantomjs = require('phantomjs').path;
 var slugifyUrl = require('slugify-url');
 var viewport = require('viewport-list');
+var mkdirp = require('mkdirp');
+var chalk = require('chalk');
 
 /**
  * Initialize Pageres
@@ -39,21 +41,21 @@ function Pageres(options) {
  * Add a page to take screenshot of
  *
  * @param {String} url
- * @param {String|Array} size
+ * @param {Array} sizes
  * @api public
  */
 
-Pageres.prototype.src = function (url, size) {
+Pageres.prototype.src = function (url, sizes) {
 	if (!arguments.length) {
 		return this._src;
 	}
 
-	this._src.push({ url: url, sizes: size });
+	this._src.push({ url: url, sizes: sizes });
 	return this;
 };
 
 /**
-* Set or get the destination dir
+* Set or get the destination directory
 *
 * @param {String} dir
 * @api public
@@ -90,9 +92,7 @@ Pageres.prototype.run = function (cb) {
 			return cb(new Error('URL required'));
 		}
 
-		self.urls.push(src.url);
-
-		if (sizes.length === 0 && keywords.length === 0) {
+		if (sizes.length === 0 && keywords.indexOf('w3counter') !== -1) {
 			return self.resolution(src.url, next);
 		}
 
@@ -194,12 +194,18 @@ Pageres.prototype.save = function (items, cb) {
 	var self = this;
 
 	eachAsync(items, function (item, i, next) {
-		var stream = item.pipe(fs.createWriteStream(path.join(self.dest(), item.filename)));
+		mkdirp(self.dest(), function (err) {
+			if (err) {
+				next(err);
+				return;
+			}
 
-		item.on('error', next);
+			var stream = item.pipe(fs.createWriteStream(path.join(self.dest(), item.filename)));
 
-		stream.on('finish', next);
-		stream.on('error', next);
+			item.on('error', next);
+			stream.on('finish', next);
+			stream.on('error', next);
+		});
 	}, function (err) {
 		if (err) {
 			return cb(err);
@@ -230,7 +236,7 @@ Pageres.prototype.generate = function (url, size) {
 	}
 
 	name = slugifyUrl(isFile ? url : newUrl).replace(/^(?:https?:\/\/)?www\./, '');
-	name = name + '-' + size + '.png';
+	name = name + '-' + size + (this.options.crop ? '-cropped' : '') + '.png';
 
 	// TODO add option to switch between phantom/nodeWebkit
 	// var stream = this.phantom(assign({ delay: 0 }, this.options, {
@@ -294,5 +300,14 @@ Pageres.prototype.nodeWebkit = function (options) {
 	return cp.stdout;
 };
 
+
+Pageres.prototype._logSuccessMessage = function () {
+	var i = this.sizes.length;
+	var s = this.stats.screenshots;
+	var u = this.stats.urls;
+	var checkmark = process.platform === 'win32' ? '√' : '✓';
+
+	console.log('\n' + chalk.green(checkmark) + ' Successfully generated %d screenshots from %d %s and %d %s', i, u, (u === 1 ? 'url' : 'urls'), s, (s === 1 ? 'resolution': 'resolutions'));
+};
 
 module.exports = Pageres;

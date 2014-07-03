@@ -1,6 +1,6 @@
 {
   "name": "pageres",
-  "version": "0.2.3",
+  "version": "0.3.0",
   "description": "Responsive website screenshots",
   "license": "MIT",
   "repository": "sindresorhus/pageres",
@@ -24,6 +24,8 @@
     "converter.js"
   ],
   "keywords": [
+    "cli",
+    "bin",
     "page",
     "website",
     "site",
@@ -34,7 +36,10 @@
     "screenshot",
     "screen",
     "responsive",
-    "cli"
+    "gulpfriendly",
+    "phantom",
+    "phantomjs",
+    "image"
   ],
   "dependencies": {
     "base64-stream": "^0.1.2",
@@ -45,19 +50,20 @@
     "get-stdin": "^0.1.0",
     "lodash": "^2.4.1",
     "memoize-async": "^1.0.1",
+    "mkdirp": "^0.5.0",
     "multiline": "^0.3.0",
-    "nopt": "^2.2.0",
+    "nopt": "^3.0.0",
     "object-assign": "^0.3.1",
     "phantomjs": "1.9.2-6",
     "slugify-url": "^1.2.0",
     "subarg": "^0.0.1",
     "sudo-block": "^0.4.0",
     "update-notifier": "^0.1.8",
-    "viewport-list": "^0.1.4"
+    "viewport-list": "^0.2.0"
   },
   "devDependencies": {
     "concat-stream": "^1.4.5",
-    "image-size": "^0.2.3",
+    "image-size": "^0.3.0",
     "mocha": "*"
   }
 }

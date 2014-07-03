@@ -13,7 +13,7 @@ before(function () {
 
 it('should generate screenshots', function (cb) {
 	var pageres = new Pageres()
-		.src('yeoman.io', ['480x320', '1024x768', 'iphone5s'])
+		.src('yeoman.io', ['480x320', '1024x768', 'iphone 5s'])
 		.src('todomvc.com', ['1280x1024', '1920x1080']);
 
 	pageres.run(function (err, streams) {
@@ -63,6 +63,7 @@ it('should crop image using the `crop` option', function (cb) {
 
 	pageres.run(function (err, streams) {
 		assert(!err, err);
+		assert.strictEqual(streams[0].filename, 'todomvc.com-1024x768-cropped.png');
 
 		streams[0].pipe(concat(function (data) {
 			var size = imageSize(data);
@@ -81,6 +82,21 @@ it('should support local relative files', function (cb) {
 		assert(!err, err);
 
 		assert.strictEqual(streams[0].filename, 'fixture.html-1024x768.png');
+
+		streams[0].once('data', function (data) {
+			assert(data.length > 1000);
+			cb();
+		});
+	});
+});
+
+it('should fetch resolutions from w3counter', function (cb) {
+	var pageres = new Pageres()
+		.src('yeoman.io', ['w3counter']);
+
+	pageres.run(function (err, streams) {
+		assert(!err, err);
+		assert.strictEqual(streams.length, 10);
 
 		streams[0].once('data', function (data) {
 			assert(data.length > 1000);

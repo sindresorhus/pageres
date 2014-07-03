@@ -53,9 +53,15 @@ You can also pipe in a newline separated list of urls and screen resolutions whi
 ```
 
 
-## API
+## Task runners
 
-*The API is still in flux and might change between minor versions. Feedback welcome!*
+Check out [grunt-pageres](https://github.com/sindresorhus/grunt-pageres) if you're using grunt. 
+
+For gulp and broccoli, just use the below API directly. No need for a wrapper plugin.  
+*(If you create a useless gulp/broccoli wrapper plugin for this, my cat will be very sad.)*
+
+
+## API
 
 ### Install
 
@@ -68,10 +74,10 @@ $ npm install --save pageres
 ```js
 var Pageres = require('pageres');
 
-var pageres = new Pageres({ delay: 2 })
-	.src('yeoman.io', ['480x320', '1024x768', 'iphone5s'])
+var pageres = new Pageres({delay: 2})
+	.src('yeoman.io', ['480x320', '1024x768', 'iphone 5s'])
 	.src('todomvc.com', ['1280x1024', '1920x1080'])
-	.dest(__dirname)
+	.dest(__dirname);
 
 pageres.run(function (err) {
 	if (err) {
@@ -82,23 +88,67 @@ pageres.run(function (err) {
 });
 ```
 
-### Options
 
-#### delay
+### Pageres(options)
 
-Type: `number`  
+#### options
+
+##### delay
+
+Type: `number` *(seconds)*  
 Default: `0`
 
 Delay capturing the screenshot.
 
 Useful when the site does things after load that you want to capture.
 
-#### crop
+##### crop
 
 Type: `boolean`  
 Default: `false`
 
 Crop to the set height.
+
+
+### pageres.src(url, sizes)
+
+Add a page to screenshot.
+
+#### url
+
+*Required*  
+Type: `string`
+
+URL or local path to the website you want to screenshot.
+
+#### sizes
+
+*Required*  
+Type: `array`
+
+Use a `<width>x<height>` notation or a keyword.
+
+A keyword is a version of a device from [this list](http://viewportsizes.com).
+You can also pass in the `w3counter` keyword to use the ten most popular 
+resolutions from [w3counter](http://www.w3counter.com/globalstats.php).
+
+### pageres.dest(directory)
+
+Set the destination directory.
+
+#### directory
+
+Type: `string`
+
+### pageres.run(callback)
+
+Run pageres.
+
+#### callback(error, [items])
+
+Type: `function`
+
+If you don't set a `dest()` you'll get `items` in this callback, which is an array of streams.
 
 
 ## Google Analytics screen resolutions
