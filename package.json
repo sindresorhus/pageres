@@ -16,7 +16,7 @@
     "node": ">=0.10.0"
   },
   "scripts": {
-    "test": "mocha --timeout 0"
+    "test": "node test/test.js"
   },
   "files": [
     "index.js",
@@ -63,8 +63,8 @@
     "tough-cookie": "^0.12.1"
   },
   "devDependencies": {
+    "ava": "0.0.3",
     "concat-stream": "^1.4.5",
-    "image-size": "^0.3.0",
-    "mocha": "*"
+    "image-size": "^0.3.0"
   }
 }
