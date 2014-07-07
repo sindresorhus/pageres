@@ -237,7 +237,20 @@ Pageres.prototype.generate = function (url, size) {
 
 	name = slugifyUrl(isFile ? url : newUrl).replace(/^(?:https?:\/\/)?www\./, '');
 	name = name + '-' + size + (this.options.crop ? '-cropped' : '') + '.png';
-
+    var cp = require('tough-cookie').parse;
+    var parsedCookies = (this.options.cookie || []).map(function(c) {
+        var cookie = cp(c);
+        return {
+            name: cookie.key,
+            value: cookie.value,
+            domain: cookie.domain,
+            path: cookie.path,
+            httponly: cookie.httpOnly,
+            secure: cookie.secure,
+            expires: cookie.expires
+        };
+    });
+    this.options.parsedCookies = parsedCookies;
 	var stream = this.phantom(assign({ delay: 0 }, this.options, {
 		url: newUrl,
 		width: size.split(/x/i)[0],

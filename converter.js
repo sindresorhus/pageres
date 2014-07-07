@@ -24,6 +24,14 @@ page.onError = function (err) {
 	console.error(err);
 };
 
+options.parsedCookies.forEach(function(c) {
+    var cs = phantom.addCookie(c);
+    if (!cs) {
+        console.error('Couldn\'t addCookie');
+        phantom.exit(1);
+    }
+});
+
 page.open(options.url, function (status) {
 	if (status === 'fail') {
 		console.error('Couldn\'t load url');
