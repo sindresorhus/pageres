@@ -17,7 +17,7 @@ var options = nopt({
 	version: Boolean,
 	crop: Boolean,
 	delay: Number,
-    cookie: [String, Array]
+	cookie: [String, Array]
 }, {
 	h: '--help',
 	v: '--version',
@@ -50,7 +50,7 @@ function showHelp() {
 		Options
 		  -d, --delay <seconds>    Delay capturing the screenshot
 		  -c, --crop               Crop to the set height
-          --cookie <cookie string> Browser cookie, can be set multiple times
+		  --cookie <cookie string> Browser cookie, can be set multiple times
 
 		<url> can also be a local file path.
 
