@@ -9,8 +9,8 @@ var updateNotifier = require('update-notifier');
 var stdin = require('get-stdin');
 var subarg = require('subarg');
 var sudoBlock = require('sudo-block');
+var pkg = require('./package.json');
 var Pageres = require('./');
-var notifier = updateNotifier();
 
 var options = nopt({
 	help: Boolean,
@@ -147,11 +147,12 @@ function init(args, options) {
 	});
 }
 
-if (notifier.update) {
-	notifier.notify(true);
-}
-
 sudoBlock();
+
+updateNotifier({
+	packageName: pkg.name,
+	packageVersion: pkg.version
+}).notify();
 
 if (process.stdin.isTTY) {
 	init(args, options);
