@@ -49,6 +49,7 @@
     "get-res": "^0.2.1",
     "get-stdin": "^0.1.0",
     "lodash": "^2.4.1",
+    "log-symbols": "^1.0.0",
     "memoize-async": "^1.0.1",
     "mkdirp": "^0.5.0",
     "multiline": "^0.3.0",

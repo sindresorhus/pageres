@@ -1,7 +1,6 @@
 #!/usr/bin/env node
 'use strict';
 var _ = require('lodash');
-var chalk = require('chalk');
 var eachAsync = require('each-async');
 var multiline = require('multiline');
 var nopt = require('nopt');
@@ -9,6 +8,7 @@ var updateNotifier = require('update-notifier');
 var stdin = require('get-stdin');
 var subarg = require('subarg');
 var sudoBlock = require('sudo-block');
+var logSymbols = require('log-symbols');
 var pkg = require('./package.json');
 var Pageres = require('./');
 
@@ -83,8 +83,9 @@ function get(args, options, cb) {
 
 	eachAsync(args, function (arg, i, next) {
 		if (arg.url.length === 0) {
-			console.error(chalk.yellow('Specify a url'));
-			return showHelp();
+			console.error(logSymbols.warning, 'Specify a url\n');
+			showHelp();
+			return;
 		}
 
 		if (arg.sizes.length === 0 && arg.keywords.length === 0) {
