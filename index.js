@@ -14,7 +14,7 @@ var phantomjs = require('phantomjs').path;
 var slugifyUrl = require('slugify-url');
 var viewport = require('viewport-list');
 var mkdirp = require('mkdirp');
-var chalk = require('chalk');
+var logSymbols = require('log-symbols');
 
 /**
  * Initialize Pageres
@@ -298,9 +298,8 @@ Pageres.prototype._logSuccessMessage = function () {
 	var i = this.sizes.length;
 	var s = this.stats.screenshots;
 	var u = this.stats.urls;
-	var checkmark = process.platform === 'win32' ? '√' : '✓';
 
-	console.log('\n' + chalk.green(checkmark) + ' Successfully generated %d screenshots from %d %s and %d %s', i, u, (u === 1 ? 'url' : 'urls'), s, (s === 1 ? 'resolution': 'resolutions'));
+	console.log('\n' + logSymbols.success + ' Successfully generated %d screenshots from %d %s and %d %s', i, u, (u === 1 ? 'url' : 'urls'), s, (s === 1 ? 'resolution': 'resolutions'));
 };
 
 module.exports = Pageres;
