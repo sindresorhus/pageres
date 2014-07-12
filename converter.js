@@ -24,10 +24,9 @@ page.onError = function (err) {
 	console.error(err);
 };
 
-options.parsedCookies.forEach(function(c) {
-    var cs = phantom.addCookie(c);
-    if (!cs) {
-        console.error('Couldn\'t addCookie');
+options.parsedCookies.forEach(function(cookie) {
+    if (!phantom.addCookie(cookie)) {
+        console.error('Couldn\'t add cookie: ' + JSON.stringify(cookie));
         phantom.exit(1);
     }
 });

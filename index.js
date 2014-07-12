@@ -237,20 +237,20 @@ Pageres.prototype.generate = function (url, size) {
 
 	name = slugifyUrl(isFile ? url : newUrl).replace(/^(?:https?:\/\/)?www\./, '');
 	name = name + '-' + size + (this.options.crop ? '-cropped' : '') + '.png';
-    var cp = require('tough-cookie').parse;
-    var parsedCookies = (this.options.cookie || []).map(function(c) {
-        var cookie = cp(c);
-        return {
-            name: cookie.key,
-            value: cookie.value,
-            domain: cookie.domain,
-            path: cookie.path,
-            httponly: cookie.httpOnly,
-            secure: cookie.secure,
-            expires: cookie.expires
-        };
-    });
-    this.options.parsedCookies = parsedCookies;
+	var parseCookie = require('tough-cookie').parse;
+	this.options.parsedCookies = (this.options.cookie || []).map(function(cookieText) {
+		var cookie = parseCookie(cookieText);
+		// adjust for phantom's API
+		return {
+			name: cookie.key,
+			value: cookie.value,
+			domain: cookie.domain,
+			path: cookie.path,
+			httponly: cookie.httpOnly,
+			secure: cookie.secure,
+			expires: cookie.expires
+		};
+	});
 	var stream = this.phantom(assign({ delay: 0 }, this.options, {
 		url: newUrl,
 		width: size.split(/x/i)[0],
@@ -273,13 +273,16 @@ Pageres.prototype.phantom = function (options) {
 		path.join(__dirname, 'converter.js'),
 		JSON.stringify(options)
 	]);
-
 	var stream = cp.stdout.pipe(base64.decode());
 	process.stderr.setMaxListeners(0);
 
 	cp.stdout.on('data', function (data) {
 		if (/Couldn\'t load url/.test(data)) {
 			return stream.emit('error', new Error('Couldn\'t load url'));
+		}
+
+		if (/Couldn\'t add cookie/.test(data)) {
+			return stream.emit('error', new Error(data));
 		}
 	});
 
