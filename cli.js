@@ -17,7 +17,7 @@ var options = nopt({
 	version: Boolean,
 	crop: Boolean,
 	delay: Number,
-	cookie: [String, Array]
+	cookie: Array
 }, {
 	h: '--help',
 	v: '--version',
