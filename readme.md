@@ -46,6 +46,7 @@ Example
 Options
   -d, --delay <seconds>    Delay capturing the screenshot
   -c, --crop               Crop to the set height
+  --cookie <cookie>        Browser cookie, can be set multiple times
 
 <url> can also be a local file path.
 

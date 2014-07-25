@@ -59,6 +59,7 @@
     "slugify-url": "^1.2.0",
     "subarg": "^0.0.1",
     "sudo-block": "^0.4.0",
+    "tough-cookie": "^0.12.1",
     "update-notifier": "^0.2.0",
     "viewport-list": "^0.2.0"
   },
