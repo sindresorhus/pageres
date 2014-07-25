@@ -24,24 +24,24 @@ page.onError = function (err) {
 	console.error(err);
 };
 
+page.viewportSize = {
+	width: options.width,
+	height: options.height
+};
+
+if (options.crop) {
+	page.clipRect = {
+		top: 0,
+		left: 0,
+		width: options.width,
+		height: options.height
+	};
+}
+
 page.open(options.url, function (status) {
 	if (status === 'fail') {
 		console.error('Couldn\'t load url');
 		phantom.exit(1);
-	}
-
-	page.viewportSize = {
-		width: options.width,
-		height: options.height
-	};
-
-	if (options.crop) {
-		page.clipRect = {
-			top: 0,
-			left: 0,
-			width: options.width,
-			height: options.height
-		};
 	}
 
 	page.evaluate(function () {
