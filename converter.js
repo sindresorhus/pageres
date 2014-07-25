@@ -7,7 +7,7 @@ var log = console.log;
 // make sure phantom never outputs to stdout
 console.log = console.error;
 
-options.parsedCookies.forEach(function (cookie) {
+options.cookies.forEach(function (cookie) {
     if (!phantom.addCookie(cookie)) {
         console.error('Couldn\'t add cookie: ', cookie);
         phantom.exit(1);

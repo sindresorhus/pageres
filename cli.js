@@ -146,6 +146,10 @@ function init(args, options) {
 			throw err;
 		}
 
+		// plural makes more sense for a programmatic option
+		options.cookies = options.cookie;
+		delete options.cookie;
+
 		generate(items, options);
 	});
 }

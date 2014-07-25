@@ -15,6 +15,28 @@ var slugifyUrl = require('slugify-url');
 var viewport = require('viewport-list');
 var mkdirp = require('mkdirp');
 var logSymbols = require('log-symbols');
+var parseCookie = require('tough-cookie').parse;
+
+// normalize cookies for PhantomJS API
+function normalizeCookies(cookies) {
+	if (!Array.isArray(cookies)) {
+		return [];
+	}
+
+	return cookies.map(function (el) {
+		var cookie = parseCookie(el);
+
+		return {
+			name: cookie.key,
+			value: cookie.value,
+			domain: cookie.domain,
+			path: cookie.path,
+			httponly: cookie.httpOnly,
+			secure: cookie.secure,
+			expires: cookie.expires
+		};
+	});
+}
 
 /**
  * Initialize Pageres
@@ -28,8 +50,9 @@ function Pageres(options) {
 		return new Pageres();
 	}
 
-	options = options || {};
-	this.options = options;
+	this.options = assign({}, options || {});
+	this.options.cookies = normalizeCookies(this.options.cookies);
+
 	this._src = [];
 	this.items = [];
 	this.sizes = [];
@@ -237,21 +260,6 @@ Pageres.prototype.generate = function (url, size) {
 
 	name = slugifyUrl(isFile ? url : newUrl).replace(/^(?:https?:\/\/)?www\./, '');
 	name = name + '-' + size + (this.options.crop ? '-cropped' : '') + '.png';
-
-	var parseCookie = require('tough-cookie').parse;
-	this.options.parsedCookies = (this.options.cookie || []).map(function (el) {
-		var cookie = parseCookie(el);
-		// adjust for phantom's API
-		return {
-			name: cookie.key,
-			value: cookie.value,
-			domain: cookie.domain,
-			path: cookie.path,
-			httponly: cookie.httpOnly,
-			secure: cookie.secure,
-			expires: cookie.expires
-		};
-	});
 
 	var stream = this.phantom(assign({ delay: 0 }, this.options, {
 		url: newUrl,

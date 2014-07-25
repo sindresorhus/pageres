@@ -110,6 +110,16 @@ Default: `false`
 
 Crop to the set height.
 
+##### cookie
+
+Type: `array`  
+
+Same format as a [browser cookie](http://en.wikipedia.org/wiki/HTTP_cookie).
+
+###### Tip
+
+Go to the website you want a cookie for and copy-paste it from Dev Tools.
+
 
 ### pageres.src(url, sizes)
 
