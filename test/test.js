@@ -4,6 +4,8 @@ var test = require('ava');
 var imageSize = require('image-size');
 var concat = require('concat-stream');
 var Pageres = require('../');
+var Server = require('./serverForCookieTests');
+var PNG = require('png-js');
 
 process.chdir(__dirname);
 
@@ -118,5 +120,30 @@ test('save image', function (t) {
 		t.assert(!err, err);
 		t.assert(fs.existsSync('todomvc.com-1024x768.png'));
 		fs.unlinkSync('todomvc.com-1024x768.png');
+	});
+});
+
+test('send cookie', function(t) {
+	t.plan(6);
+	var server = new Server();
+	var filename = 'localhost!1337-320x480.png';
+
+	var pageres = new Pageres({cookies: ['pageresColor=black; Path=/; Domain=localhost']})
+		.src('http://localhost:1337', ['320x480'])
+		.dest(__dirname);
+
+	pageres.run(function(err) {
+		server.close();
+
+		t.assert(!err, err);
+		t.assert(fs.existsSync(filename));
+
+		PNG.decode(filename, function(pixels) {
+			fs.unlinkSync(filename);
+			t.assert(pixels[0] === 0);
+			t.assert(pixels[1] === 0);
+			t.assert(pixels[2] === 0);
+			t.assert(pixels[3] === 255);
+		});
 	});
 });
