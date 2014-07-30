@@ -17,7 +17,8 @@ var options = nopt({
 	version: Boolean,
 	crop: Boolean,
 	delay: Number,
-	cookie: Array
+	cookie: Array,
+	'ignore-ssl-errors': Boolean
 }, {
 	h: '--help',
 	v: '--version',
@@ -48,9 +49,10 @@ function showHelp() {
 		  cat screen-resolutions.txt | pageres todomvc.com yeoman.io
 
 		Options
-		  -d, --delay <seconds>		Delay capturing the screenshot
+		  -d, --delay <seconds>			Delay capturing the screenshot
 		  -c, --crop				Crop to the set height
 		  --cookie <cookie>			Browser cookie, can be set multiple times
+		  --ignore-ssl-errors			Ignore SSL errors
 
 		<url> can also be a local file path.
 

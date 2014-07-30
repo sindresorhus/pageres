@@ -147,3 +147,28 @@ test('send cookie', function(t) {
 		});
 	});
 });
+
+test('ignore-ssl-errors', function(t) {
+	t.plan(6);
+	var server = new Server({ssl: true});
+	var filename = 'localhost!2337-320x480.png';
+
+	var pageres = new Pageres({'ignore-ssl-errors': true})
+		.src('https://localhost:2337', ['320x480'])
+		.dest(__dirname);
+
+	pageres.run(function(err) {
+		server.close();
+
+		t.assert(!err, err);
+		t.assert(fs.existsSync(filename));
+
+		PNG.decode(filename, function(pixels) {
+			fs.unlinkSync(filename);
+			t.assert(pixels[0] === 255);
+			t.assert(pixels[1] === 0);
+			t.assert(pixels[2] === 0);
+			t.assert(pixels[3] === 255);
+		});
+	});
+});

@@ -279,10 +279,11 @@ Pageres.prototype.generate = function (url, size) {
  */
 
 Pageres.prototype.phantom = function (options) {
-	var cp = spawn(phantomjs, [
+	var args = (options['ignore-ssl-errors']) ? ['--ignore-ssl-errors=yes'] : [];
+	var cp = spawn(phantomjs, args.concat([
 		path.join(__dirname, 'converter.js'),
 		JSON.stringify(options)
-	]);
+	]));
 	var stream = cp.stdout.pipe(base64.decode());
 	process.stderr.setMaxListeners(0);
 
