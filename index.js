@@ -281,7 +281,9 @@ Pageres.prototype.generate = function (url, size) {
 Pageres.prototype.phantom = function (options) {
 	var cp = spawn(phantomjs, [
 		path.join(__dirname, 'converter.js'),
-		JSON.stringify(options)
+		JSON.stringify(options),
+		'--ignore-ssl-errors=true',
+		'--local-to-remote-url-access=true'
 	]);
 	var stream = cp.stdout.pipe(base64.decode());
 	process.stderr.setMaxListeners(0);
