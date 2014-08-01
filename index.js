@@ -15,28 +15,7 @@ var slugifyUrl = require('slugify-url');
 var viewport = require('viewport-list');
 var mkdirp = require('mkdirp');
 var logSymbols = require('log-symbols');
-var parseCookie = require('tough-cookie').parse;
-
-// normalize cookies for PhantomJS API
-function normalizeCookies(cookies) {
-	if (!Array.isArray(cookies)) {
-		return [];
-	}
-
-	return cookies.map(function (el) {
-		var cookie = parseCookie(el);
-
-		return {
-			name: cookie.key,
-			value: cookie.value,
-			domain: cookie.domain,
-			path: cookie.path,
-			httponly: cookie.httpOnly,
-			secure: cookie.secure,
-			expires: cookie.expires
-		};
-	});
-}
+var parseCookiePhantomjs = require('parse-cookie-phantomjs');
 
 /**
  * Initialize Pageres
@@ -51,7 +30,7 @@ function Pageres(options) {
 	}
 
 	this.options = assign({}, options || {});
-	this.options.cookies = normalizeCookies(this.options.cookies);
+	this.options.cookies = (this.options.cookies || []).map(parseCookiePhantomjs);
 
 	this._src = [];
 	this.items = [];

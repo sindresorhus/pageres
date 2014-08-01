@@ -55,6 +55,7 @@
     "multiline": "^0.3.0",
     "nopt": "^3.0.0",
     "object-assign": "^0.3.1",
+    "parse-cookie-phantomjs": "^1.0.0",
     "phantomjs": "1.9.2-6",
     "slugify-url": "^1.2.0",
     "subarg": "^0.0.1",
