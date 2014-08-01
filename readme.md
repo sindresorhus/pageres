@@ -110,7 +110,7 @@ Default: `false`
 
 Crop to the set height.
 
-##### cookie
+##### cookies
 
 Type: `array`  
 
