@@ -28,34 +28,35 @@ var options = nopt({
 var args = subarg(options.argv.remain)._;
 
 function showHelp() {
-	console.log(multiline.stripIndent(function () {/*
-		Get screenshots of websites in different resolutions.
+  console.log(multiline(function () {/*
 
-		Specify urls and screen resolutions as arguments. Order doesn't matter. Group arguments with [ ]
-		Screenshots are saved in the current directory.
+  Get screenshots of websites in different resolutions.
 
-		Usage
-		  pageres <url> <resolution>
-		  pageres [ <url> <resolution> ] [ <url> <resolution> ]
-		  pageres [ <url> <resolution> ... ] < <file>
-		  cat <file> | pageres [ <url> <resolution> ... ]
+  Specify urls and screen resolutions as arguments. Order doesn't matter. Group arguments with [ ]
+  Screenshots are saved in the current directory.
 
-		Example
-		  pageres todomvc.com yeoman.io 1366x768 1600x900
-		  pageres [ yeoman.io 1366x768 1600x900 ] [ todomvc.com 1024x768 480x320 ]
-		  pageres --delay 3 1366x768 < urls.txt
-		  pageres unicorn.html 1366x768
-		  cat screen-resolutions.txt | pageres todomvc.com yeoman.io
+  Usage
+    pageres <url> <resolution>
+    pageres [ <url> <resolution> ] [ <url> <resolution> ]
+    pageres [ <url> <resolution> ... ] < <file>
+    cat <file> | pageres [ <url> <resolution> ... ]
 
-		Options
-		  -d, --delay <seconds>  Delay capturing the screenshot
-		  -c, --crop             Crop to the set height
-		  --cookie <cookie>      Browser cookie, can be set multiple times
+  Example
+    pageres todomvc.com yeoman.io 1366x768 1600x900
+    pageres [ yeoman.io 1366x768 1600x900 ] [ todomvc.com 1024x768 480x320 ]
+    pageres --delay 3 1366x768 < urls.txt
+    pageres unicorn.html 1366x768
+    cat screen-resolutions.txt | pageres todomvc.com yeoman.io
 
-		<url> can also be a local file path.
+  Options
+    -d, --delay <seconds>    Delay capturing the screenshot
+    -c, --crop               Crop to the set height
+    --cookie <cookie>        Browser cookie, can be set multiple times
 
-		You can also pipe in a newline separated list of urls and screen resolutions which will get merged with the arguments. If no screen resolutions are specified it will fall back to the ten most popular ones according to w3counter.
-	*/}));
+  <url> can also be a local file path.
+
+  You can also pipe in a newline separated list of urls and screen resolutions which will get merged with the arguments.
+  */}));
 }
 
 function generate(args, opts) {
