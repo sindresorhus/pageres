@@ -240,7 +240,9 @@ Pageres.prototype.generate = function (url, size) {
 	name = slugifyUrl(isFile ? url : newUrl).replace(/^(?:https?:\/\/)?www\./, '');
 	name = name + '-' + size + (this.options.crop ? '-cropped' : '') + '.png';
 
-	var stream = this.phantom(assign({ delay: 0 }, this.options, {
+	// TODO add option to switch between phantom/nodeWebkit
+	// var stream = this.phantom(assign({ delay: 0 }, this.options, {
+	var stream = this.nodeWebkit(assign({ delay: 0 }, this.options, {
 		url: newUrl,
 		width: size.split(/x/i)[0],
 		height: size.split(/x/i)[1]
@@ -287,6 +289,24 @@ Pageres.prototype.phantom = function (options) {
 
 	return stream;
 };
+
+/**
+ * Run node webkit
+ *
+ * @param {Object} options
+ * @api public
+ */
+
+Pageres.prototype.nodeWebkit = function (options) {
+	// Start node-webkit
+	var cp = spawn('node-webkit', [
+		path.join(__dirname, 'nw-screenshot'),
+		JSON.stringify(options)
+	]);
+	// nw-app will
+	return cp.stdout;
+};
+
 
 Pageres.prototype._logSuccessMessage = function () {
 	var i = this.sizes.length;
