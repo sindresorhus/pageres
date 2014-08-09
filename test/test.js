@@ -38,7 +38,6 @@ test('remove special characters from the URL to create a valid filename', functi
 		t.assert(!err, err);
 		t.assert(streams.length === 1);
 		t.assert(streams[0].filename === 'microsoft.com!query=pageres-1024x768.png');
-		cb();
 	});
 });
 
