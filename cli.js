@@ -30,7 +30,7 @@ var args = subarg(options.argv.remain)._;
 function showHelp() {
   console.log(multiline(function () {/*
 
-  Get screenshots of websites in different resolutions.
+  Capture screenshots of websites in various resolutions.
 
   Specify urls and screen resolutions as arguments. Order doesn't matter. Group arguments with [ ]
   Screenshots are saved in the current directory.
