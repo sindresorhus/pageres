@@ -31,12 +31,12 @@ function Pageres(options) {
 
 	this.options = assign({}, options || {});
 	this.options.cookies = (this.options.cookies || []).map(parseCookiePhantomjs);
+	this.stats = {};
 
 	this._src = [];
-	this.items = [];
-	this.sizes = [];
-	this.urls = [];
-	this.stats = {};
+	this._items = [];
+	this._sizes = [];
+	this._urls = [];
 }
 
 /**
@@ -94,17 +94,19 @@ Pageres.prototype.run = function (cb) {
 			return cb(new Error('URL required'));
 		}
 
+		self._urls.push(src.url);
+
 		if (sizes.length === 0 && keywords.indexOf('w3counter') !== -1) {
-			return self.resolution(src.url, next);
+			return self._resolution(src.url, next);
 		}
 
 		if (keywords.length > 0) {
-			return self.viewport(src.url, sizes, keywords, next);
+			return self._viewport(src.url, sizes, keywords, next);
 		}
 
 		sizes.forEach(function (size) {
-			self.sizes.push(size);
-			self.items.push(self.generate(src.url, size));
+			self._sizes.push(size);
+			self._items.push(self._generate(src.url, size));
 		});
 
 		next();
@@ -113,14 +115,14 @@ Pageres.prototype.run = function (cb) {
 			return cb(err);
 		}
 
-		self.stats.screenshots = _.uniq(self.sizes).length;
-		self.stats.urls = _.uniq(self.urls).length;
+		self.stats.screenshots = _.uniq(self._sizes).length;
+		self.stats.urls = _.uniq(self._urls).length;
 
 		if (!self.dest()) {
-			return cb(null, self.items);
+			return cb(null, self._items);
 		}
 
-		self.save(self.items, cb);
+		self._save(self._items, cb);
 	});
 };
 
@@ -129,10 +131,10 @@ Pageres.prototype.run = function (cb) {
  *
  * @param {String} url
  * @param {Function} cb
- * @api public
+ * @api private
  */
 
-Pageres.prototype.resolution = function (url, cb) {
+Pageres.prototype._resolution = function (url, cb) {
 	var self = this;
 	var g = memoize(getRes);
 
@@ -144,8 +146,8 @@ Pageres.prototype.resolution = function (url, cb) {
 		self._resolutions = res;
 
 		res.forEach(function (size) {
-			self.sizes.push(size.item);
-			self.items.push(self.generate(url, size.item));
+			self._sizes.push(size.item);
+			self._items.push(self._generate(url, size.item));
 		});
 
 		cb();
@@ -159,10 +161,10 @@ Pageres.prototype.resolution = function (url, cb) {
 * @param {Array} sizes
 * @param {Array} keywords
 * @param {Function} cb
-* @api public
+* @api private
 */
 
-Pageres.prototype.viewport = function (url, sizes, keywords, cb) {
+Pageres.prototype._viewport = function (url, sizes, keywords, cb) {
 	var self = this;
 	var v = memoize(viewport);
 
@@ -172,12 +174,12 @@ Pageres.prototype.viewport = function (url, sizes, keywords, cb) {
 		}
 
 		res.forEach(function (r) {
-			self.sizes.push(r.size);
+			self._sizes.push(r.size);
 			sizes.push(r.size);
 		});
 
 		_.uniq(sizes).forEach(function (size) {
-			self.items.push(self.generate(url, size));
+			self._items.push(self._generate(url, size));
 		});
 
 		cb();
@@ -189,10 +191,10 @@ Pageres.prototype.viewport = function (url, sizes, keywords, cb) {
  *
  * @param {Array} items
  * @param {Function} cb
- * @api public
+ * @api private
  */
 
-Pageres.prototype.save = function (items, cb) {
+Pageres.prototype._save = function (items, cb) {
 	var self = this;
 
 	eachAsync(items, function (item, i, next) {
@@ -222,10 +224,10 @@ Pageres.prototype.save = function (items, cb) {
  *
  * @param {String} url
  * @param {String} size
- * @api public
+ * @api private
  */
 
-Pageres.prototype.generate = function (url, size) {
+Pageres.prototype._generate = function (url, size) {
 	var isFile = fs.existsSync(url);
 	var name;
 	var newUrl;
@@ -240,7 +242,7 @@ Pageres.prototype.generate = function (url, size) {
 	name = slugifyUrl(isFile ? url : newUrl).replace(/^(?:https?:\/\/)?www\./, '');
 	name = name + '-' + size + (this.options.crop ? '-cropped' : '') + '.png';
 
-	var stream = this.phantom(assign({ delay: 0 }, this.options, {
+	var stream = this._phantom(assign({ delay: 0 }, this.options, {
 		url: newUrl,
 		width: size.split(/x/i)[0],
 		height: size.split(/x/i)[1]
@@ -254,10 +256,10 @@ Pageres.prototype.generate = function (url, size) {
  * Run Phantom JS
  *
  * @param {Object} options
- * @api public
+ * @api private
  */
 
-Pageres.prototype.phantom = function (options) {
+Pageres.prototype._phantom = function (options) {
 	var cp = spawn(phantomjs, [
 		path.join(__dirname, 'converter.js'),
 		JSON.stringify(options),
@@ -288,8 +290,14 @@ Pageres.prototype.phantom = function (options) {
 	return stream;
 };
 
+/**
+ * Success message
+ *
+ * @api private
+ */
+
 Pageres.prototype._logSuccessMessage = function () {
-	var i = this.sizes.length;
+	var i = this._sizes.length;
 	var s = this.stats.screenshots;
 	var u = this.stats.urls;
 
