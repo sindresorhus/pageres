@@ -5,7 +5,6 @@ var urlMod = require('url');
 var spawn = require('child_process').spawn;
 var _ = require('lodash');
 var assign = require('object-assign');
-var base64 = require('base64-stream');
 var eachAsync = require('each-async');
 var fileUrl = require('file-url');
 var getRes = require('get-res');
@@ -266,7 +265,7 @@ Pageres.prototype._phantom = function (options) {
 		'--ignore-ssl-errors=true',
 		'--local-to-remote-url-access=true'
 	]);
-	var stream = cp.stdout.pipe(base64.decode());
+
 	process.stderr.setMaxListeners(0);
 
 	cp.stdout.on('data', function (data) {
@@ -284,10 +283,10 @@ Pageres.prototype._phantom = function (options) {
 			return;
 		}
 
-		stream.emit('error', data);
+		cp.emit('error', data);
 	});
 
-	return stream;
+	return cp.stdout;
 };
 
 /**

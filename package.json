@@ -42,7 +42,6 @@
     "image"
   ],
   "dependencies": {
-    "base64-stream": "^0.1.2",
     "chalk": "^0.5.0",
     "each-async": "^0.1.2",
     "file-url": "^0.1.0",
