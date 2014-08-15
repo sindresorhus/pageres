@@ -76,7 +76,7 @@ $ npm install --save pageres
 var Pageres = require('pageres');
 
 var pageres = new Pageres({delay: 2})
-	.src('yeoman.io', ['480x320', '1024x768', 'iphone 5s'])
+	.src('yeoman.io', ['480x320', '1024x768', 'iphone 5s'], { crop: true })
 	.src('todomvc.com', ['1280x1024', '1920x1080'])
 	.dest(__dirname);
 
@@ -121,7 +121,7 @@ Same format as a [browser cookie](http://en.wikipedia.org/wiki/HTTP_cookie).
 Go to the website you want a cookie for and copy-paste it from Dev Tools.
 
 
-### pageres.src(url, sizes)
+### pageres.src(url, sizes, options)
 
 Add a page to screenshot.
 
@@ -142,6 +142,12 @@ Use a `<width>x<height>` notation or a keyword.
 A keyword is a version of a device from [this list](http://viewportsizes.com).
 You can also pass in the `w3counter` keyword to use the ten most popular 
 resolutions from [w3counter](http://www.w3counter.com/globalstats.php).
+
+#### options
+
+Type: `object`
+
+Options set here will take precedence over the ones set in the constructor.
 
 ### pageres.dest(directory)
 

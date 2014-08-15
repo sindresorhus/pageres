@@ -43,15 +43,16 @@ function Pageres(options) {
  *
  * @param {String} url
  * @param {Array} sizes
+ * @param {Object} options
  * @api public
  */
 
-Pageres.prototype.src = function (url, sizes) {
+Pageres.prototype.src = function (url, sizes, options) {
 	if (!arguments.length) {
 		return this._src;
 	}
 
-	this._src.push({ url: url, sizes: sizes });
+	this._src.push({ url: url, sizes: sizes, options: options });
 	return this;
 };
 
@@ -87,6 +88,7 @@ Pageres.prototype.run = function (cb) {
 	}
 
 	eachAsync(this.src(), function (src, i, next) {
+		var options = assign(self.options, src.options || {});
 		var sizes = _.uniq(src.sizes.filter(/./.test, /^\d{3,4}x\d{3,4}$/i));
 		var keywords = _.difference(src.sizes, sizes);
 
@@ -98,18 +100,18 @@ Pageres.prototype.run = function (cb) {
 		self._urls.push(src.url);
 
 		if (sizes.length === 0 && keywords.indexOf('w3counter') !== -1) {
-			self._resolution(src.url, next);
+			self._resolution(src.url, options, next);
 			return;
 		}
 
 		if (keywords.length > 0) {
-			self._viewport(src.url, sizes, keywords, next);
+			self._viewport(src.url, sizes, keywords, options, next);
 			return;
 		}
 
 		sizes.forEach(function (size) {
 			self._sizes.push(size);
-			self._items.push(self._generate(src.url, size));
+			self._items.push(self._generate(src.url, size, options));
 		});
 
 		next();
@@ -136,10 +138,11 @@ Pageres.prototype.run = function (cb) {
  *
  * @param {String} url
  * @param {Function} cb
+ * @param {Object} options
  * @api private
  */
 
-Pageres.prototype._resolution = function (url, cb) {
+Pageres.prototype._resolution = function (url, options, cb) {
 	var self = this;
 	var g = memoize(getRes);
 
@@ -153,7 +156,7 @@ Pageres.prototype._resolution = function (url, cb) {
 
 		res.forEach(function (size) {
 			self._sizes.push(size.item);
-			self._items.push(self._generate(url, size.item));
+			self._items.push(self._generate(url, size.item, options));
 		});
 
 		cb();
@@ -166,11 +169,12 @@ Pageres.prototype._resolution = function (url, cb) {
 * @param {String} url
 * @param {Array} sizes
 * @param {Array} keywords
+* @param {Object} options
 * @param {Function} cb
 * @api private
 */
 
-Pageres.prototype._viewport = function (url, sizes, keywords, cb) {
+Pageres.prototype._viewport = function (url, sizes, keywords, options, cb) {
 	var self = this;
 	var v = memoize(viewport);
 
@@ -186,7 +190,7 @@ Pageres.prototype._viewport = function (url, sizes, keywords, cb) {
 		});
 
 		_.uniq(sizes).forEach(function (size) {
-			self._items.push(self._generate(url, size));
+			self._items.push(self._generate(url, size, options));
 		});
 
 		cb();
@@ -232,10 +236,11 @@ Pageres.prototype._save = function (items, cb) {
  *
  * @param {String} url
  * @param {String} size
+ * @param {Object} options
  * @api private
  */
 
-Pageres.prototype._generate = function (url, size) {
+Pageres.prototype._generate = function (url, size, options) {
 	var isFile = fs.existsSync(url);
 	var name;
 	var newUrl;
@@ -248,9 +253,9 @@ Pageres.prototype._generate = function (url, size) {
 	}
 
 	name = slugifyUrl(isFile ? url : newUrl).replace(/^(?:https?:\/\/)?www\./, '');
-	name = name + '-' + size + (this.options.crop ? '-cropped' : '') + '.png';
+	name = name + '-' + size + (options.crop ? '-cropped' : '') + '.png';
 
-	var stream = this._phantom(assign({ delay: 0 }, this.options, {
+	var stream = this._phantom(assign({ delay: 0 }, options, {
 		url: newUrl,
 		width: size.split(/x/i)[0],
 		height: size.split(/x/i)[1]
