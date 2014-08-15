@@ -82,7 +82,8 @@ Pageres.prototype.run = function (cb) {
 	var self = this;
 
 	if (!phantomjs) {
-		return cb('The automatic install of PhantomJS, which is used for generating the screenshots, seems to have failed.\nTry installing it manually: http://phantomjs.org/download.html');
+		cb('The automatic install of PhantomJS, which is used for generating the screenshots, seems to have failed.\nTry installing it manually: http://phantomjs.org/download.html');
+		return;
 	}
 
 	eachAsync(this.src(), function (src, i, next) {
@@ -90,17 +91,20 @@ Pageres.prototype.run = function (cb) {
 		var keywords = _.difference(src.sizes, sizes);
 
 		if (!src.url) {
-			return cb(new Error('URL required'));
+			cb(new Error('URL required'));
+			return;
 		}
 
 		self._urls.push(src.url);
 
 		if (sizes.length === 0 && keywords.indexOf('w3counter') !== -1) {
-			return self._resolution(src.url, next);
+			self._resolution(src.url, next);
+			return;
 		}
 
 		if (keywords.length > 0) {
-			return self._viewport(src.url, sizes, keywords, next);
+			self._viewport(src.url, sizes, keywords, next);
+			return;
 		}
 
 		sizes.forEach(function (size) {
@@ -111,14 +115,16 @@ Pageres.prototype.run = function (cb) {
 		next();
 	}, function (err) {
 		if (err) {
-			return cb(err);
+			cb(err);
+			return;
 		}
 
 		self.stats.screenshots = _.uniq(self._sizes).length;
 		self.stats.urls = _.uniq(self._urls).length;
 
 		if (!self.dest()) {
-			return cb(null, self._items);
+			cb(null, self._items);
+			return;
 		}
 
 		self._save(self._items, cb);
@@ -139,7 +145,8 @@ Pageres.prototype._resolution = function (url, cb) {
 
 	g(function (err, res) {
 		if (err) {
-			return cb(err);
+			cb(err);
+			return;
 		}
 
 		self._resolutions = res;
@@ -169,7 +176,8 @@ Pageres.prototype._viewport = function (url, sizes, keywords, cb) {
 
 	v(keywords, function (err, res) {
 		if (err) {
-			return cb(err);
+			cb(err);
+			return;
 		}
 
 		res.forEach(function (r) {
@@ -211,7 +219,8 @@ Pageres.prototype._save = function (items, cb) {
 		});
 	}, function (err) {
 		if (err) {
-			return cb(err);
+			cb(err);
+			return;
 		}
 
 		cb(null, items);

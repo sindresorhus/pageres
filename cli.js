@@ -131,11 +131,13 @@ function parse(args) {
 
 function init(args, options) {
 	if (options.help || args.length === 0) {
-		return showHelp();
+		showHelp();
+		return;
 	}
 
 	if (options.version) {
-		return console.log(require('./package').version);
+		console.log(require('./package').version);
+		return;
 	}
 
 	if (args.some(function (arr) { return arr._ === undefined; })) {
@@ -144,7 +146,8 @@ function init(args, options) {
 
 	get(parse(args), options, function (err, items) {
 		if (err) {
-			throw err;
+			console.error(err);
+			process.exit(1);
 		}
 
 		// plural makes more sense for a programmatic option
