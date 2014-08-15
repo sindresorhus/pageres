@@ -169,7 +169,7 @@ if (process.stdin.isTTY) {
 	init(args, options);
 } else {
 	stdin(function (data) {
-		[].push.apply(args, data.trim().split('\n'));
+		[].push.apply(args, data.toString().trim().split('\n'));
 		init(args, options);
 	});
 }
