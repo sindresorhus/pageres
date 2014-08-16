@@ -30,7 +30,11 @@ function Pageres(options) {
 	}
 
 	this.options = assign({}, options);
-	this.options.cookies = (this.options.cookies || []).map(parseCookiePhantomjs);
+
+	this.options.cookies = (this.options.cookies || []).map(function (el) {
+		return typeof el === 'string' ? parseCookiePhantomjs(el) : el;
+	});
+
 	this.options.name = this.options.name || '<%= url %>-<%= size %><%= crop %>';
 	this.stats = {};
 

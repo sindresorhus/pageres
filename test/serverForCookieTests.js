@@ -11,8 +11,8 @@ app.get('/', function(request, response) {
 	response.send('<body><div style="background: ' + color + ';position: absolute;top: 0;bottom: 0;left: 0;right: 0;"></div></body');
 });
 
-module.exports = function() {
+module.exports = function (port) {
 	var server = http.createServer(app);
-	server.listen(1337);
+	server.listen(port);
 	return server;
 };

@@ -136,13 +136,13 @@ test('save image', function (t) {
 	});
 });
 
-test('send cookie', function(t) {
+function cookieTest (port, input, t) {
 	t.plan(6);
-	var server = new Server();
-	var filename = 'localhost!1337-320x480.png';
+	var server = new Server(port);
+	var filename = 'localhost!' + port + '-320x480.png';
 
-	var pageres = new Pageres({cookies: ['pageresColor=black; Path=/; Domain=localhost']})
-		.src('http://localhost:1337', ['320x480'])
+	var pageres = new Pageres({cookies: [input]})
+		.src('http://localhost:' + port, ['320x480'])
 		.dest(__dirname);
 
 	pageres.run(function(err) {
@@ -159,4 +159,12 @@ test('send cookie', function(t) {
 			t.assert(pixels[3] === 255);
 		});
 	});
-});
+}
+
+test('send cookie', cookieTest.bind(null, 5000, 'pageresColor=black; Path=/; Domain=localhost'));
+
+test('send cookie using an object', cookieTest.bind(null, 5001, {
+	name: 'pageresColor',
+	value: 'black',
+	domain: 'localhost'
+}));

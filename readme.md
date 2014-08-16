@@ -115,9 +115,9 @@ Crop to the set height.
 
 ##### cookies
 
-Type: `array`  
+Type: `array` of `string`, `object`
 
-Same format as a [browser cookie](http://en.wikipedia.org/wiki/HTTP_cookie).
+A string with the same format as a [browser cookie](http://en.wikipedia.org/wiki/HTTP_cookie) or an object of what [`phantomjs.addCookie`](http://phantomjs.org/api/phantom/method/add-cookie.html) accepts.
 
 ###### Tip
 
