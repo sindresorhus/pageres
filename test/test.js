@@ -3,9 +3,10 @@ var fs = require('fs');
 var test = require('ava');
 var imageSize = require('image-size');
 var concat = require('concat-stream');
+var date = require('easydate');
+var PNG = require('png-js')
 var Pageres = require('../');
-var Server = require('./serverForCookieTests');
-var PNG = require('png-js');
+var Server = require('./serverForCookieTests');;
 
 process.chdir(__dirname);
 
@@ -73,6 +74,19 @@ test('crop image using the `crop` option', function (t) {
 			t.assert(size.width === 1024);
 			t.assert(size.height === 768);
 		}));
+	});
+});
+
+test('rename image using the `name` option', function (t) {
+	t.plan(3);
+
+	var pageres = new Pageres()
+		.src('http://todomvc.com', ['1024x768'], { name: '<%= date %> - <%= url %>' });
+
+	pageres.run(function (err, streams) {
+		t.assert(!err, err);
+		t.assert(streams.length === 1);
+		t.assert(streams[0].filename === date('Y-M-d') + ' - todomvc.com.png');
 	});
 });
 

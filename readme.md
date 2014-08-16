@@ -32,22 +32,24 @@ Group arguments with [ ]. Options defined inside a group will override the outer
 Screenshots are saved in the current directory.
 
 Usage
-  pageres <url> <resolution>
-  pageres [ <url> <resolution> ] [ <url> <resolution> ]
-  pageres [ <url> <resolution> ... ] < <file>
-  cat <file> | pageres [ <url> <resolution> ... ]
+	pageres <url> <resolution>
+	pageres [ <url> <resolution> ] [ <url> <resolution> ]
+	pageres [ <url> <resolution> ... ] < <file>
+	cat <file> | pageres [ <url> <resolution> ... ]
 
 Example
-  pageres todomvc.com yeoman.io 1366x768 1600x900
-  pageres [ yeoman.io 1366x768 1600x900 --no-crop ] [ todomvc.com 1024x768 480x320 ] --crop
-  pageres --delay 3 1366x768 < urls.txt
-  pageres unicorn.html 1366x768
-  cat screen-resolutions.txt | pageres todomvc.com yeoman.io
+	pageres todomvc.com yeoman.io 1366x768 1600x900
+	pageres [ yeoman.io 1366x768 1600x900 --no-crop ] [ todomvc.com 1024x768 480x320 ] --crop
+	pageres todomvc.com 1024x768 --name '<%= date %> - <%= url %>'
+	pageres --delay 3 1366x768 < urls.txt
+	pageres unicorn.html 1366x768
+	cat screen-resolutions.txt | pageres todomvc.com yeoman.io
 
 Options
-  -d, --delay <seconds>    Delay capturing the screenshot
-  -c, --crop               Crop to the set height
-  --cookie <cookie>        Browser cookie, can be set multiple times
+	-d, --delay <seconds>    Delay screenshot capture
+	-c, --crop               Crop to the set height
+	--cookie <cookie>        Browser cookie, can be set multiple times
+	--name <template>        Custom filename
 
 <url> can also be a local file path.
 
@@ -120,6 +122,20 @@ Same format as a [browser cookie](http://en.wikipedia.org/wiki/HTTP_cookie).
 ###### Tip
 
 Go to the website you want a cookie for and copy-paste it from Dev Tools.
+
+##### name
+
+Type: `string`
+
+Define a customized filename using [Lo-Dash templates](http://lodash.com/docs#template).  
+For example `<%= date %> - <%= url %>-<%= size %><%= crop %>`.
+
+Available variables:
+
+- `url`: The URL in [slugified](https://github.com/ogt/slugify-url) form, eg. `http://yeoman.io/blog/` becomes `yeoman.io!blog`
+- `size`: Specified size, eg. `1024x1000`
+- `crop`: Outputs `-cropped` when the crop option is true
+- `date`: The current date
 
 
 ### pageres.src(url, sizes, options)
