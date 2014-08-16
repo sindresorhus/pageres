@@ -3,7 +3,6 @@
 var _ = require('lodash');
 var eachAsync = require('each-async');
 var multiline = require('multiline');
-var nopt = require('nopt');
 var updateNotifier = require('update-notifier');
 var stdin = require('get-stdin');
 var subarg = require('subarg');
@@ -12,27 +11,26 @@ var logSymbols = require('log-symbols');
 var pkg = require('./package.json');
 var Pageres = require('./');
 
-var options = nopt({
-	help: Boolean,
-	version: Boolean,
-	crop: Boolean,
-	delay: Number,
-	cookie: Array
-}, {
-	h: '--help',
-	v: '--version',
-	c: '--crop',
-	d: '--delay'
+var options = subarg(process.argv.slice(2), {
+	boolean: ['crop', 'help', 'version'],
+	default: { delay: 0 },
+	alias: {
+		c: 'crop',
+		d: 'delay',
+		h: 'help',
+		v: 'version'
+	}
 });
-
-var args = subarg(options.argv.remain)._;
+var args = options._;
+delete options._;
 
 function showHelp() {
   console.log(multiline(function () {/*
 
   Capture screenshots of websites in various resolutions.
 
-  Specify urls and screen resolutions as arguments. Order doesn't matter. Group arguments with [ ]
+  Specify urls and screen resolutions as arguments. Order doesn't matter. Group arguments with [ ].
+  Options defined inside a group will override the outer ones.
   Screenshots are saved in the current directory.
 
   Usage
@@ -43,7 +41,7 @@ function showHelp() {
 
   Example
     pageres todomvc.com yeoman.io 1366x768 1600x900
-    pageres [ yeoman.io 1366x768 1600x900 ] [ todomvc.com 1024x768 480x320 ]
+    pageres [ yeoman.io 1366x768 1600x900 --crop ] [ todomvc.com 1024x768 480x320 ]
     pageres --delay 3 1366x768 < urls.txt
     pageres unicorn.html 1366x768
     cat screen-resolutions.txt | pageres todomvc.com yeoman.io
@@ -64,7 +62,7 @@ function generate(args, opts) {
 		.dest(process.cwd());
 
 	args.forEach(function (arg) {
-		pageres.src(arg.url, arg.sizes);
+		pageres.src(arg.url, arg.sizes, arg.options);
 	});
 
 	pageres.run(function (err) {
@@ -100,7 +98,7 @@ function get(args, options, cb) {
 		}
 
 		arg.url.forEach(function (el) {
-			ret.push({ url: el, sizes: arg.sizes });
+			ret.push({ url: el, sizes: arg.sizes, options: arg.options });
 		});
 
 		next();
@@ -117,26 +115,28 @@ function parse(args) {
 	var ret = [];
 
 	args.forEach(function (arg) {
+		var options = arg;
 		arg = arg._;
+		delete options._;
 
 		var url = _.uniq(arg.filter(/./.test, /\.|localhost/));
 		var sizes = _.uniq(arg.filter(/./.test, /^\d{3,4}x\d{3,4}$/i));
 		var keywords = _.difference(arg, url.concat(sizes));
 
-		ret.push({ url: url, sizes: sizes, keywords: keywords });
+		ret.push({ url: url, sizes: sizes, keywords: keywords, options: options });
 	});
 
 	return ret;
 }
 
 function init(args, options) {
-	if (options.help || args.length === 0) {
-		showHelp();
+	if (options.version) {
+		console.log(require('./package').version);
 		return;
 	}
 
-	if (options.version) {
-		console.log(require('./package').version);
+	if (options.help || args.length === 0) {
+		showHelp();
 		return;
 	}
 

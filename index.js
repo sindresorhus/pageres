@@ -88,7 +88,7 @@ Pageres.prototype.run = function (cb) {
 	}
 
 	eachAsync(this.src(), function (src, i, next) {
-		var options = assign(self.options, src.options || {});
+		var options = assign({}, self.options, src.options || {});
 		var sizes = _.uniq(src.sizes.filter(/./.test, /^\d{3,4}x\d{3,4}$/i));
 		var keywords = _.difference(src.sizes, sizes);
 
