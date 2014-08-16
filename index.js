@@ -5,6 +5,7 @@ var urlMod = require('url');
 var spawn = require('child_process').spawn;
 var _ = require('lodash');
 var assign = require('object-assign');
+var date = require('easydate');
 var eachAsync = require('each-async');
 var fileUrl = require('file-url');
 var getRes = require('get-res');
@@ -30,6 +31,7 @@ function Pageres(options) {
 
 	this.options = assign({}, options);
 	this.options.cookies = (this.options.cookies || []).map(parseCookiePhantomjs);
+	this.options.name = this.options.name || '<%= url %>-<%= size %><%= crop =>';
 	this.stats = {};
 
 	this._src = [];
@@ -252,8 +254,12 @@ Pageres.prototype._generate = function (url, size, options) {
 		newUrl = urlMod.parse(newUrl).protocol ? newUrl : 'http://' + newUrl;
 	}
 
-	name = slugifyUrl(isFile ? url : newUrl).replace(/^(?:https?:\/\/)?www\./, '');
-	name = name + '-' + size + (options.crop ? '-cropped' : '') + '.png';
+	name = _.template(options.name + '.png', {
+		url: slugifyUrl(isFile ? url : newUrl).replace(/^(?:https?:\/\/)?www\./, ''),
+		size: size,
+		crop: options.crop ? '-cropped' : '',
+		date: date('Y-M-d')
+	});
 
 	var stream = this._phantom(assign({ delay: 0 }, options, {
 		url: newUrl,

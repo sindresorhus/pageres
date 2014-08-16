@@ -44,6 +44,7 @@
   "dependencies": {
     "chalk": "^0.5.0",
     "each-async": "^1.0.0",
+    "easydate": "^1.0.1",
     "file-url": "^1.0.0",
     "get-res": "^0.2.1",
     "get-stdin": "^2.0.0",
