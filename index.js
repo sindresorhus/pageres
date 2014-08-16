@@ -31,7 +31,7 @@ function Pageres(options) {
 
 	this.options = assign({}, options);
 	this.options.cookies = (this.options.cookies || []).map(parseCookiePhantomjs);
-	this.options.name = this.options.name || '<%= url %>-<%= size %><%= crop =>';
+	this.options.name = this.options.name || '<%= url %>-<%= size %><%= crop %>';
 	this.stats = {};
 
 	this._src = [];
