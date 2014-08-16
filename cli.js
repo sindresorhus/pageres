@@ -29,8 +29,8 @@ function showHelp() {
 
   Capture screenshots of websites in various resolutions.
 
-  Specify urls and screen resolutions as arguments. Order doesn't matter. Group arguments with [ ].
-  Options defined inside a group will override the outer ones.
+  Specify urls and screen resolutions as arguments. Order doesn't matter.
+  Group arguments with [ ]. Options defined inside a group will override the outer ones.
   Screenshots are saved in the current directory.
 
   Usage
@@ -41,7 +41,7 @@ function showHelp() {
 
   Example
     pageres todomvc.com yeoman.io 1366x768 1600x900
-    pageres [ yeoman.io 1366x768 1600x900 --crop ] [ todomvc.com 1024x768 480x320 ]
+    pageres [ yeoman.io 1366x768 1600x900 --no-crop ] [ todomvc.com 1024x768 480x320 ] --crop
     pageres --delay 3 1366x768 < urls.txt
     pageres unicorn.html 1366x768
     cat screen-resolutions.txt | pageres todomvc.com yeoman.io
