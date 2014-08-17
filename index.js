@@ -5,6 +5,7 @@ var urlMod = require('url');
 var spawn = require('child_process').spawn;
 var _ = require('lodash');
 var assign = require('object-assign');
+var base64 = require('base64-stream');
 var date = require('easydate');
 var eachAsync = require('each-async');
 var fileUrl = require('file-url');
@@ -289,16 +290,17 @@ Pageres.prototype._phantom = function (options) {
 		'--ignore-ssl-errors=true',
 		'--local-to-remote-url-access=true'
 	]);
+	var stream = cp.stdout.pipe(base64.decode());
 
 	process.stderr.setMaxListeners(0);
 
 	cp.stdout.on('data', function (data) {
 		if (/Couldn\'t load url/.test(data)) {
-			return cp.emit('error', new Error('Couldn\'t load url'));
+			return stream.emit('error', new Error('Couldn\'t load url'));
 		}
 
 		if (/Couldn\'t add cookie/.test(data)) {
-			return cp.emit('error', new Error(data));
+			return stream.emit('error', new Error(data));
 		}
 	});
 
@@ -307,10 +309,10 @@ Pageres.prototype._phantom = function (options) {
 			return;
 		}
 
-		cp.emit('error', data);
+		stream.emit('error', data);
 	});
 
-	return cp.stdout;
+	return stream;
 };
 
 /**

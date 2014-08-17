@@ -56,7 +56,7 @@ page.open(options.url, function (status) {
 	});
 
 	window.setTimeout(function () {
-		page.render('/dev/stdout');
+		log.call(console, page.renderBase64('png'));
 		phantom.exit(0);
 	}, options.delay * 1000);
 });
