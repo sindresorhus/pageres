@@ -57,6 +57,17 @@ You can also pipe in a newline separated list of urls and screen resolutions whi
 ```
 
 
+## Config file
+
+You can persist your commands into a file and run it whenever with eg. `sh .pageres`:
+
+```sh
+# .pageres
+pageres [ todomvc.com 1000x1000 --crop ] [ yeoman.io 500x500 ]
+pageres [ google.com 1000x1000 --crop ] [ github.com 500x500 ]
+```
+
+
 ## Task runners
 
 Check out [grunt-pageres](https://github.com/sindresorhus/grunt-pageres) if you're using grunt. 
