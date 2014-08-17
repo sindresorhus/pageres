@@ -294,11 +294,11 @@ Pageres.prototype._phantom = function (options) {
 
 	cp.stdout.on('data', function (data) {
 		if (/Couldn\'t load url/.test(data)) {
-			return stream.emit('error', new Error('Couldn\'t load url'));
+			return cp.emit('error', new Error('Couldn\'t load url'));
 		}
 
 		if (/Couldn\'t add cookie/.test(data)) {
-			return stream.emit('error', new Error(data));
+			return cp.emit('error', new Error(data));
 		}
 	});
 
