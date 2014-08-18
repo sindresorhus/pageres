@@ -4,9 +4,9 @@ var test = require('ava');
 var imageSize = require('image-size');
 var concat = require('concat-stream');
 var date = require('easydate');
-var PNG = require('png-js')
+var PNG = require('png-js');
 var Pageres = require('../');
-var Server = require('./serverForCookieTests');;
+var Server = require('./serverForCookieTests');
 
 process.chdir(__dirname);
 
@@ -123,7 +123,7 @@ test('fetch resolutions from w3counter', function (t) {
 });
 
 test('save image', function (t) {
-	t.plan(2);
+	t.plan(3);
 
 	var pageres = new Pageres()
 		.src('http://todomvc.com', ['1024x768'])
@@ -132,7 +132,10 @@ test('save image', function (t) {
 	pageres.run(function (err) {
 		t.assert(!err, err);
 		t.assert(fs.existsSync('todomvc.com-1024x768.png'));
-		fs.unlinkSync('todomvc.com-1024x768.png');
+
+		fs.unlink('todomvc.com-1024x768.png', function (err) {
+			t.assert(!err);
+		});
 	});
 });
 
