@@ -51,6 +51,12 @@ page.open(options.url, function (status) {
 		phantom.exit(1);
 	}
 
+	if (options.selector) {
+		page.clipRect = page.evaluate(function (s) {
+			return document.querySelector(s).getBoundingClientRect();
+		}, options.selector);
+	}
+
 	page.evaluate(function () {
 		document.body.style.background = 'white';
 	});

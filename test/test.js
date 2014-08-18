@@ -90,6 +90,25 @@ test('rename image using the `name` option', function (t) {
 	});
 });
 
+test('capture a DOM element using the `selector` option', function (t) {
+	t.plan(5);
+
+	var pageres = new Pageres({ selector: '.page-header' })
+		.src('http://yeoman.io', ['1024x768']);
+
+	pageres.run(function (err, streams) {
+		t.assert(!err, err);
+		t.assert(streams[0].filename === 'yeoman.io-1024x768.png');
+
+		streams[0].pipe(concat(function (data) {
+			var size = imageSize(data);
+			t.assert(size.width === 1024);
+			t.assert(size.height === 80);
+			t.assert(data.length === 15016);
+		}));
+	});
+});
+
 test('support local relative files', function (t) {
 	t.plan(3);
 

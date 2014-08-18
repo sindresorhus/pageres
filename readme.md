@@ -41,6 +41,7 @@ Example
 	pageres todomvc.com yeoman.io 1366x768 1600x900
 	pageres [ yeoman.io 1366x768 1600x900 --no-crop ] [ todomvc.com 1024x768 480x320 ] --crop
 	pageres todomvc.com 1024x768 --name '<%= date %> - <%= url %>'
+	pageres yeoman.io 1366x768 --selector '.page-header'
 	pageres --delay 3 1366x768 < urls.txt
 	pageres unicorn.html 1366x768
 	cat screen-resolutions.txt | pageres todomvc.com yeoman.io
@@ -50,6 +51,7 @@ Options
 	-c, --crop               Crop to the set height
 	--cookie <cookie>        Browser cookie, can be set multiple times
 	--name <template>        Custom filename
+	--selector <element>     Capture DOM element
 
 <url> can also be a local file path.
 
@@ -147,6 +149,12 @@ Available variables:
 - `size`: Specified size, eg. `1024x1000`
 - `crop`: Outputs `-cropped` when the crop option is true
 - `date`: The current date
+
+##### selector
+
+Type: `string`
+
+Capture a specific DOM element.
 
 
 ### pageres.src(url, sizes, options)
