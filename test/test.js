@@ -10,6 +10,29 @@ var Server = require('./serverForCookieTests');
 
 process.chdir(__dirname);
 
+test('expose a constructor', function (t) {
+	t.plan(1);
+	t.assert(typeof Pageres === 'function');
+});
+
+test('add a source', function (t) {
+	t.plan(1);
+
+	var pageres = new Pageres()
+		.src('yeoman.io', ['1280x1024', '1920x1080']);
+
+	t.assert(pageres._src[0].url === 'yeoman.io');
+});
+
+test('set destination directory', function (t) {
+	t.plan(1);
+
+	var pageres = new Pageres()
+		.dest('tmp');
+
+	t.assert(pageres._dest === 'tmp');
+});
+
 test('generate screenshots', function (t) {
 	t.plan(5);
 
