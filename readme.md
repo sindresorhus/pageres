@@ -1,8 +1,6 @@
-# ![pageres](https://cdn.rawgit.com/sindresorhus/pageres/c68734fcb7b980d9d0a67f0ee84ab6226d236ba4/media/logo.svg)
+# ![pageres](media/promo.png)
 
-> Responsive website screenshots
-
-[![Build Status](https://travis-ci.org/sindresorhus/pageres.svg?branch=master)](https://travis-ci.org/sindresorhus/pageres) ![](http://img.shields.io/badge/unicorn-approved-ff69b4.svg)
+[![Build Status](http://img.shields.io/travis/sindresorhus/pageres/master.svg?style=flat)](https://travis-ci.org/sindresorhus/pageres?style=flat) ![](http://img.shields.io/badge/unicorn-approved-ff69b4.svg?style=flat)
 
 Capture screenshots of websites in various resolutions. A good way to make sure your websites are responsive.
 
