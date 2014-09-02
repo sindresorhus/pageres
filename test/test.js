@@ -201,22 +201,22 @@ function cookieTest (port, input, t) {
 	var filename = 'localhost!' + port + '-320x480.png';
 
 	var pageres = new Pageres({cookies: [input]})
-		.src('http://localhost:' + port, ['320x480'])
-		.dest(__dirname);
+		.src('http://localhost:' + port, ['320x480']);
 
-	pageres.run(function(err) {
-		server.close();
-
+	pageres.run(function (err, streams) {
 		t.assert(!err, err);
-		t.assert(fs.existsSync(filename));
+		t.assert(streams[0].filename === filename);
 
-		PNG.decode(filename, function(pixels) {
-			fs.unlinkSync(filename);
-			t.assert(pixels[0] === 0);
-			t.assert(pixels[1] === 0);
-			t.assert(pixels[2] === 0);
-			t.assert(pixels[3] === 255);
-		});
+		streams[0].pipe(concat(function (data) {
+			server.close();
+			var png = new PNG(data);
+			png.decode(function (pixels) {
+				t.assert(pixels[0] === 0);
+				t.assert(pixels[1] === 0);
+				t.assert(pixels[2] === 0);
+				t.assert(pixels[3] === 255);
+			});
+		}));
 	});
 }
 
