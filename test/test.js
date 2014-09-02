@@ -1,5 +1,6 @@
 'use strict';
 var fs = require('fs');
+var spawn = require('child_process').spawn;
 var test = require('ava');
 var imageSize = require('image-size');
 var concat = require('concat-stream');
@@ -127,7 +128,7 @@ test('capture a DOM element using the `selector` option', function (t) {
 			var size = imageSize(data);
 			t.assert(size.width === 1024);
 			t.assert(size.height === 80);
-			t.assert(data.length === 15016);
+			t.assert(data.length === 15191);
 		}));
 	});
 });
@@ -179,6 +180,19 @@ test('save image', function (t) {
 			t.assert(!err);
 		});
 	});
+});
+
+test('generate screenshot using the CLI', function (t) {
+	t.plan(2);
+
+	spawn('../cli.js', ['yeoman.io', '320x240'], {stdio:'inherit'})
+		.on('close', function () {
+			t.assert(fs.existsSync('yeoman.io-320x240.png'));
+
+			fs.unlink('yeoman.io-320x240.png', function (err) {
+				t.assert(!err);
+			});
+		});
 });
 
 function cookieTest (port, input, t) {
