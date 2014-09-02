@@ -128,7 +128,7 @@ test('capture a DOM element using the `selector` option', function (t) {
 			var size = imageSize(data);
 			t.assert(size.width === 1024);
 			t.assert(size.height === 80);
-			t.assert(data.length === 15191);
+			t.assert(data.length > 10000);
 		}));
 	});
 });
