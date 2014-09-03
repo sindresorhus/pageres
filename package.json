@@ -46,6 +46,7 @@
     "chalk": "^0.5.1",
     "each-async": "^1.0.0",
     "easydate": "^1.0.1",
+    "es5-shim": "^4.0.3",
     "file-url": "^1.0.0",
     "get-res": "^0.2.1",
     "get-stdin": "^2.0.0",

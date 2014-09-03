@@ -31,6 +31,10 @@ page.onError = function (err) {
 	console.error(err);
 };
 
+page.onResourceReceived = function () {
+	page.injectJs('./node_modules/es5-shim/es5-shim.js');
+};
+
 page.viewportSize = {
 	width: options.width,
 	height: options.height
