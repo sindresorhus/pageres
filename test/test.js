@@ -115,7 +115,7 @@ test('rename image using the `name` option', function (t) {
 });
 
 test('capture a DOM element using the `selector` option', function (t) {
-	t.plan(5);
+	t.plan(4);
 
 	var pageres = new Pageres({ selector: '.page-header' })
 		.src('http://yeoman.io', ['1024x768']);
@@ -128,7 +128,6 @@ test('capture a DOM element using the `selector` option', function (t) {
 			var size = imageSize(data);
 			t.assert(size.width === 1024);
 			t.assert(size.height === 80);
-			t.assert(data.length > 10000);
 		}));
 	});
 });
