@@ -294,22 +294,12 @@ Pageres.prototype._phantom = function (options) {
 
 	process.stderr.setMaxListeners(0);
 
-	cp.stdout.on('data', function (data) {
-		if (/Couldn\'t load url/.test(data)) {
-			return stream.emit('error', new Error('Couldn\'t load url'));
-		}
-
-		if (/Couldn\'t add cookie/.test(data)) {
-			return stream.emit('error', new Error(data));
-		}
-	});
-
 	cp.stderr.on('data', function (data) {
 		if (/ phantomjs\[/.test(data)) {
 			return;
 		}
 
-		stream.emit('error', data);
+		stream.emit('error', new Error(data));
 	});
 
 	return stream;

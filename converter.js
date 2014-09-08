@@ -1,17 +1,21 @@
 'use strict';
 var webpage = require('webpage');
 var page = webpage.create();
+var system = require('system');
 var options = JSON.parse(phantom.args[0]);
 
 var log = console.log;
+
 // make sure phantom never outputs to stdout
-console.log = console.error;
+console.log = console.error = function () {
+	system.stderr.writeLine([].slice.call(arguments).join(' '));
+};
 
 options.cookies.forEach(function (cookie) {
-    if (!phantom.addCookie(cookie)) {
-        console.error('Couldn\'t add cookie: ', cookie);
-        phantom.exit(1);
-    }
+	if (!phantom.addCookie(cookie)) {
+		console.error('Couldn\'t add cookie: ', cookie);
+		phantom.exit(1);
+	}
 });
 
 phantom.onError = function(msg, trace) {
