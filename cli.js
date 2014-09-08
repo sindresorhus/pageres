@@ -94,7 +94,9 @@ function get(args, options, cb) {
 		}
 
 		if (arg.sizes.length === 0 && arg.keywords.length === 0) {
-			console.log('No sizes specified. Falling back to the ten most popular screen resolutions according to w3counter.');
+			console.error(logSymbols.warning, 'Specify a size\n');
+			showHelp();
+			return;
 		}
 
 		if (arg.keywords.length > 0) {
