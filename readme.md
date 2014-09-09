@@ -50,6 +50,8 @@ Options
 	--cookie <cookie>        Browser cookie, can be set multiple times
 	--name <template>        Custom filename
 	--selector <element>     Capture DOM element
+	--username <username>    Username for HTTP auth
+	--password <password>    Password for HTTP auth
 
 <url> can also be a local file path.
 
@@ -153,6 +155,18 @@ Available variables:
 Type: `string`
 
 Capture a specific DOM element.
+
+##### username
+
+Type: `string`
+
+Username for authenticating with HTTP auth.
+
+##### password
+
+Type: `string`
+
+Password for authenticating with HTTP auth.
 
 
 ### pageres.src(url, sizes, options)
