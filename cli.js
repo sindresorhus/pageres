@@ -54,6 +54,8 @@ function showHelp() {
     --cookie <cookie>        Browser cookie, can be set multiple times
     --name <template>        Custom filename
     --selector <element>     Capture DOM element
+    --username <username>    Username for HTTP auth
+    --password <password>    Password for HTTP auth
 
   <url> can also be a local file path.
 

@@ -194,6 +194,22 @@ test('generate screenshot using the CLI', function (t) {
 		});
 });
 
+test('auth using username and password', function (t) {
+	t.plan(3);
+
+	var pageres = new Pageres({username: 'user', password: 'passwd'})
+		.src('httpbin.org/basic-auth/user/passwd', ['120x120']);
+
+	pageres.run(function (err, streams) {
+		t.assert(!err, err);
+		t.assert(streams.length === 1);
+
+		streams[0].once('data', function (data) {
+			t.assert(data.length);
+		});
+	});
+});
+
 function cookieTest (port, input, t) {
 	t.plan(6);
 	var server = new Server(port);

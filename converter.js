@@ -11,6 +11,10 @@ console.log = console.error = function () {
 	system.stderr.writeLine([].slice.call(arguments).join(' '));
 };
 
+if (options.username && options.password) {
+	page.customHeaders = {'Authorization': 'Basic ' + btoa(options.username + ':' + options.password)};
+}
+
 options.cookies.forEach(function (cookie) {
 	if (!phantom.addCookie(cookie)) {
 		console.error('Couldn\'t add cookie: ', cookie);
