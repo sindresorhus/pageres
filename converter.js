@@ -70,11 +70,10 @@ page.open(options.url, function (status) {
 	}
 
 	page.evaluate(function () {
-		var styles = window.getComputedStyle(document.body);
-		var background = styles.getPropertyValue('background-color');
+		var background = window.getComputedStyle(document.body).getPropertyValue('background-color');
 
 		if (!background) {
-			document.body.style.background = 'white';
+			document.body.style.backgroundColor = 'white';
 		}
 	});
 
