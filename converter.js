@@ -70,7 +70,8 @@ page.open(options.url, function (status) {
 	}
 
 	page.evaluate(function () {
-		if (!window.getComputedStyle(document.body).getPropertyValue('background-color')) {
+		var background = window.getComputedStyle(document.body).getPropertyValue('background-color');
+		if (!background || background === 'rgba(0, 0, 0, 0)') {
 			document.body.style.backgroundColor = 'white';
 		}
 	});
