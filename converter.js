@@ -70,7 +70,12 @@ page.open(options.url, function (status) {
 	}
 
 	page.evaluate(function () {
-		document.body.style.background = 'white';
+		var styles = window.getComputedStyle(document.body);
+		var background = styles.getPropertyValue('background-color');
+
+		if (!background) {
+			document.body.style.background = 'white';
+		}
 	});
 
 	window.setTimeout(function () {
