@@ -43,7 +43,6 @@
   ],
   "dependencies": {
     "base64-stream": "^0.1.2",
-    "chalk": "^0.5.1",
     "each-async": "^1.0.0",
     "easydate": "^1.0.1",
     "es5-shim": "^4.0.3",
@@ -61,7 +60,6 @@
     "slugify-url": "^1.2.0",
     "subarg": "^0.0.1",
     "sudo-block": "^1.0.0",
-    "tough-cookie": "^0.12.1",
     "update-notifier": "^0.2.0",
     "viewport-list": "^0.2.1"
   },
