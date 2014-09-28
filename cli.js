@@ -92,18 +92,18 @@ function generate(args, opts) {
 	});
 }
 
-function get(args, options, cb) {
+function get(args, options) {
 	var ret = [];
 
-	eachAsync(args, function (arg, i, next) {
+	args.forEach(function (arg, i) {
 		if (arg.url.length === 0) {
 			console.error(logSymbols.warning, 'Specify a url');
-			return;
+			process.exit(1);
 		}
 
 		if (arg.sizes.length === 0 && arg.keywords.length === 0) {
 			console.error(logSymbols.warning, 'Specify a size');
-			return;
+			process.exit(1);
 		}
 
 		if (arg.keywords.length > 0) {
@@ -117,15 +117,9 @@ function get(args, options, cb) {
 				options: arg.options
 			});
 		});
-
-		next();
-	}, function (err) {
-		if (err) {
-			cb(err);
-		}
-
-		cb(null, ret);
 	});
+
+	return ret;
 }
 
 function parse(args) {
@@ -166,18 +160,13 @@ function init(args, options) {
 		args = [{ _: args }];
 	}
 
-	get(parse(args), options, function (err, items) {
-		if (err) {
-			console.error(err);
-			process.exit(1);
-		}
+	var items = get(parse(args), options);
 
-		// plural makes more sense for a programmatic option
-		options.cookies = options.cookie;
-		delete options.cookie;
+	// plural makes more sense for a programmatic option
+	options.cookies = options.cookie;
+	delete options.cookie;
 
-		generate(items, options);
-	});
+	generate(items, options);
 }
 
 sudoBlock();

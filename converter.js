@@ -1,7 +1,7 @@
 'use strict';
 var webpage = require('webpage');
-var page = webpage.create();
 var system = require('system');
+var page = webpage.create();
 var options = JSON.parse(phantom.args[0]);
 
 var log = console.log;
