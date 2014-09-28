@@ -1,5 +1,7 @@
 'use strict';
 var fs = require('fs');
+var util = require('util');
+var events = require('events');
 var path = require('path');
 var urlMod = require('url');
 var spawn = require('child_process').spawn;
@@ -17,6 +19,8 @@ var viewport = require('viewport-list');
 var mkdirp = require('mkdirp');
 var logSymbols = require('log-symbols');
 var parseCookiePhantomjs = require('parse-cookie-phantomjs');
+
+util.inherits(Pageres, events.EventEmitter);
 
 /**
  * Initialize Pageres
@@ -229,6 +233,7 @@ Pageres.prototype._save = function (items, cb) {
 
 			var stream = item.pipe(fs.createWriteStream(path.join(self.dest(), item.filename)));
 
+			item.on('warn', self.emit.bind(self, 'warn'));
 			item.on('error', next);
 			stream.on('finish', next);
 			stream.on('error', next);
@@ -299,8 +304,14 @@ Pageres.prototype._phantom = function (options) {
 
 	process.stderr.setMaxListeners(0);
 
+	cp.stderr.setEncoding('utf8');
 	cp.stderr.on('data', function (data) {
 		if (/ phantomjs\[/.test(data)) {
+			return;
+		}
+
+		if (/^WARN: /.test(data)) {
+			stream.emit('warn', data.replace(/^WARN: /, ''));
 			return;
 		}
 
