@@ -12,7 +12,9 @@ console.log = console.error = function () {
 };
 
 if (options.username && options.password) {
-	page.customHeaders = {'Authorization': 'Basic ' + btoa(options.username + ':' + options.password)};
+	page.customHeaders = {
+		'Authorization': 'Basic ' + btoa(options.username + ':' + options.password)
+	};
 }
 
 options.cookies.forEach(function (cookie) {

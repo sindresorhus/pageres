@@ -12,8 +12,14 @@ var pkg = require('./package.json');
 var Pageres = require('./');
 
 var options = subarg(process.argv.slice(2), {
-	boolean: ['crop', 'help', 'version'],
-	default: { delay: 0 },
+	boolean: [
+		'crop',
+		'help',
+		'version'
+	],
+	default: {
+		delay: 0
+	},
 	alias: {
 		c: 'crop',
 		d: 'delay',
@@ -21,6 +27,7 @@ var options = subarg(process.argv.slice(2), {
 		v: 'version'
 	}
 });
+
 var args = options._;
 delete options._;
 
@@ -104,7 +111,11 @@ function get(args, options, cb) {
 		}
 
 		arg.url.forEach(function (el) {
-			ret.push({ url: el, sizes: arg.sizes, options: arg.options });
+			ret.push({
+				url: el,
+				sizes: arg.sizes,
+				options: arg.options
+			});
 		});
 
 		next();
@@ -129,7 +140,12 @@ function parse(args) {
 		var sizes = _.uniq(arg.filter(/./.test, /^\d{3,4}x\d{3,4}$/i));
 		var keywords = _.difference(arg, url.concat(sizes));
 
-		ret.push({ url: url, sizes: sizes, keywords: keywords, options: options });
+		ret.push({
+			url: url,
+			sizes: sizes,
+			keywords: keywords,
+			options: options
+		});
 	});
 
 	return ret;
@@ -137,7 +153,7 @@ function parse(args) {
 
 function init(args, options) {
 	if (options.version) {
-		console.log(require('./package').version);
+		console.log(pkg.version);
 		return;
 	}
 

@@ -59,7 +59,12 @@ Pageres.prototype.src = function (url, sizes, options) {
 		return this._src;
 	}
 
-	this._src.push({ url: url, sizes: sizes, options: options });
+	this._src.push({
+		url: url,
+		sizes: sizes,
+		options: options
+	});
+
 	return this;
 };
 
