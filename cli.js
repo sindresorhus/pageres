@@ -90,14 +90,12 @@ function get(args, options, cb) {
 
 	eachAsync(args, function (arg, i, next) {
 		if (arg.url.length === 0) {
-			console.error(logSymbols.warning, 'Specify a url\n');
-			showHelp();
+			console.error(logSymbols.warning, 'Specify a url');
 			return;
 		}
 
 		if (arg.sizes.length === 0 && arg.keywords.length === 0) {
-			console.error(logSymbols.warning, 'Specify a size\n');
-			showHelp();
+			console.error(logSymbols.warning, 'Specify a size');
 			return;
 		}
 
