@@ -25,37 +25,38 @@ $ npm install --global pageres
 ```
 $ pageres --help
 
-Specify urls and screen resolutions as arguments. Order doesn't matter.
-Group arguments with [ ]. Options defined inside a group will override the outer ones.
-Screenshots are saved in the current directory.
+  Specify urls and screen resolutions as arguments. Order doesn't matter.
+  Group arguments with [ ]. Options defined inside a group will override the outer ones.
+  Screenshots are saved in the current directory.
 
-Usage
-	pageres <url> <resolution>
-	pageres [ <url> <resolution> ] [ <url> <resolution> ]
-	pageres [ <url> <resolution> ... ] < <file>
-	cat <file> | pageres [ <url> <resolution> ... ]
+  Usage
+    pageres <url> <resolution>
+    pageres [ <url> <resolution> ] [ <url> <resolution> ]
+    pageres [ <url> <resolution> ... ] < <file>
+    cat <file> | pageres [ <url> <resolution> ... ]
 
-Example
-	pageres todomvc.com yeoman.io 1366x768 1600x900
-	pageres [ yeoman.io 1366x768 1600x900 --no-crop ] [ todomvc.com 1024x768 480x320 ] --crop
-	pageres todomvc.com 1024x768 --name '<%= date %> - <%= url %>'
-	pageres yeoman.io 1366x768 --selector '.page-header'
-	pageres --delay 3 1366x768 < urls.txt
-	pageres unicorn.html 1366x768
-	cat screen-resolutions.txt | pageres todomvc.com yeoman.io
+  Example
+    pageres todomvc.com yeoman.io 1366x768 1600x900
+    pageres [ yeoman.io 1366x768 1600x900 --no-crop ] [ todomvc.com 1024x768 480x320 ] --crop
+    pageres todomvc.com 1024x768 --name '<%= date %> - <%= url %>'
+    pageres yeoman.io 1366x768 --selector '.page-header'
+    pageres --delay 3 1366x768 < urls.txt
+    pageres unicorn.html 1366x768
+    cat screen-resolutions.txt | pageres todomvc.com yeoman.io
 
-Options
-	-d, --delay <seconds>    Delay screenshot capture
-	-c, --crop               Crop to the set height
-	--cookie <cookie>        Browser cookie, can be set multiple times
-	--name <template>        Custom filename
-	--selector <element>     Capture DOM element
-	--username <username>    Username for HTTP auth
-	--password <password>    Password for HTTP auth
+  Options
+    -v, --verbose            Verbose output
+    -c, --crop               Crop to the set height
+    -d, --delay <seconds>    Delay screenshot capture
+    --name <template>        Custom filename
+    --selector <element>     Capture DOM element
+    --cookie <cookie>        Browser cookie, can be set multiple times
+    --username <username>    Username for HTTP auth
+    --password <password>    Password for HTTP auth
 
-<url> can also be a local file path.
+  <url> can also be a local file path.
 
-You can also pipe in a newline separated list of urls and screen resolutions which will get merged with the arguments.
+  You can also pipe in a newline separated list of urls and screen resolutions which will get merged with the arguments.
 ```
 
 
@@ -214,6 +215,10 @@ Run pageres.
 Type: `function`
 
 If you don't set a `dest()` you'll get `items` in this callback, which is an array of streams.
+
+### pageres.on('warn', callback)
+
+Warnings with eg. page errors.
 
 
 ## Google Analytics screen resolutions

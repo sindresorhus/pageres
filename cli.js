@@ -13,6 +13,7 @@ var Pageres = require('./');
 
 var options = subarg(process.argv.slice(2), {
 	boolean: [
+		'verbose',
 		'crop',
 		'help',
 		'version'
@@ -21,10 +22,9 @@ var options = subarg(process.argv.slice(2), {
 		delay: 0
 	},
 	alias: {
+		v: 'verbose',
 		c: 'crop',
-		d: 'delay',
-		h: 'help',
-		v: 'version'
+		d: 'delay'
 	}
 });
 
@@ -56,11 +56,12 @@ function showHelp() {
     cat screen-resolutions.txt | pageres todomvc.com yeoman.io
 
   Options
-    -d, --delay <seconds>    Delay screenshot capture
+    -v, --verbose            Verbose output
     -c, --crop               Crop to the set height
-    --cookie <cookie>        Browser cookie, can be set multiple times
+    -d, --delay <seconds>    Delay screenshot capture
     --name <template>        Custom filename
     --selector <element>     Capture DOM element
+    --cookie <cookie>        Browser cookie, can be set multiple times
     --username <username>    Username for HTTP auth
     --password <password>    Password for HTTP auth
 
@@ -77,6 +78,10 @@ function generate(args, opts) {
 	args.forEach(function (arg) {
 		pageres.src(arg.url, arg.sizes, arg.options);
 	});
+
+	if (opts.verbose) {
+		pageres.on('warn', console.error.bind(console));
+	}
 
 	pageres.run(function (err) {
 		if (err) {

@@ -3,13 +3,16 @@ var webpage = require('webpage');
 var system = require('system');
 var page = webpage.create();
 var options = JSON.parse(phantom.args[0]);
-
 var log = console.log;
 
 // make sure phantom never outputs to stdout
 console.log = console.error = function () {
 	system.stderr.writeLine([].slice.call(arguments).join(' '));
 };
+
+function formatTrace(trace) {
+	return '→ ' + (trace.file || trace.sourceURL) + ' on line ' + trace.line + (trace.function ? ' in function ' + trace.function : '');
+}
 
 if (options.username && options.password) {
 	page.customHeaders = {
@@ -24,21 +27,12 @@ options.cookies.forEach(function (cookie) {
 	}
 });
 
-phantom.onError = function(msg, trace) {
-	var msgStack = ['PHANTOM ERROR: ' + msg];
-
-	if (trace && trace.length) {
-		msgStack.push('TRACE:');
-		trace.forEach(function(t) {
-			msgStack.push(' -> ' + (t.file || t.sourceURL) + ': ' + t.line + (t.function ? ' (in function ' + t.function +')' : ''));
-		});
-	}
-
-	console.error(msgStack.join('\n'));
+phantom.onError = function (err, trace) {
+	console.error('PHANTOM ERROR:', err + '\n' + formatTrace(trace[0]));
 };
 
-page.onError = function (err) {
-	console.error(err);
+page.onError = function (err, trace) {
+	console.error('WARN:', err + '\n' + formatTrace(trace[0]));
 };
 
 page.onResourceReceived = function () {
