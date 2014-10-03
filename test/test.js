@@ -101,11 +101,11 @@ test('crop image using the `crop` option', function (t) {
 	});
 });
 
-test('rename image using the `name` option', function (t) {
+test('rename image using the `filename` option', function (t) {
 	t.plan(3);
 
 	var pageres = new Pageres()
-		.src('http://todomvc.com', ['1024x768'], { name: '<%= date %> - <%= url %>' });
+		.src('http://todomvc.com', ['1024x768'], { filename: '<%= date %> - <%= url %>' });
 
 	pageres.run(function (err, streams) {
 		t.assert(!err, err);

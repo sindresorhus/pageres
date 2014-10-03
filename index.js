@@ -40,7 +40,7 @@ function Pageres(options) {
 		return typeof el === 'string' ? parseCookiePhantomjs(el) : el;
 	});
 
-	this.options.name = this.options.name || '<%= url %>-<%= size %><%= crop %>';
+	this.options.filename = this.options.filename || '<%= url %>-<%= size %><%= crop %>';
 	this.stats = {};
 
 	this._src = [];
@@ -259,7 +259,7 @@ Pageres.prototype._save = function (items, cb) {
 
 Pageres.prototype._generate = function (url, size, options) {
 	var isFile = fs.existsSync(url);
-	var name;
+	var filename;
 	var newUrl;
 
 	if (isFile) {
@@ -269,7 +269,7 @@ Pageres.prototype._generate = function (url, size, options) {
 		newUrl = urlMod.parse(newUrl).protocol ? newUrl : 'http://' + newUrl;
 	}
 
-	name = _.template(options.name + '.png', {
+	filename = _.template(options.filename + '.png', {
 		url: slugifyUrl(isFile ? url : newUrl).replace(/^(?:https?:\/\/)?www\./, ''),
 		size: size,
 		crop: options.crop ? '-cropped' : '',
@@ -282,7 +282,7 @@ Pageres.prototype._generate = function (url, size, options) {
 		height: size.split(/x/i)[1]
 	}));
 
-	stream.filename = name;
+	stream.filename = filename;
 	return stream;
 };
 
