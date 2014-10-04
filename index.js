@@ -34,14 +34,13 @@ function Pageres(options) {
 		return new Pageres();
 	}
 
-	this.options = assign({}, options);
+	this.stats = {};
 
+	this.options = assign({}, options);
+	this.options.filename = this.options.filename || '<%= url %>-<%= size %><%= crop %>';
 	this.options.cookies = (this.options.cookies || []).map(function (el) {
 		return typeof el === 'string' ? parseCookiePhantomjs(el) : el;
 	});
-
-	this.options.filename = this.options.filename || '<%= url %>-<%= size %><%= crop %>';
-	this.stats = {};
 
 	this._src = [];
 	this._items = [];
@@ -50,7 +49,7 @@ function Pageres(options) {
 }
 
 /**
- * Add a page to take screenshot of
+ * Get or set page to capture
  *
  * @param {String} url
  * @param {Array} sizes
@@ -73,11 +72,11 @@ Pageres.prototype.src = function (url, sizes, options) {
 };
 
 /**
-* Set or get the destination directory
-*
-* @param {String} dir
-* @api public
-*/
+ * Get or set the destination directory
+ *
+ * @param {String} dir
+ * @api public
+ */
 
 Pageres.prototype.dest = function (dir) {
 	if (!arguments.length) {
@@ -115,12 +114,12 @@ Pageres.prototype.run = function (cb) {
 
 		self._urls.push(src.url);
 
-		if (sizes.length === 0 && keywords.indexOf('w3counter') !== -1) {
+		if (!sizes.length && keywords.indexOf('w3counter') !== -1) {
 			self._resolution(src.url, options, next);
 			return;
 		}
 
-		if (keywords.length > 0) {
+		if (keywords.length) {
 			self._viewport(src.url, sizes, keywords, options, next);
 			return;
 		}
@@ -180,15 +179,15 @@ Pageres.prototype._resolution = function (url, options, cb) {
 };
 
 /**
-* Fetch keywords
-*
-* @param {String} url
-* @param {Array} sizes
-* @param {Array} keywords
-* @param {Object} options
-* @param {Function} cb
-* @api private
-*/
+ * Fetch keywords
+ *
+ * @param {String} url
+ * @param {Array} sizes
+ * @param {Array} keywords
+ * @param {Object} options
+ * @param {Function} cb
+ * @api private
+ */
 
 Pageres.prototype._viewport = function (url, sizes, keywords, options, cb) {
 	var self = this;

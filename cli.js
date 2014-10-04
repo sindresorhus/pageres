@@ -101,17 +101,17 @@ function get(args, options) {
 	var ret = [];
 
 	args.forEach(function (arg, i) {
-		if (arg.url.length === 0) {
+		if (!arg.url.length) {
 			console.error(logSymbols.warning, 'Specify a url');
 			process.exit(1);
 		}
 
-		if (arg.sizes.length === 0 && arg.keywords.length === 0) {
+		if (!arg.sizes.length && !arg.keywords.length) {
 			console.error(logSymbols.warning, 'Specify a size');
 			process.exit(1);
 		}
 
-		if (arg.keywords.length > 0) {
+		if (arg.keywords.length) {
 			arg.sizes = arg.sizes.concat(arg.keywords);
 		}
 
@@ -156,7 +156,7 @@ function init(args, options) {
 		return;
 	}
 
-	if (options.help || args.length === 0) {
+	if (options.help || !args.length) {
 		showHelp();
 		return;
 	}
