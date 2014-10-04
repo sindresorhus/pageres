@@ -1,7 +1,6 @@
 #!/usr/bin/env node
 'use strict';
 var _ = require('lodash');
-var eachAsync = require('each-async');
 var multiline = require('multiline');
 var updateNotifier = require('update-notifier');
 var stdin = require('get-stdin');
@@ -85,15 +84,15 @@ function generate(args, opts) {
 
 	pageres.run(function (err) {
 		if (err) {
-			if (err instanceof Error) {
-				throw err;
-			} else {
-				console.error(err);
+			if (err.noStack) {
+				console.error(err.message);
 				process.exit(1);
+			} else {
+				throw err;
 			}
 		}
 
-		pageres._logSuccessMessage();
+		pageres.successMessage();
 	});
 }
 
