@@ -315,7 +315,9 @@ Pageres.prototype._phantom = function (options) {
 			return;
 		}
 
-		stream.emit('error', new Error(data));
+		if (data.trim().length) {
+			stream.emit('error', new Error(data));
+		}
 	});
 
 	return stream;

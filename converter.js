@@ -29,6 +29,7 @@ options.cookies.forEach(function (cookie) {
 
 phantom.onError = function (err, trace) {
 	console.error('PHANTOM ERROR:', err + '\n' + formatTrace(trace[0]));
+	process.exit(1);
 };
 
 page.onError = function (err, trace) {
