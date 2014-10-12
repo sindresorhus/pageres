@@ -42,7 +42,6 @@
     "image"
   ],
   "dependencies": {
-    "base64-stream": "^0.1.2",
     "each-async": "^1.0.0",
     "easydate": "^1.0.1",
     "es5-shim": "^4.0.3",
@@ -54,8 +53,7 @@
     "memoize-async": "^1.0.1",
     "mkdirp": "^0.5.0",
     "multiline": "^1.0.0",
-    "parse-cookie-phantomjs": "^1.0.0",
-    "phantomjs": "1.9.2-6",
+    "screenshot-stream": "^1.0.0",
     "slugify-url": "^1.2.0",
     "subarg": "^1.0.0",
     "sudo-block": "^1.0.0",
