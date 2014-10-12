@@ -118,8 +118,9 @@ Pageres.prototype.run = function (cb) {
 			return;
 		}
 
-		this.stats.screenshots = _.uniq(this.sizes).length;
 		this.stats.urls = _.uniq(this.urls).length;
+		this.stats.sizes = _.uniq(this.sizes).length;
+		this.stats.screenshots = this.stats.urls * this.stats.sizes;
 
 		if (!this.dest()) {
 			cb(null, this.items);
