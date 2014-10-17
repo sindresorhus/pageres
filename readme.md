@@ -22,43 +22,116 @@ $ npm install --global pageres
 
 ## Usage
 
+Specify urls and screen resolutions as arguments. Order doesn't matter.
 ```
-$ pageres --help
+$ pageres <url> <resolution>
+$ pageres <resolution> <url>
 
-  Specify urls and screen resolutions as arguments. Order doesn't matter.
-  Group arguments with [ ]. Options defined inside a group will override the outer ones.
-  Screenshots are saved in the current directory.
-
-  Usage
-    pageres <url> <resolution>
-    pageres [ <url> <resolution> ] [ <url> <resolution> ]
-    pageres [ <url> <resolution> ... ] < <file>
-    cat <file> | pageres [ <url> <resolution> ... ]
-
-  Example
-    pageres todomvc.com yeoman.io 1366x768 1600x900
-    pageres [ yeoman.io 1366x768 1600x900 --no-crop ] [ todomvc.com 1024x768 480x320 ] --crop
-    pageres todomvc.com 1024x768 --filename '<%= date %> - <%= url %>'
-    pageres yeoman.io 1366x768 --selector '.page-header'
-    pageres --delay 3 1366x768 < urls.txt
-    pageres unicorn.html 1366x768
-    cat screen-resolutions.txt | pageres todomvc.com yeoman.io
-
-  Options
-    -v, --verbose            Verbose output
-    -c, --crop               Crop to the set height
-    -d, --delay <seconds>    Delay screenshot capture
-    --filename <template>    Custom filename
-    --selector <element>     Capture DOM element
-    --cookie <cookie>        Browser cookie, can be set multiple times
-    --username <username>    Username for HTTP auth
-    --password <password>    Password for HTTP auth
-
-  <url> can also be a local file path.
-
-  You can also pipe in a newline separated list of urls and screen resolutions which will get merged with the arguments.
+# <url> can also be a local file path.
+$ pageres <file> <resolution>
 ```
 
+List multiple urls and resolutions for pageres to capture all combinations.
+```
+$ pageres <url> <resolution> ...
+
+$ pageres todomvc.com 1024x768 1366x768 # 2 screenshots
+$ pageres todomvc.com yeoman.io 1024x768 # 2 screenshots
+$ pageres todomvc.com yeoman.io 1024x768 1366x768 # 4 screenshots
+```
+
+Pipe in a newline separated list of urls and screen resolutions which will get merged with the arguments.
+```
+# In this case a list of screen resolutions
+$ pageres <url> < screen-resolutions.txt
+```
+
+
+Group arguments with square brackets.
+
+```
+$ pageres [ <url> <resolution> ] [ <url> <resolution> ]
+$ pageres [ <url> <resolution> ... ]
+
+# Options defined inside a group will override the outer ones.
+$ pageres [ yeoman.io 1024x768 --no-crop ] [ todomvc.com 1366x768 ] --crop
+```
+
+Screenshots are saved in the current directory.
+
+### Examples
+```
+# Basic multi-url, multi-resolution usage
+pageres todomvc.com yeoman.io 1366x768 1600x900
+
+# Override outer option within group
+pageres [ yeoman.io 1366x768 1600x900 --no-crop ] [ todomvc.com 1024x768 480x320 ] --crop
+
+# Provide a custom filename template
+pageres todomvc.com 1024x768 --filename '<%= date %> - <%= url %>'
+
+# Capture a specific element
+pageres yeoman.io 1366x768 --selector '.page-header'
+
+# Delay and pipe in a list of urls
+pageres --delay 3 1366x768 < urls.txt
+
+# Capture a local file
+pageres unicorn.html 1366x768
+
+# Pipe in resolutions
+cat screen-resolutions.txt | pageres todomvc.com yeoman.io
+```
+
+
+### Options
+**-v, --verbose**
+
+Verbose output to see errors if you need to troubleshoot.
+
+**-c, --crop**
+
+Crop to the set height.
+
+```
+$ pageres todomvc.com 1024x768 --crop
+```
+
+**-d, --delay**
+
+Delay screenshot capture.
+
+```
+$ pageres todomvc.com 1024x768 --delay 3
+```
+
+**--filename &lt;template>**
+
+Custom filename.
+
+```
+$ pageres todomvc.com 1024x768 --filename '<%= date %> - <%= url %>'
+```
+
+**--selector &lt;element>**
+
+Capture DOM element.
+
+```
+$ pageres yeoman.io 1366x768 --selector '.page-header'
+```
+
+**--cookie &lt;cookie>**
+
+Browser cookie, can be set multiple times.
+
+**--username &lt;username>**
+
+Username for HTTP auth.
+
+**--password &lt;password>**
+
+Password for HTTP auth.
 
 ## Config file
 
@@ -73,7 +146,7 @@ pageres [ google.com 1000x1000 --crop ] [ github.com 500x500 ]
 
 ## Task runners
 
-Check out [grunt-pageres](https://github.com/sindresorhus/grunt-pageres) if you're using grunt. 
+Check out [grunt-pageres](https://github.com/sindresorhus/grunt-pageres) if you're using grunt.
 
 For gulp and broccoli, just use the below API directly. No need for a wrapper plugin.  
 *(If you create a useless gulp/broccoli wrapper plugin for this, my cat will be very sad.)*
@@ -189,7 +262,7 @@ Type: `array`
 Use a `<width>x<height>` notation or a keyword.
 
 A keyword is a version of a device from [this list](http://viewportsizes.com).
-You can also pass in the `w3counter` keyword to use the ten most popular 
+You can also pass in the `w3counter` keyword to use the ten most popular
 resolutions from [w3counter](http://www.w3counter.com/globalstats.php).
 
 #### options
