@@ -23,7 +23,8 @@ $ npm install --global pageres
 ## Usage
 
 Specify urls and screen resolutions as arguments. Order doesn't matter.
-```
+
+```sh
 $ pageres <url> <resolution>
 $ pageres <resolution> <url>
 
@@ -32,7 +33,8 @@ $ pageres <file> <resolution>
 ```
 
 List multiple urls and resolutions for pageres to capture all combinations.
-```
+
+```sh
 $ pageres <url> <resolution> ...
 
 $ pageres todomvc.com 1024x768 1366x768 # 2 screenshots
@@ -41,15 +43,15 @@ $ pageres todomvc.com yeoman.io 1024x768 1366x768 # 4 screenshots
 ```
 
 Pipe in a newline separated list of urls and screen resolutions which will get merged with the arguments.
-```
+
+```sh
 # In this case a list of screen resolutions
 $ pageres <url> < screen-resolutions.txt
 ```
 
-
 Group arguments with square brackets.
 
-```
+```sh
 $ pageres [ <url> <resolution> ] [ <url> <resolution> ]
 $ pageres [ <url> <resolution> ... ]
 
@@ -60,7 +62,8 @@ $ pageres [ yeoman.io 1024x768 --no-crop ] [ todomvc.com 1366x768 ] --crop
 Screenshots are saved in the current directory.
 
 ### Examples
-```
+
+```sh
 # Basic multi-url, multi-resolution usage
 pageres todomvc.com yeoman.io 1366x768 1600x900
 
@@ -83,55 +86,56 @@ pageres unicorn.html 1366x768
 cat screen-resolutions.txt | pageres todomvc.com yeoman.io
 ```
 
-
 ### Options
-**-v, --verbose**
+
+##### `-v`, `--verbose`
 
 Verbose output to see errors if you need to troubleshoot.
 
-**-c, --crop**
+##### `-c`, `--crop`
 
 Crop to the set height.
 
-```
+```sh
 $ pageres todomvc.com 1024x768 --crop
 ```
 
-**-d, --delay**
+##### `-d`, `--delay`
 
 Delay screenshot capture.
 
-```
+```sh
 $ pageres todomvc.com 1024x768 --delay 3
 ```
 
-**--filename &lt;template>**
+##### `--filename <template>`
 
 Custom filename.
 
-```
+```sh
 $ pageres todomvc.com 1024x768 --filename '<%= date %> - <%= url %>'
 ```
 
-**--selector &lt;element>**
+##### `--selector <element>`
 
 Capture DOM element.
 
-```
+```sh
 $ pageres yeoman.io 1366x768 --selector '.page-header'
 ```
 
-**--cookie &lt;cookie>**
+##### `--cookie <cookie>`
 
 Browser cookie, can be set multiple times.
 
-**--username &lt;username>**
+##### `--username <username>`
 
 Username for HTTP auth.
 
-**--password &lt;password>**
+##### `--password <password>`
 
 Password for HTTP auth.
+
 
 ## Config file
 
