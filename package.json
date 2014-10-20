@@ -46,6 +46,7 @@
     "easydate": "^1.0.1",
     "es5-shim": "^4.0.3",
     "file-url": "^1.0.0",
+    "fs-write-stream-atomic": "^1.0.2",
     "get-res": "^0.2.1",
     "get-stdin": "^3.0.0",
     "lodash": "^2.4.1",
