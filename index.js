@@ -13,7 +13,7 @@ var each = require('each-async');
 
 function Pageres(options) {
 	if (!(this instanceof Pageres)) {
-		return new Pageres();
+		return new Pageres(options);
 	}
 
 	EventEmitter.call(this);
