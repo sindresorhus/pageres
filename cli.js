@@ -150,8 +150,6 @@ function parse(args) {
 }
 
 function init(args, options) {
-	var arr = [];
-
 	if (options.version) {
 		console.log(pkg.version);
 		return;
@@ -162,16 +160,17 @@ function init(args, options) {
 		return;
 	}
 
-	arr = args.filter(function (arg) {
+	var nonGroupedArgs = args.filter(function (arg) {
 		return !arg._;
 	});
 
+	// filter grouped args
 	args = args.filter(function (arg) {
 		return arg._;
 	});
 
-	if (arr.length) {
-		args.push({_: arr});
+	if (nonGroupedArgs.length) {
+		args.push({_: nonGroupedArgs});
 	}
 
 	var items = get(parse(args), options);
