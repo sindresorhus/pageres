@@ -55,8 +55,11 @@ Group arguments with square brackets.
 $ pageres [ <url> <resolution> ] [ <url> <resolution> ]
 $ pageres [ <url> <resolution> ... ]
 
+# Mix grouped and single arguments
+$ pageres [ yeoman.io 1024x768 1600x900 ] todomvc.com 1366x768
+
 # Options defined inside a group will override the outer ones.
-$ pageres [ yeoman.io 1024x768 --no-crop ] [ todomvc.com 1366x768 ] --crop
+$ pageres [ yeoman.io 1024x768 --no-crop ] todomvc.com 1366x768 --crop
 ```
 
 Screenshots are saved in the current directory.
@@ -122,6 +125,14 @@ Capture DOM element.
 
 ```sh
 $ pageres yeoman.io 1366x768 --selector '.page-header'
+```
+
+##### `--no-crop`
+
+Override a global crop option within a group.
+
+```sh
+$ pageres [ yeoman.io 1366x768 --no-crop ] todomvc.com 1024x768 --crop
 ```
 
 ##### `--cookie <cookie>`
