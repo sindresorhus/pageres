@@ -120,7 +120,7 @@ Pageres.prototype.run = function (cb) {
 
 		this.stats.urls = _.uniq(this.urls).length;
 		this.stats.sizes = _.uniq(this.sizes).length;
-		this.stats.screenshots = this.stats.urls * this.stats.sizes;
+		this.stats.screenshots = this.items.length;
 
 		if (!this.dest()) {
 			cb(null, this.items);
