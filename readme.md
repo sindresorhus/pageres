@@ -236,6 +236,8 @@ Available variables:
 
 - `url`: The URL in [slugified](https://github.com/ogt/slugify-url) form, eg. `http://yeoman.io/blog/` becomes `yeoman.io!blog`
 - `size`: Specified size, eg. `1024x1000`
+- `width`: Width of the specified size, eg. `1024`
+- `height`: Height of the specified size, eg. `1000`
 - `crop`: Outputs `-cropped` when the crop option is true
 - `date`: The current date
 
