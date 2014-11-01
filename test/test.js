@@ -210,6 +210,23 @@ test('auth using username and password', function (t) {
 	});
 });
 
+test('scale webpage using the `scale` option', function (t) {
+	t.plan(3);
+
+	var pageres = new Pageres({scale: 2, crop: true})
+		.src('yeoman.io', ['120x120']);
+
+	pageres.run(function (err, streams) {
+		t.assert(!err, err);
+
+		streams[0].pipe(concat(function (data) {
+			var size = imageSize(data);
+			t.assert(size.width === 240);
+			t.assert(size.height === 240);
+		}));
+	});
+});
+
 function cookieTest (port, input, t) {
 	t.plan(6);
 	var server = new Server(port);

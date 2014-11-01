@@ -18,7 +18,8 @@ var options = subarg(process.argv.slice(2), {
 		'version'
 	],
 	default: {
-		delay: 0
+		delay: 0,
+		scale: 1
 	},
 	alias: {
 		v: 'verbose',
@@ -63,6 +64,7 @@ function showHelp() {
     --cookie <cookie>        Browser cookie, can be set multiple times
     --username <username>    Username for HTTP auth
     --password <password>    Password for HTTP auth
+    --scale <number>         Scale webpage
 
   <url> can also be a local file path.
 

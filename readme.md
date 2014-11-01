@@ -147,6 +147,10 @@ Username for HTTP auth.
 
 Password for HTTP auth.
 
+##### `--scale <number>`
+
+Scale webpage `n` of times.
+
 
 ## Config file
 
@@ -258,6 +262,13 @@ Username for authenticating with HTTP auth.
 Type: `string`
 
 Password for authenticating with HTTP auth.
+
+##### scale
+
+Type: `Number`  
+Default: `1`
+
+Scale webpage `n` times.
 
 
 ### pageres.src(url, sizes, options)
