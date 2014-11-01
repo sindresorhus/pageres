@@ -18,7 +18,8 @@ var options = subarg(process.argv.slice(2), {
 		'version'
 	],
 	default: {
-		delay: 0
+		delay: 0,
+		scale: 1
 	},
 	alias: {
 		v: 'verbose',
