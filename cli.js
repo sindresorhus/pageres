@@ -61,6 +61,7 @@ function showHelp() {
     -d, --delay <seconds>    Delay screenshot capture
     --filename <template>    Custom filename
     --selector <element>     Capture DOM element
+    --hide <element>         Hide DOM element, can be set multiple times
     --cookie <cookie>        Browser cookie, can be set multiple times
     --username <username>    Username for HTTP auth
     --password <password>    Password for HTTP auth
@@ -136,6 +137,10 @@ function parse(args) {
 		arg = arg._;
 		delete options._;
 
+		if (options.hide) {
+			options.hide = Array.isArray(options.hide) ? options.hide : [options.hide];
+		}
+
 		var url = _.uniq(arg.filter(/./.test, /\.|localhost/));
 		var sizes = _.uniq(arg.filter(/./.test, /^\d{3,4}x\d{3,4}$/i));
 		var keywords = _.difference(arg, url.concat(sizes));
@@ -180,6 +185,10 @@ function init(args, options) {
 	// plural makes more sense for a programmatic option
 	options.cookies = options.cookie;
 	delete options.cookie;
+
+	if (options.hide) {
+		options.hide = Array.isArray(options.hide) ? options.hide : [options.hide];
+	}
 
 	generate(items, options);
 }

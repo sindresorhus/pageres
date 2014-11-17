@@ -79,6 +79,9 @@ pageres todomvc.com 1024x768 --filename '<%= date %> - <%= url %>'
 # Capture a specific element
 pageres yeoman.io 1366x768 --selector '.page-header'
 
+# Hide a specific element
+pageres yeoman.io 1366x768 --hide '.page-header'
+
 # Delay and pipe in a list of urls
 pageres --delay 3 1366x768 < urls.txt
 
@@ -125,6 +128,14 @@ Capture DOM element.
 
 ```sh
 $ pageres yeoman.io 1366x768 --selector '.page-header'
+```
+
+##### `--hide <element>`
+
+Hide DOM element, can be set multiple times.
+
+```sh
+$ pageres yeoman.io 1366x768 --hide '.page-header'
 ```
 
 ##### `--no-crop`
@@ -250,6 +261,12 @@ Available variables:
 Type: `string`
 
 Capture a specific DOM element.
+
+##### hide
+
+Type: `array`
+
+Hide an array of DOM elements.
 
 ##### username
 
