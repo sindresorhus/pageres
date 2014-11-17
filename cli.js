@@ -137,6 +137,9 @@ function parse(args) {
 		arg = arg._;
 		delete options._;
 
+		options.cookies = options.cookie;
+		delete options.cookie;
+
 		if (options.hide) {
 			options.hide = Array.isArray(options.hide) ? options.hide : [options.hide];
 		}
