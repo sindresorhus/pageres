@@ -73,15 +73,15 @@ function showHelp() {
   */}));
 }
 
-function generate(args, opts) {
-	var pageres = new Pageres(opts)
+function generate(args, options) {
+	var pageres = new Pageres()
 		.dest(process.cwd());
 
 	args.forEach(function (arg) {
 		pageres.src(arg.url, arg.sizes, arg.options);
 	});
 
-	if (opts.verbose) {
+	if (options.verbose) {
 		pageres.on('warn', console.error.bind(console));
 	}
 
@@ -99,7 +99,7 @@ function generate(args, opts) {
 	});
 }
 
-function get(args, options) {
+function get(args) {
 	var ret = [];
 
 	args.forEach(function (arg, i) {
@@ -129,14 +129,13 @@ function get(args, options) {
 	return ret;
 }
 
-function parse(args) {
-	var ret = [];
-
-	args.forEach(function (arg) {
-		var options = arg;
+function parse(args, globalOptions) {
+	return args.map(function (arg) {
+		var options = _.defaults(arg, globalOptions);
 		arg = arg._;
 		delete options._;
 
+		// plural makes more sense for a programmatic option
 		options.cookies = options.cookie;
 		delete options.cookie;
 
@@ -148,15 +147,13 @@ function parse(args) {
 		var sizes = _.uniq(arg.filter(/./.test, /^\d{3,4}x\d{3,4}$/i));
 		var keywords = _.difference(arg, url.concat(sizes));
 
-		ret.push({
+		return {
 			url: url,
 			sizes: sizes,
 			keywords: keywords,
 			options: options
-		});
+		};
 	});
-
-	return ret;
 }
 
 function init(args, options) {
@@ -183,15 +180,8 @@ function init(args, options) {
 		args.push({_: nonGroupedArgs});
 	}
 
-	var items = get(parse(args), options);
-
-	// plural makes more sense for a programmatic option
-	options.cookies = options.cookie;
-	delete options.cookie;
-
-	if (options.hide) {
-		options.hide = Array.isArray(options.hide) ? options.hide : [options.hide];
-	}
+	var parsedArgs = parse(args, options);
+	var items = get(parsedArgs);
 
 	generate(items, options);
 }
