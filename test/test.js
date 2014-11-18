@@ -176,7 +176,7 @@ test('save image', function (t) {
 		t.assert(fs.existsSync('todomvc.com-1024x768.png'));
 
 		fs.unlink('todomvc.com-1024x768.png', function (err) {
-			t.assert(!err);
+			t.assert(!err, err);
 		});
 	});
 });
@@ -189,7 +189,7 @@ test('generate screenshot using the CLI', function (t) {
 			t.assert(fs.existsSync('yeoman.io-320x240.png'));
 
 			fs.unlink('yeoman.io-320x240.png', function (err) {
-				t.assert(!err);
+				t.assert(!err, err);
 			});
 		});
 });
@@ -208,7 +208,7 @@ test('generate screenshots from a list of screen resolutions', function (t) {
 		fs.unlinkSync('yeoman.io-1280x1024.png');
 
 		fs.unlink('yeoman.io-768x1024.png', function (err) {
-			t.assert(!err);
+			t.assert(!err, err);
 		});
 	});
 
