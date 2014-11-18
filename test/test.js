@@ -194,6 +194,27 @@ test('generate screenshot using the CLI', function (t) {
 		});
 });
 
+test('generate screenshots from a list of screen resolutions', function (t) {
+	t.plan(4);
+
+	var read = fs.createReadStream('fixture.txt');
+	var cp = spawn('../cli.js', ['yeoman.io']);
+
+	cp.on('close', function () {
+		t.assert(fs.existsSync('yeoman.io-1366x768.png'));
+		t.assert(fs.existsSync('yeoman.io-1280x1024.png'));
+		t.assert(fs.existsSync('yeoman.io-768x1024.png'));
+		fs.unlinkSync('yeoman.io-1366x768.png');
+		fs.unlinkSync('yeoman.io-1280x1024.png');
+
+		fs.unlink('yeoman.io-768x1024.png', function (err) {
+			t.assert(!err);
+		});
+	});
+
+	read.pipe(cp.stdin);
+});
+
 test('auth using username and password', function (t) {
 	t.plan(3);
 
