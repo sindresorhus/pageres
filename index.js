@@ -97,7 +97,7 @@ Pageres.prototype.run = function (cb) {
 		}
 
 		if (keywords.length) {
-			this.viewport({ url: src.url, sizes: sizes, keywords: keywords }, options, next);
+			this.viewport({url: src.url, sizes: sizes, keywords: keywords}, options, next);
 			return;
 		}
 

@@ -69,7 +69,7 @@ test('remove special characters from the URL to create a valid filename', functi
 test('have a `delay` option', function (t) {
 	t.plan(2);
 
-	var pageres = new Pageres({ delay: 2 })
+	var pageres = new Pageres({delay: 2})
 		.src('http://todomvc.com', ['1024x768']);
 
 	pageres.run(function (err, streams) {
@@ -86,7 +86,7 @@ test('have a `delay` option', function (t) {
 test('crop image using the `crop` option', function (t) {
 	t.plan(4);
 
-	var pageres = new Pageres({ crop: true })
+	var pageres = new Pageres({crop: true})
 		.src('http://todomvc.com', ['1024x768']);
 
 	pageres.run(function (err, streams) {
@@ -105,7 +105,7 @@ test('rename image using the `filename` option', function (t) {
 	t.plan(3);
 
 	var pageres = new Pageres()
-		.src('http://todomvc.com', ['1024x768'], { filename: '<%= date %> - <%= url %>' });
+		.src('http://todomvc.com', ['1024x768'], {filename: '<%= date %> - <%= url %>'});
 
 	pageres.run(function (err, streams) {
 		t.assert(!err, err);
@@ -117,7 +117,7 @@ test('rename image using the `filename` option', function (t) {
 test('capture a DOM element using the `selector` option', function (t) {
 	t.plan(4);
 
-	var pageres = new Pageres({ selector: '.page-header' })
+	var pageres = new Pageres({selector: '.page-header'})
 		.src('http://yeoman.io', ['1024x768']);
 
 	pageres.run(function (err, streams) {
