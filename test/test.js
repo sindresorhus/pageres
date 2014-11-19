@@ -184,14 +184,17 @@ test('save image', function (t) {
 test('generate screenshot using the CLI', function (t) {
 	t.plan(2);
 
-	spawn('../cli.js', ['yeoman.io', '320x240'], {stdio:'inherit'})
-		.on('close', function () {
-			t.assert(fs.existsSync('yeoman.io-320x240.png'));
+	var cp = spawn('../cli.js', ['yeoman.io', '320x240'], {
+		stdio: [process.stdin, null, null]
+	});
 
-			fs.unlink('yeoman.io-320x240.png', function (err) {
-				t.assert(!err, err);
-			});
+	cp.on('close', function () {
+		t.assert(fs.existsSync('yeoman.io-320x240.png'));
+
+		fs.unlink('yeoman.io-320x240.png', function (err) {
+			t.assert(!err, err);
 		});
+	});
 });
 
 test('generate screenshots from a list of screen resolutions', function (t) {
