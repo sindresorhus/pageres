@@ -54,6 +54,7 @@
     "mkdirp": "^0.5.0",
     "multiline": "^1.0.0",
     "protocolify": "^1.0.0",
+    "rimraf": "^2.2.8",
     "screenshot-stream": "^1.0.0",
     "slugify-url": "^1.2.0",
     "subarg": "^1.0.0",

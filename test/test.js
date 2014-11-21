@@ -218,6 +218,25 @@ test('generate screenshots from a list of screen resolutions', function (t) {
 	read.pipe(cp.stdin);
 });
 
+test('remove temporary files on cancel', function (t) {
+	t.plan(2);
+
+	var cp = spawn('../cli.js', ['yeoman.io', '320x240'], {
+		stdio: [process.stdin, null, null]
+	});
+
+	cp.on('exit', function () {
+		fs.readdir(__dirname, function (err, files) {
+			t.assert(!err, err);
+			t.assert(files.indexOf('yeoman.io-320x240.png') === -1);
+		});
+	});
+
+	setTimeout(function () {
+		cp.kill('SIGINT');
+	}, 500);
+});
+
 test('auth using username and password', function (t) {
 	t.plan(3);
 
