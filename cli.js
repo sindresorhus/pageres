@@ -135,6 +135,10 @@ function parse(args, globalOptions) {
 		arg = arg._;
 		delete options._;
 
+		if (options.cookie) {
+			options.cookie = Array.isArray(options.cookie) ? options.cookie : [options.cookie];
+		}
+
 		// plural makes more sense for a programmatic option
 		options.cookies = options.cookie;
 		delete options.cookie;

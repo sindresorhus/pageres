@@ -150,6 +150,10 @@ $ pageres [ yeoman.io 1366x768 --no-crop ] todomvc.com 1024x768 --crop
 
 Browser cookie, can be set multiple times.
 
+```sh
+$ pageres yeoman.io 1024x768 --cookie 'foo=bar'
+```
+
 ##### `--username <username>`
 
 Username for HTTP auth.
