@@ -60,7 +60,7 @@
     "subarg": "^1.0.0",
     "sudo-block": "^1.0.0",
     "update-notifier": "^0.2.1",
-    "viewport-list": "^1.0.1"
+    "viewport-list": "^2.0.0"
   },
   "devDependencies": {
     "ava": "0.0.4",
