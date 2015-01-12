@@ -59,7 +59,7 @@
     "slugify-url": "^1.2.0",
     "subarg": "^1.0.0",
     "sudo-block": "^1.0.0",
-    "update-notifier": "^0.2.1",
+    "update-notifier": "^0.3.0",
     "viewport-list": "^2.0.0"
   },
   "devDependencies": {

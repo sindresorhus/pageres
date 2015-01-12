@@ -191,11 +191,7 @@ function init(args, options) {
 }
 
 sudoBlock();
-
-updateNotifier({
-	packageName: pkg.name,
-	packageVersion: pkg.version
-}).notify();
+updateNotifier({pkg: pkg}).notify();
 
 if (process.stdin.isTTY) {
 	init(args, options);
