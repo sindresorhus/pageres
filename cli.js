@@ -1,12 +1,14 @@
 #!/usr/bin/env node
 'use strict';
-var _ = require('lodash');
 var multiline = require('multiline');
 var updateNotifier = require('update-notifier');
 var stdin = require('get-stdin');
 var subarg = require('subarg');
 var sudoBlock = require('sudo-block');
 var logSymbols = require('log-symbols');
+var arrayUniq = require('array-uniq');
+var arrayDiffer = require('array-differ');
+var objectAssign = require('object-assign');
 var pkg = require('./package.json');
 var Pageres = require('./');
 
@@ -131,7 +133,7 @@ function get(args) {
 
 function parse(args, globalOptions) {
 	return args.map(function (arg) {
-		var options = _.defaults(arg, globalOptions);
+		var options = objectAssign({}, globalOptions, arg);
 		arg = arg._;
 		delete options._;
 
@@ -147,9 +149,9 @@ function parse(args, globalOptions) {
 			options.hide = Array.isArray(options.hide) ? options.hide : [options.hide];
 		}
 
-		var url = _.uniq(arg.filter(/./.test, /\.|localhost/));
-		var sizes = _.uniq(arg.filter(/./.test, /^\d{3,4}x\d{3,4}$/i));
-		var keywords = _.difference(arg, url.concat(sizes));
+		var url = arrayUniq(arg.filter(/./.test, /\.|localhost/));
+		var sizes = arrayUniq(arg.filter(/./.test, /^\d{3,4}x\d{3,4}$/i));
+		var keywords = arrayDiffer(arg, url.concat(sizes));
 
 		return {
 			url: url,

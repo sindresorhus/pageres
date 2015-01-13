@@ -1,8 +1,10 @@
 'use strict';
 var EventEmitter = require('events').EventEmitter;
 var util = require('util');
-var _ = require('lodash');
 var each = require('each-async');
+var arrayUniq = require('array-uniq');
+var arrayDiffer = require('array-differ');
+var objectAssign = require('object-assign');
 
 /**
  * Initialize a new Pageres
@@ -18,7 +20,7 @@ function Pageres(options) {
 
 	EventEmitter.call(this);
 
-	this.options = _.assign({}, options);
+	this.options = objectAssign({}, options);
 	this.options.filename = this.options.filename || '<%= url %>-<%= size %><%= crop %>';
 
 	this.stats = {};
@@ -28,7 +30,7 @@ function Pageres(options) {
 }
 
 util.inherits(Pageres, EventEmitter);
-_.assign(Pageres.prototype, require('./lib/util'));
+objectAssign(Pageres.prototype, require('./lib/util'));
 module.exports = Pageres;
 
 /**
@@ -80,9 +82,9 @@ Pageres.prototype.dest = function (dir) {
 
 Pageres.prototype.run = function (cb) {
 	each(this.src(), function (src, i, next) {
-		var options = _.assign({}, this.options, src.options);
-		var sizes = _.uniq(src.sizes.filter(/./.test, /^\d{3,4}x\d{3,4}$/i));
-		var keywords = _.difference(src.sizes, sizes);
+		var options = objectAssign({}, this.options, src.options);
+		var sizes = arrayUniq(src.sizes.filter(/./.test, /^\d{3,4}x\d{3,4}$/i));
+		var keywords = arrayDiffer(src.sizes, sizes);
 
 		if (!src.url) {
 			cb(new Error('URL required'));
@@ -118,8 +120,8 @@ Pageres.prototype.run = function (cb) {
 			return;
 		}
 
-		this.stats.urls = _.uniq(this.urls).length;
-		this.stats.sizes = _.uniq(this.sizes).length;
+		this.stats.urls = arrayUniq(this.urls).length;
+		this.stats.sizes = arrayUniq(this.sizes).length;
 		this.stats.screenshots = this.items.length;
 
 		if (!this.dest()) {
