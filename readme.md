@@ -24,6 +24,8 @@ $ npm install --global pageres
 
 Specify urls and screen resolutions as arguments. Order doesn't matter.
 
+If no resolution is specified it will default to `1366x768` which is the most popular resolution.
+
 ```sh
 $ pageres <url> <resolution>
 $ pageres <resolution> <url>
