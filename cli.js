@@ -111,8 +111,7 @@ function get(args) {
 		}
 
 		if (!arg.sizes.length && !arg.keywords.length) {
-			console.error(logSymbols.warning, 'Specify a size');
-			process.exit(1);
+			arg.sizes = ['1366x768'];
 		}
 
 		if (arg.keywords.length) {
