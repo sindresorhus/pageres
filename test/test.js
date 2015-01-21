@@ -181,6 +181,24 @@ test('save image', function (t) {
 	});
 });
 
+test('remove temporary files on error', function (t) {
+	t.plan(4);
+
+	var pageres = new Pageres()
+		.src('this-is-a-error-site.io', ['1024x768'])
+		.dest(__dirname);
+
+	pageres.run(function (err) {
+		t.assert(err);
+		t.assert(err.message === 'Couldn\'t load url: http://this-is-a-error-site.io');
+
+		fs.readdir(__dirname, function (err, files) {
+			t.assert(!err, err);
+			t.assert(files.indexOf('this-is-a-error-site.io.png') === -1);
+		});
+	});
+});
+
 test('generate screenshot using the CLI', function (t) {
 	t.plan(2);
 
