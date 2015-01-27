@@ -181,6 +181,23 @@ test('save image', function (t) {
 	});
 });
 
+test('save image to absolute path', function (t) {
+	t.plan(3);
+
+	var pageres = new Pageres()
+		.src('http://bing.com', ['1024x768'], {filename: '/tmp/pageres-test.png'})
+		.dest(__dirname);
+
+	pageres.run(function (err) {
+		t.assert(!err, err);
+		t.assert(fs.existsSync('/tmp/pageres-test.png'));
+
+		fs.unlink('/tmp/pageres-test.png', function (err) {
+			t.assert(!err, err);
+		});
+	});
+});
+
 test('remove temporary files on error', function (t) {
 	t.plan(4);
 
