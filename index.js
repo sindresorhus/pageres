@@ -1,6 +1,5 @@
 'use strict';
 var EventEmitter = require('events').EventEmitter;
-var util = require('util');
 var each = require('each-async');
 var arrayUniq = require('array-uniq');
 var arrayDiffer = require('array-differ');
@@ -29,7 +28,7 @@ function Pageres(options) {
 	this.urls = [];
 }
 
-util.inherits(Pageres, EventEmitter);
+objectAssign(Pageres.prototype, EventEmitter.prototype);
 objectAssign(Pageres.prototype, require('./lib/util'));
 module.exports = Pageres;
 
