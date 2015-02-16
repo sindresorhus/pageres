@@ -168,6 +168,10 @@ Password for HTTP auth.
 
 Scale webpage `n` of times.
 
+##### `--format <string>`
+
+Image format. Either `png` *(default)* or `jpg`.
+
 
 ## Config file
 
@@ -292,6 +296,14 @@ Type: `Number`
 Default: `1`
 
 Scale webpage `n` times.
+
+##### format
+
+Type: `String`  
+Default: `png`  
+Values: `png`, `jpg`
+
+Image format.
 
 
 ### pageres.src(url, sizes, options)

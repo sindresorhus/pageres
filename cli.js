@@ -68,6 +68,7 @@ function showHelp() {
     --username <username>    Username for HTTP auth
     --password <password>    Password for HTTP auth
     --scale <number>         Scale webpage
+    --format <string>        Image format
 
   <url> can also be a local file path.
 
