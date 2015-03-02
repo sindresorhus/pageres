@@ -21,6 +21,7 @@ function Pageres(options) {
 
 	this.options = objectAssign({}, options);
 	this.options.filename = this.options.filename || '<%= url %>-<%= size %><%= crop %>';
+	this.options.format = this.options.format || 'png';
 
 	this.stats = {};
 	this.items = [];
