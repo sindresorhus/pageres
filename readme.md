@@ -172,6 +172,10 @@ Scale webpage `n` of times.
 
 Image format. Either `png` *(default)* or `jpg`.
 
+##### `--user-agent <string>`
+
+Custom user agent.
+
 
 ## Config file
 
@@ -304,6 +308,12 @@ Default: `png`
 Values: `png`, `jpg`
 
 Image format.
+
+##### userAgent
+
+Type: `string`
+
+Custom user agent.
 
 
 ### pageres.src(url, sizes, options)
