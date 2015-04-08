@@ -13,7 +13,7 @@ It's speedy and generates 100 screenshots from 10 different websites in just ove
 
 ## Install
 
-```sh
+```
 $ npm install --global pageres
 ```
 
@@ -215,10 +215,6 @@ var pageres = new Pageres({delay: 2})
 	.dest(__dirname);
 
 pageres.run(function (err) {
-	if (err) {
-		throw err;
-	}
-
 	console.log('done');
 });
 ```
@@ -296,14 +292,14 @@ Password for authenticating with HTTP auth.
 
 ##### scale
 
-Type: `Number`  
+Type: `number`  
 Default: `1`
 
 Scale webpage `n` times.
 
 ##### format
 
-Type: `String`  
+Type: `string`  
 Default: `png`  
 Values: `png`, `jpg`
 
