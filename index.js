@@ -81,6 +81,8 @@ Pageres.prototype.dest = function (dir) {
  */
 
 Pageres.prototype.run = function (cb) {
+	cb = cb || function () {};
+
 	each(this.src(), function (src, i, next) {
 		var options = objectAssign({}, this.options, src.options);
 		var sizes = arrayUniq(src.sizes.filter(/./.test, /^\d{3,4}x\d{3,4}$/i));
