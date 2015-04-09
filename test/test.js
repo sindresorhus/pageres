@@ -3,8 +3,8 @@ var fs = require('fs');
 var spawn = require('child_process').spawn;
 var test = require('ava');
 var imageSize = require('image-size');
-var concat = require('concat-stream');
-var date = require('easydate');
+var concatStream = require('concat-stream');
+var easydate = require('easydate');
 var PNG = require('png-js');
 var Pageres = require('../');
 var Server = require('./serverForCookieTests');
@@ -93,7 +93,7 @@ test('crop image using the `crop` option', function (t) {
 		t.assert(!err, err);
 		t.assert(streams[0].filename === 'todomvc.com-1024x768-cropped.png');
 
-		streams[0].pipe(concat(function (data) {
+		streams[0].pipe(concatStream(function (data) {
 			var size = imageSize(data);
 			t.assert(size.width === 1024);
 			t.assert(size.height === 768);
@@ -110,7 +110,7 @@ test('rename image using the `filename` option', function (t) {
 	pageres.run(function (err, streams) {
 		t.assert(!err, err);
 		t.assert(streams.length === 1);
-		t.assert(streams[0].filename === date('Y-M-d') + ' - todomvc.com.png');
+		t.assert(streams[0].filename === easydate('Y-M-d') + ' - todomvc.com.png');
 	});
 });
 
@@ -124,7 +124,7 @@ test('capture a DOM element using the `selector` option', function (t) {
 		t.assert(!err, err);
 		t.assert(streams[0].filename === 'yeoman.io-1024x768.png');
 
-		streams[0].pipe(concat(function (data) {
+		streams[0].pipe(concatStream(function (data) {
 			var size = imageSize(data);
 			t.assert(size.width === 1024);
 			t.assert(size.height === 80);
@@ -280,7 +280,7 @@ test('scale webpage using the `scale` option', function (t) {
 	pageres.run(function (err, streams) {
 		t.assert(!err, err);
 
-		streams[0].pipe(concat(function (data) {
+		streams[0].pipe(concatStream(function (data) {
 			var size = imageSize(data);
 			t.assert(size.width === 240);
 			t.assert(size.height === 240);
@@ -300,7 +300,7 @@ function cookieTest (port, input, t) {
 		t.assert(!err, err);
 		t.assert(streams[0].filename === filename);
 
-		streams[0].pipe(concat(function (data) {
+		streams[0].pipe(concatStream(function (data) {
 			server.close();
 			var png = new PNG(data);
 			png.decode(function (pixels) {

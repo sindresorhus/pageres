@@ -2,7 +2,7 @@
 'use strict';
 var multiline = require('multiline');
 var updateNotifier = require('update-notifier');
-var stdin = require('get-stdin');
+var getStdin = require('get-stdin');
 var subarg = require('subarg');
 var sudoBlock = require('sudo-block');
 var logSymbols = require('log-symbols');
@@ -198,7 +198,7 @@ updateNotifier({pkg: pkg}).notify();
 if (process.stdin.isTTY) {
 	init(args, options);
 } else {
-	stdin(function (data) {
+	getStdin(function (data) {
 		[].push.apply(args, data.trim().split(/\r?\n/));
 		init(args, options);
 	});

@@ -1,6 +1,6 @@
 'use strict';
 var EventEmitter = require('events').EventEmitter;
-var each = require('each-async');
+var eachAsync = require('each-async');
 var arrayUniq = require('array-uniq');
 var arrayDiffer = require('array-differ');
 var objectAssign = require('object-assign');
@@ -83,7 +83,7 @@ Pageres.prototype.dest = function (dir) {
 Pageres.prototype.run = function (cb) {
 	cb = cb || function () {};
 
-	each(this.src(), function (src, i, next) {
+	eachAsync(this.src(), function (src, i, next) {
 		var options = objectAssign({}, this.options, src.options);
 		var sizes = arrayUniq(src.sizes.filter(/./.test, /^\d{3,4}x\d{3,4}$/i));
 		var keywords = arrayDiffer(src.sizes, sizes);
