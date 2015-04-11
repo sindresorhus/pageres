@@ -1,6 +1,6 @@
 # ![pageres](media/promo.png)
 
-[![Build Status](http://img.shields.io/travis/sindresorhus/pageres/master.svg?style=flat)](https://travis-ci.org/sindresorhus/pageres?style=flat) ![](http://img.shields.io/badge/unicorn-approved-ff69b4.svg?style=flat)
+[![Build Status](http://img.shields.io/travis/sindresorhus/pageres/master.svg?style=flat)](https://travis-ci.org/sindresorhus/pageres?style=flat) [![](http://img.shields.io/badge/unicorn-approved-ff69b4.svg)](https://www.youtube.com/watch?v=9auOCbH5Ns4)
 
 Capture screenshots of websites in various resolutions. A good way to make sure your websites are responsive.
 
