@@ -6,6 +6,8 @@ Capture screenshots of websites in various resolutions. A good way to make sure 
 
 It's speedy and generates 100 screenshots from 10 different websites in just over a minute.
 
+It can also be used to render SVG images.
+
 ![](media/screenshot.png)
 
 ![](media/screenshot-output.png)
