@@ -25,6 +25,7 @@
     "lib"
   ],
   "keywords": [
+    "cli-app",
     "cli",
     "bin",
     "page",
@@ -35,12 +36,26 @@
     "resolution",
     "size",
     "screenshot",
+    "screenshots",
+    "screengrab",
     "screen",
+    "snapshot",
+    "shot",
     "responsive",
     "gulpfriendly",
     "phantom",
     "phantomjs",
-    "image"
+    "image",
+    "svg",
+    "render",
+    "html",
+    "headless",
+    "capture",
+    "pic",
+    "picture",
+    "png",
+    "jpg",
+    "jpeg"
   ],
   "dependencies": {
     "array-differ": "^1.0.0",
