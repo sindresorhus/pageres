@@ -31,10 +31,11 @@ var options = subarg(process.argv.slice(2), {
 });
 
 var args = options._;
+
 delete options._;
 
 function showHelp() {
-  console.log(multiline(function () {/*
+	console.log(multiline(function () {/*
 
   Capture screenshots of websites in various resolutions.
 
@@ -134,13 +135,13 @@ function get(args) {
 function parse(args, globalOptions) {
 	return args.map(function (arg) {
 		var options = objectAssign({}, globalOptions, arg);
+
 		arg = arg._;
 		delete options._;
 
 		if (options.cookie) {
 			options.cookie = Array.isArray(options.cookie) ? options.cookie : [options.cookie];
 		}
-
 		// plural makes more sense for a programmatic option
 		options.cookies = options.cookie;
 		delete options.cookie;
@@ -176,7 +177,6 @@ function init(args, options) {
 	var nonGroupedArgs = args.filter(function (arg) {
 		return !arg._;
 	});
-
 	// filter grouped args
 	args = args.filter(function (arg) {
 		return arg._;

@@ -95,6 +95,7 @@ test('crop image using the `crop` option', function (t) {
 
 		streams[0].pipe(concatStream(function (data) {
 			var size = imageSize(data);
+
 			t.assert(size.width === 1024);
 			t.assert(size.height === 768);
 		}));
@@ -126,6 +127,7 @@ test('capture a DOM element using the `selector` option', function (t) {
 
 		streams[0].pipe(concatStream(function (data) {
 			var size = imageSize(data);
+
 			t.assert(size.width === 1024);
 			t.assert(size.height === 80);
 		}));
@@ -282,13 +284,14 @@ test('scale webpage using the `scale` option', function (t) {
 
 		streams[0].pipe(concatStream(function (data) {
 			var size = imageSize(data);
+
 			t.assert(size.width === 240);
 			t.assert(size.height === 240);
 		}));
 	});
 });
 
-function cookieTest (port, input, t) {
+function cookieTest(port, input, t) {
 	t.plan(6);
 	var server = new Server(port);
 	var filename = 'localhost!' + port + '-320x480.png';
@@ -303,6 +306,7 @@ function cookieTest (port, input, t) {
 		streams[0].pipe(concatStream(function (data) {
 			server.close();
 			var png = new PNG(data);
+
 			png.decode(function (pixels) {
 				t.assert(pixels[0] === 0);
 				t.assert(pixels[1] === 0);
