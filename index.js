@@ -51,7 +51,7 @@ Pageres.prototype.src = function (url, sizes, options) {
 	this._src = this._src || [];
 	this._src.push({
 		url: url,
-		sizes: sizes,
+		sizes: sizes || [],
 		options: options
 	});
 
@@ -96,9 +96,14 @@ Pageres.prototype.run = function (cb) {
 
 		this.urls.push(src.url);
 
-		if (!sizes.length && keywords.indexOf('w3counter') !== -1) {
-			this.resolution(src.url, options, next);
-			return;
+		if (!sizes.length) {
+			if (keywords.indexOf('w3counter') !== -1){
+				this.resolution(src.url, options, next);
+				return;
+			}
+			else{
+				sizes.push('1366x768');
+			}
 		}
 
 		if (keywords.length) {
