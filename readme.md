@@ -266,7 +266,8 @@ Available variables:
 - `width`: Width of the specified size, eg. `1024`
 - `height`: Height of the specified size, eg. `1000`
 - `crop`: Outputs `-cropped` when the crop option is true
-- `date`: The current date
+- `date`: The current date (Y-M-d), eg. 2015-05-18
+- `time`: The current time (h-m-s), eg. 21-15-11
 
 ##### selector
 
