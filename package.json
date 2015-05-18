@@ -76,7 +76,7 @@
     "screenshot-stream": "^1.0.0",
     "subarg": "^1.0.0",
     "sudo-block": "^1.0.0",
-    "update-notifier": "^0.3.0",
+    "update-notifier": "^0.5.0",
     "viewport-list": "^3.0.0"
   },
   "devDependencies": {
