@@ -4,9 +4,7 @@
   "description": "Capture website screenshots",
   "license": "MIT",
   "repository": "sindresorhus/pageres",
-  "bin": {
-    "pageres": "cli.js"
-  },
+  "bin": "cli.js",
   "preferGlobal": true,
   "author": {
     "name": "Sindre Sorhus",
