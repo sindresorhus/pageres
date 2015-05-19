@@ -106,12 +106,12 @@ test('rename image using the `filename` option', function (t) {
 	t.plan(3);
 
 	var pageres = new Pageres()
-		.src('http://todomvc.com', ['1024x768'], {filename: '<%= date %> - <%= url %>'});
+		.src('http://todomvc.com', ['1024x768'], {filename: '<%= date %> - <%= time %> - <%= url %>'});
 
 	pageres.run(function (err, streams) {
 		t.assert(!err, err);
 		t.assert(streams.length === 1);
-		t.assert(streams[0].filename === easydate('Y-M-d') + ' - todomvc.com.png');
+		t.assert(streams[0].filename === easydate('Y-M-d') + ' - ' + easydate('h-m-s') + ' - todomvc.com.png');
 	});
 });
 
