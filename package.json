@@ -15,7 +15,9 @@
     "node": ">=0.10.0"
   },
   "scripts": {
-    "test": "node test/test.js"
+    "test": "node test/test.js",
+    "coverage": "nyc npm test && nyc report",
+    "coveralls": "nyc npm test && nyc report --reporter=text-lcov | coveralls"
   },
   "files": [
     "index.js",
@@ -83,7 +85,9 @@
     "ava": "0.0.4",
     "concat-stream": "^1.4.5",
     "cookie": "^0.1.2",
+    "coveralls": "^2.11.2",
     "image-size": "^0.3.3",
+    "nyc": "^2.1.4",
     "png-js": "^0.1.1"
   }
 }
