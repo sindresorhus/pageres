@@ -1,7 +1,7 @@
 # ![pageres](media/promo.png)
 
 [![Build Status](https://travis-ci.org/sindresorhus/pageres.svg?branch=master)](https://travis-ci.org/sindresorhus/pageres)
-[![Coverage Status](https://coveralls.io/repos/sindresorhus/chalk/badge.svg?branch=)](https://coveralls.io/r/sindresorhus/chalk?branch=master) [![](http://img.shields.io/badge/unicorn-approved-ff69b4.svg)](https://www.youtube.com/watch?v=9auOCbH5Ns4)
+[![Coverage Status](https://coveralls.io/repos/sindresorhus/pageres/badge.svg?branch=master)](https://coveralls.io/r/sindresorhus/pageres?branch=master) [![](http://img.shields.io/badge/unicorn-approved-ff69b4.svg)](https://www.youtube.com/watch?v=9auOCbH5Ns4)
 
 Capture screenshots of websites in various resolutions. A good way to make sure your websites are responsive.
 
