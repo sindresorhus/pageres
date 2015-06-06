@@ -257,6 +257,33 @@ test('remove temporary files on cancel', function (t) {
 	}, 500);
 });
 
+test('show help screen', function (t) {
+	t.plan(1);
+
+	var cp = spawn('../cli.js', ['--help'], {
+		stdio: [process.stdin, null, null]
+	});
+
+	cp.stdout.setEncoding('utf8');
+	cp.stdout.on('data', function (data) {
+		t.assert(/Capture screenshots of websites in various resolutions./.test(data), data);
+	});
+});
+
+test('show version', function (t) {
+	t.plan(1);
+
+	var cp = spawn('../cli.js', ['--version'], {
+		stdio: [process.stdin, null, null]
+	});
+
+	cp.stdout.setEncoding('utf8');
+	cp.stdout.on('data', function (data) {
+		var regex = new RegExp(require('../package.json').version);
+		t.assert(regex.test(data), data);
+	});
+});
+
 test('auth using username and password', function (t) {
 	t.plan(3);
 
