@@ -30,7 +30,7 @@ function Pageres(options) {
 }
 
 objectAssign(Pageres.prototype, EventEmitter.prototype);
-objectAssign(Pageres.prototype, require('./lib/util'));
+objectAssign(Pageres.prototype, require('./util'));
 
 module.exports = Pageres;
 

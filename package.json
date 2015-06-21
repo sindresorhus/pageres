@@ -19,7 +19,7 @@
   },
   "files": [
     "index.js",
-    "lib"
+    "util.js"
   ],
   "keywords": [
     "page",
