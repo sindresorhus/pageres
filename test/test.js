@@ -74,10 +74,10 @@ test('have a `delay` option', function (t) {
 	pageres.run(function (err, streams) {
 		t.assert(!err, err);
 
-		var now = new Date();
+		var now = Date.now();
 
 		streams[0].once('data', function () {
-			t.assert((new Date()) - now > 2000);
+			t.assert(Date.now() - now > 2000);
 		});
 	});
 });
