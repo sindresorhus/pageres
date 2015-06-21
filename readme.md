@@ -1,213 +1,22 @@
 # ![pageres](media/promo.png)
 
-[![Build Status](https://travis-ci.org/sindresorhus/pageres.svg?branch=master)](https://travis-ci.org/sindresorhus/pageres)
-[![Coverage Status](https://coveralls.io/repos/sindresorhus/pageres/badge.svg?branch=master)](https://coveralls.io/r/sindresorhus/pageres?branch=master) [![](http://img.shields.io/badge/unicorn-approved-ff69b4.svg)](https://www.youtube.com/watch?v=9auOCbH5Ns4)
+[![Build Status](https://travis-ci.org/sindresorhus/pageres.svg?branch=master)](https://travis-ci.org/sindresorhus/pageres) [![Coverage Status](https://coveralls.io/repos/sindresorhus/pageres/badge.svg?branch=master)](https://coveralls.io/r/sindresorhus/pageres?branch=master)
 
-Capture screenshots of websites in various resolutions. A good way to make sure your websites are responsive.
+Capture screenshots of websites in various resolutions. A good way to make sure your websites are responsive. It's speedy and generates 100 screenshots from 10 different websites in just over a minute. It can also be used to render SVG images.
 
-It's speedy and generates 100 screenshots from 10 different websites in just over a minute.
-
-It can also be used to render SVG images.
-
-![](media/screenshot.png)
-
-![](media/screenshot-output.png)
+*See [pageres-cli](https://github.com/sindresorhus/pageres-cli) for the command-line version.*
 
 
 ## Install
 
 ```
-$ npm install --global pageres
+$ npm install --save pageres
 ```
 
 *PhantomJS, which is used for generating the screenshots, is installed automagically, but in some [rare cases](https://github.com/Obvious/phantomjs/issues/102) it might fail to and you'll get an `Error: spawn EACCES` error. [Download](http://phantomjs.org/download.html) PhantomJS manually and reinstall pageres if that happens.*
 
 
 ## Usage
-
-Specify urls and screen resolutions as arguments. Order doesn't matter.
-
-If no resolution is specified it will default to `1366x768` which is the most popular resolution.
-
-```sh
-$ pageres <url> <resolution>
-$ pageres <resolution> <url>
-
-# <url> can also be a local file path.
-$ pageres <file> <resolution>
-```
-
-List multiple urls and resolutions for pageres to capture all combinations.
-
-```sh
-$ pageres <url> <resolution> ...
-
-$ pageres todomvc.com 1024x768 1366x768 # 2 screenshots
-$ pageres todomvc.com yeoman.io 1024x768 # 2 screenshots
-$ pageres todomvc.com yeoman.io 1024x768 1366x768 # 4 screenshots
-```
-
-Pipe in a newline separated list of urls and screen resolutions which will get merged with the arguments.
-
-```sh
-# In this case a list of screen resolutions
-$ pageres <url> < screen-resolutions.txt
-```
-
-Group arguments with square brackets.
-
-```sh
-$ pageres [ <url> <resolution> ] [ <url> <resolution> ]
-$ pageres [ <url> <resolution> ... ]
-
-# Mix grouped and single arguments
-$ pageres [ yeoman.io 1024x768 1600x900 ] todomvc.com 1366x768
-
-# Options defined inside a group will override the outer ones.
-$ pageres [ yeoman.io 1024x768 --no-crop ] todomvc.com 1366x768 --crop
-```
-
-Screenshots are saved in the current directory.
-
-### Examples
-
-```sh
-# Basic multi-url, multi-resolution usage
-pageres todomvc.com yeoman.io 1366x768 1600x900
-
-# Override outer option within group
-pageres [ yeoman.io 1366x768 1600x900 --no-crop ] [ todomvc.com 1024x768 480x320 ] --crop
-
-# Provide a custom filename template
-pageres todomvc.com 1024x768 --filename '<%= date %> - <%= url %>'
-
-# Capture a specific element
-pageres yeoman.io 1366x768 --selector '.page-header'
-
-# Hide a specific element
-pageres yeoman.io 1366x768 --hide '.page-header'
-
-# Delay and pipe in a list of urls
-pageres --delay 3 1366x768 < urls.txt
-
-# Capture a local file
-pageres unicorn.html 1366x768
-
-# Pipe in resolutions
-cat screen-resolutions.txt | pageres todomvc.com yeoman.io
-```
-
-### Options
-
-##### `-v`, `--verbose`
-
-Verbose output to see errors if you need to troubleshoot.
-
-##### `-c`, `--crop`
-
-Crop to the set height.
-
-```sh
-$ pageres todomvc.com 1024x768 --crop
-```
-
-##### `-d`, `--delay`
-
-Delay screenshot capture.
-
-```sh
-$ pageres todomvc.com 1024x768 --delay 3
-```
-
-##### `--filename <template>`
-
-Custom filename.
-
-```sh
-$ pageres todomvc.com 1024x768 --filename '<%= date %> - <%= url %>'
-```
-
-##### `--selector <element>`
-
-Capture DOM element.
-
-```sh
-$ pageres yeoman.io 1366x768 --selector '.page-header'
-```
-
-##### `--hide <element>`
-
-Hide DOM element, can be set multiple times.
-
-```sh
-$ pageres yeoman.io 1366x768 --hide '.page-header'
-```
-
-##### `--no-crop`
-
-Override a global crop option within a group.
-
-```sh
-$ pageres [ yeoman.io 1366x768 --no-crop ] todomvc.com 1024x768 --crop
-```
-
-##### `--cookie <cookie>`
-
-Browser cookie, can be set multiple times.
-
-```sh
-$ pageres yeoman.io 1024x768 --cookie 'foo=bar'
-```
-
-##### `--username <username>`
-
-Username for HTTP auth.
-
-##### `--password <password>`
-
-Password for HTTP auth.
-
-##### `--scale <number>`
-
-Scale webpage `n` of times.
-
-##### `--format <string>`
-
-Image format. Either `png` *(default)* or `jpg`.
-
-##### `--user-agent <string>`
-
-Custom user agent.
-
-
-## Config file
-
-You can persist your commands into a file and run it whenever with eg. `sh .pageres`:
-
-```sh
-# .pageres
-pageres [ todomvc.com 1000x1000 --crop ] [ yeoman.io 500x500 ]
-pageres [ google.com 1000x1000 --crop ] [ github.com 500x500 ]
-```
-
-
-## Task runners
-
-Check out [grunt-pageres](https://github.com/sindresorhus/grunt-pageres) if you're using grunt.
-
-For gulp and broccoli, just use the below API directly. No need for a wrapper plugin.  
-*(If you create a useless gulp/broccoli wrapper plugin for this, my cat will be very sad.)*
-
-
-## API
-
-### Install
-
-```sh
-$ npm install --save pageres
-```
-
-### Usage
 
 ```js
 var Pageres = require('pageres');
@@ -222,8 +31,9 @@ pageres.run(function (err) {
 });
 ```
 
+## API
 
-### Pageres(options)
+### Pageres([options])
 
 #### options
 
@@ -367,16 +177,11 @@ If you don't set a `dest()` you'll get `items` in this callback, which is an arr
 Warnings with eg. page errors.
 
 
-## Google Analytics screen resolutions
+## Task runners
 
-You can use the most popular resolutions for your site with `pageres` by following these steps:
+Check out [grunt-pageres](https://github.com/sindresorhus/grunt-pageres) if you're using grunt.
 
-- In Google Analytics go to the site for which you want screen resolutions
-- Select `Audience` => `Technology` => `Browser & OS`
-- Click the `Screen Resolution` link in the middle of the screen
-- Click the `Export` button at the top, then `Google Spreadsheets`, and select yes for importing
-- Select all the resolutions and copy them into a new file and save it
-- In your terminal run: `pageres website.com < file-from-above-step.txt`
+For gulp or broccoli, just use the below API directly. No need for a wrapper plugin.
 
 
 ## Built with Pageres
