@@ -15,6 +15,11 @@ test('expose a constructor', function (t) {
 	t.assert(typeof Pageres === 'function');
 });
 
+test('return an instance if it called without `new`', function (t) {
+	t.plan(1);
+	t.assert(Pageres() instanceof Pageres);
+});
+
 test('add a source', function (t) {
 	t.plan(1);
 
@@ -31,6 +36,17 @@ test('set destination directory', function (t) {
 		.dest('tmp');
 
 	t.assert(pageres._dest === 'tmp');
+});
+
+test('error if no url is specified', function (t) {
+	t.plan(2);
+
+	new Pageres()
+		.src('', [])
+		.run(function (err) {
+			t.assert(err);
+			t.assert(err.message === 'URL required');
+		});
 });
 
 test('generate screenshots', function (t) {
