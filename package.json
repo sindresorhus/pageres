@@ -67,7 +67,7 @@
     "object-assign": "^3.0.0",
     "protocolify": "^1.0.0",
     "rimraf": "^2.2.8",
-    "screenshot-stream": "^1.0.0",
+    "screenshot-stream": "^2.0.0",
     "viewport-list": "^3.0.0"
   },
   "devDependencies": {
