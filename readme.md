@@ -125,6 +125,12 @@ Type: `string`
 
 Custom user agent.
 
+##### headers
+
+Type: `object`
+
+Custom HTTP request headers.
+
 
 ### pageres.src(url, sizes, options)
 
