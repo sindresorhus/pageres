@@ -17,7 +17,8 @@ test('expose a constructor', function (t) {
 
 test('return an instance if it called without `new`', function (t) {
 	t.plan(1);
-	t.assert(Pageres() instanceof Pageres);
+	var pageres = Pageres;
+	t.assert(pageres() instanceof Pageres);
 });
 
 test('add a source', function (t) {
@@ -84,7 +85,9 @@ test('remove special characters from the URL to create a valid filename', functi
 test('have a `delay` option', function (t) {
 	t.plan(2);
 
-	var pageres = new Pageres({delay: 2})
+	var pageres = new Pageres({
+		delay: 2
+	})
 		.src('http://todomvc.com', ['1024x768']);
 
 	pageres.run(function (err, streams) {
@@ -101,7 +104,9 @@ test('have a `delay` option', function (t) {
 test('crop image using the `crop` option', function (t) {
 	t.plan(4);
 
-	var pageres = new Pageres({crop: true})
+	var pageres = new Pageres({
+		crop: true
+	})
 		.src('http://todomvc.com', ['1024x768']);
 
 	pageres.run(function (err, streams) {
@@ -121,7 +126,9 @@ test('rename image using the `filename` option', function (t) {
 	t.plan(3);
 
 	var pageres = new Pageres()
-		.src('http://todomvc.com', ['1024x768'], {filename: '<%= date %> - <%= time %> - <%= url %>'});
+		.src('http://todomvc.com', ['1024x768'], {
+			filename: '<%= date %> - <%= time %> - <%= url %>'
+		});
 
 	pageres.run(function (err, streams) {
 		t.assert(!err, err);
@@ -133,7 +140,9 @@ test('rename image using the `filename` option', function (t) {
 test('capture a DOM element using the `selector` option', function (t) {
 	t.plan(4);
 
-	var pageres = new Pageres({selector: '.page-header'})
+	var pageres = new Pageres({
+		selector: '.page-header'
+	})
 		.src('http://yeoman.io', ['1024x768']);
 
 	pageres.run(function (err, streams) {
@@ -219,7 +228,10 @@ test('remove temporary files on error', function (t) {
 test('auth using username and password', function (t) {
 	t.plan(3);
 
-	var pageres = new Pageres({username: 'user', password: 'passwd'})
+	var pageres = new Pageres({
+		username: 'user',
+		password: 'passwd'
+	})
 		.src('httpbin.org/basic-auth/user/passwd', ['120x120']);
 
 	pageres.run(function (err, streams) {
@@ -235,7 +247,10 @@ test('auth using username and password', function (t) {
 test('scale webpage using the `scale` option', function (t) {
 	t.plan(3);
 
-	var pageres = new Pageres({scale: 2, crop: true})
+	var pageres = new Pageres({
+		scale: 2,
+		crop: true
+	})
 		.src('yeoman.io', ['120x120']);
 
 	pageres.run(function (err, streams) {
@@ -255,7 +270,9 @@ function cookieTest(port, input, t) {
 	var server = new Server(port);
 	var filename = 'localhost!' + port + '-320x480.png';
 
-	var pageres = new Pageres({cookies: [input]})
+	var pageres = new Pageres({
+		cookies: [input]
+	})
 		.src('http://localhost:' + port, ['320x480']);
 
 	pageres.run(function (err, streams) {
