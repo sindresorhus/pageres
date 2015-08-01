@@ -13,7 +13,7 @@
     "node": ">=0.10.0"
   },
   "scripts": {
-    "test": "node test/test.js",
+    "test": "xo && node test/test.js",
     "coverage": "nyc npm test && nyc report",
     "coveralls": "nyc npm test && nyc report --reporter=text-lcov | coveralls"
   },
@@ -77,6 +77,7 @@
     "coveralls": "^2.11.2",
     "image-size": "^0.3.3",
     "nyc": "^3.0.1",
-    "png-js": "^0.1.1"
+    "png-js": "^0.1.1",
+    "xo": "*"
   }
 }
