@@ -24,11 +24,9 @@ var Pageres = require('pageres');
 var pageres = new Pageres({delay: 2})
 	.src('yeoman.io', ['480x320', '1024x768', 'iphone 5s'], {crop: true})
 	.src('todomvc.com', ['1280x1024', '1920x1080'])
-	.dest(__dirname);
-
-pageres.run(function (err) {
-	console.log('done');
-});
+	.dest(__dirname)
+	.run()
+	.then(() => console.log('done'));
 ```
 
 ## API
@@ -168,15 +166,9 @@ Set the destination directory.
 
 Type: `string`
 
-### pageres.run(callback)
+### pageres.run()
 
-Run pageres.
-
-#### callback(error, [items])
-
-Type: `function`
-
-If you don't set a `dest()` you'll get `items` in this callback, which is an array of streams.
+Run pageres. Returns a promise that resolves to an array of streams.
 
 ### pageres.on('warn', callback)
 
