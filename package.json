@@ -13,7 +13,7 @@
     "node": ">=0.10.0"
   },
   "scripts": {
-    "test": "xo lib/*.js test/*.js && ava",
+    "test": "xo lib/*.js test/*.js && npm run prepublish && ava",
     "prepublish": "babel lib --out-dir dist",
     "coverage": "nyc npm test && nyc report",
     "coveralls": "nyc npm test && nyc report --reporter=text-lcov | coveralls"
