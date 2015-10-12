@@ -4,7 +4,7 @@ import imageSize from 'image-size';
 import concatStream from 'concat-stream';
 import easydate from 'easydate';
 import PNG from 'png-js';
-import Pageres from '../lib';
+import Pageres from '../dist';
 import Server from './serverForCookieTests';
 
 process.chdir(__dirname);
