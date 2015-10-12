@@ -19,9 +19,9 @@ $ npm install --save pageres
 ## Usage
 
 ```js
-var Pageres = require('pageres');
+const Pageres = require('pageres');
 
-var pageres = new Pageres({delay: 2})
+const pageres = new Pageres({delay: 2})
 	.src('yeoman.io', ['480x320', '1024x768', 'iphone 5s'], {crop: true})
 	.src('todomvc.com', ['1280x1024', '1920x1080'])
 	.dest(__dirname)
@@ -168,11 +168,11 @@ Type: `string`
 
 ### pageres.run()
 
-Run pageres. Returns a promise that resolves to an array of streams.
+Run pageres. Returns a promise for an array of streams.
 
 ### pageres.on('warn', callback)
 
-Warnings with eg. page errors.
+Warnings with e.g. page errors.
 
 
 ## Task runners
