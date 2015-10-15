@@ -13,7 +13,7 @@
     "node": ">=0.10.0"
   },
   "scripts": {
-    "test": "xo lib/*.js test/*.js && npm run prepublish && ava",
+    "test": "xo && npm run prepublish && ava",
     "prepublish": "babel lib --out-dir dist",
     "coverage": "nyc npm test && nyc report",
     "coveralls": "nyc npm test && nyc report --reporter=text-lcov | coveralls"
@@ -76,15 +76,23 @@
   "devDependencies": {
     "ava": "*",
     "babel": "^5.8.23",
-    "concat-stream": "^1.4.5",
+    "concat-stream": "^1.5.0",
     "cookie": "^0.1.2",
     "coveralls": "^2.11.2",
+    "get-stream": "^1.0.0",
     "image-size": "^0.3.3",
     "nyc": "^3.0.1",
+    "pify": "^2.2.0",
+    "pinkie-promise": "^1.0.0",
     "png-js": "^0.1.1",
+    "rfpify": "^0.1.0",
     "xo": "*"
   },
   "xo": {
-    "esnext": true
+    "esnext": true,
+    "ignores": [
+      "test/test.js",
+      "dist/**"
+    ]
   }
 }
