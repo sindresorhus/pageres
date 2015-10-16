@@ -48,8 +48,11 @@ test('generate screenshots', async t => {
 		.run();
 
 	t.is(streams.length, 5);
-	t.is(streams[0].filename, 'todomvc.com-1280x1024.png');
-	t.is(streams[4].filename, 'yeoman.io-320x568.png');
+	t.is(streams[0].filename, 'yeoman.io-480x320.png');
+	t.is(streams[1].filename, 'yeoman.io-1024x768.png');
+	t.is(streams[2].filename, 'yeoman.io-320x568.png');
+	t.is(streams[3].filename, 'todomvc.com-1280x1024.png');
+	t.is(streams[4].filename, 'todomvc.com-1920x1080.png');
 	t.true((await getStream.buffer(streams[0])).length > 1000);
 });
 
