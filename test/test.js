@@ -6,12 +6,11 @@ import PNG from 'png-js';
 import getStream from 'get-stream';
 import pify from 'pify';
 import rfpify from 'rfpify';
-import Promise from 'pinkie-promise';
 import pathExists from 'path-exists';
 import Pageres from '../dist';
 import Server from './serverForCookieTests';
 
-const promiseFs = pify.all(fs, Promise);
+const promiseFs = pify.all(fs);
 
 process.chdir(__dirname);
 
@@ -154,7 +153,7 @@ async function cookieTest(port, input, t) {
 	server.close();
 
 	const png = new PNG(data);
-	const pixels = await rfpify(png.decode.bind(png), Promise)();
+	const pixels = await rfpify(png.decode.bind(png))();
 
 	t.is(pixels[0], 0);
 	t.is(pixels[1], 0);
