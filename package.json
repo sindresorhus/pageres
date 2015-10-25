@@ -90,7 +90,8 @@
     "esnext": true,
     "ignores": [
       "dist/**",
-      "lib/index.js"
+      "lib/index.js",
+      "test/_*.js"
     ]
   }
 }

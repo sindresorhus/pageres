@@ -8,7 +8,7 @@ import pify from 'pify';
 import rfpify from 'rfpify';
 import pathExists from 'path-exists';
 import Pageres from '../dist';
-import Server from './serverForCookieTests';
+import Server from './_server';
 
 const promiseFs = pify.all(fs);
 
