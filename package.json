@@ -13,10 +13,9 @@
     "node": ">=0.10.0"
   },
   "scripts": {
-    "test": "xo && npm run prepublish && ava",
+    "test": "xo && npm run prepublish && nyc ava",
     "prepublish": "babel lib --out-dir=dist --optional=runtime",
-    "coverage": "nyc npm test && nyc report",
-    "coveralls": "nyc npm test && nyc report --reporter=text-lcov | coveralls"
+    "coveralls": "nyc report --reporter=text-lcov | coveralls"
   },
   "main": "dist/index.js",
   "files": [
