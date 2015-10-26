@@ -12,8 +12,6 @@ import Server from './_server';
 
 const fsP = pify(fs);
 
-process.chdir(__dirname);
-
 test('expose a constructor', t => {
 	t.is(typeof Pageres, 'function');
 	t.end();
