@@ -14,7 +14,7 @@
   },
   "scripts": {
     "test": "xo && npm run prepublish && ava",
-    "prepublish": "babel lib --out-dir dist",
+    "prepublish": "babel lib --out-dir=dist --optional=runtime",
     "coverage": "nyc npm test && nyc report",
     "coveralls": "nyc npm test && nyc report --reporter=text-lcov | coveralls"
   },
@@ -55,6 +55,7 @@
   "dependencies": {
     "array-differ": "^1.0.0",
     "array-uniq": "^1.0.2",
+    "babel-runtime": "^5.8.29",
     "easydate": "^2.0.0",
     "es5-shim": "^4.0.3",
     "filenamify-url": "^1.0.0",
