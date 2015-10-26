@@ -10,7 +10,7 @@ import pathExists from 'path-exists';
 import Pageres from '../dist';
 import Server from './_server';
 
-const promiseFs = pify.all(fs);
+const fsP = pify(fs);
 
 process.chdir(__dirname);
 
@@ -111,7 +111,7 @@ test('save image', async t => {
 		await new Pageres().src('http://todomvc.com', ['1024x768']).dest(__dirname).run();
 		t.true(fs.existsSync('todomvc.com-1024x768.png'));
 	} finally {
-		await promiseFs.unlink('todomvc.com-1024x768.png');
+		await fsP.unlink('todomvc.com-1024x768.png');
 	}
 });
 
