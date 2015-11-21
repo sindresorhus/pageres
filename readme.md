@@ -184,7 +184,7 @@ For Gulp and Broccoli, just use the API directly. No need for a wrapper plugin.
 
 ## Built with Pageres
 
-- [Break Shot](https://github.com/rcdigital/break-shot) - Desktop app for capturing screenshots of responsive websites.
+- [Break Shot](https://github.com/victorferraz/break-shot) - Desktop app for capturing screenshots of responsive websites.
 
 
 ## Team
