@@ -15,28 +15,19 @@ const fsP = pify(fs);
 
 test('expose a constructor', t => {
 	t.is(typeof Pageres, 'function');
-	t.end();
 });
 
 test('add a source', t => {
 	const pageres = new Pageres().src('yeoman.io', ['1280x1024', '1920x1080']);
 	t.is(pageres._src[0].url, 'yeoman.io');
-	t.end();
 });
 
 test('set destination directory', t => {
 	t.is((new Pageres().dest('tmp'))._dest, 'tmp');
-	t.end();
 });
 
 test('error if no url is specified', async t => {
-	try {
-		await new Pageres().src('', []).run();
-		t.fail();
-	} catch (err) {
-		t.ok(err);
-		t.is(err.message, 'URL required');
-	}
+	await t.throws(new Pageres().src('', []).run(), 'URL required');
 });
 
 test('generate screenshots', async t => {
@@ -121,13 +112,8 @@ test('save image', async t => {
 });
 
 test('remove temporary files on error', async t => {
-	try {
-		await new Pageres().src('this-is-a-error-site.io', ['1024x768']).dest(__dirname).run();
-	} catch (err) {
-		t.ok(err);
-		t.is(err.message, 'Couldn\'t load url: http://this-is-a-error-site.io');
-		t.false(await pathExists('this-is-a-error-site.io.png'));
-	}
+	await t.throws(new Pageres().src('this-is-a-error-site.io', ['1024x768']).dest(__dirname).run(), 'Couldn\'t load url: http://this-is-a-error-site.io');
+	t.false(await pathExists('this-is-a-error-site.io.png'));
 });
 
 test('auth using username and password', async t => {
