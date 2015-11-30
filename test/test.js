@@ -1,4 +1,5 @@
 import fs from 'fs';
+import path from 'path';
 import test from 'ava';
 import imageSize from 'image-size';
 import easydate from 'easydate';
@@ -85,6 +86,12 @@ test('capture a DOM element using the `selector` option', async t => {
 
 test('support local relative files', async t => {
 	const streams = await new Pageres().src('fixture.html', ['1024x768']).run();
+	t.is(streams[0].filename, 'fixture.html-1024x768.png');
+	t.true((await getStream.buffer(streams[0])).length > 1000);
+});
+
+test('support local absolute files', async t => {
+	const streams = await new Pageres().src(path.join(__dirname, 'fixture.html'), ['1024x768']).run();
 	t.is(streams[0].filename, 'fixture.html-1024x768.png');
 	t.true((await getStream.buffer(streams[0])).length > 1000);
 });
