@@ -8,6 +8,7 @@ import getStream from 'get-stream';
 import pify from 'pify';
 import rfpify from 'rfpify';
 import pathExists from 'path-exists';
+import sinon from 'sinon';
 import Pageres from '../dist';
 import Server from './_server';
 
@@ -40,6 +41,15 @@ test('generate screenshots', async t => {
 	t.is(streams[0].filename, 'todomvc.com-1280x1024.png');
 	t.is(streams[4].filename, 'yeoman.io-320x568.png');
 	t.true((await getStream.buffer(streams[0])).length > 1000);
+});
+
+test('success message', async t => {
+	const stub = sinon.stub(console, 'log');
+	const pageres = new Pageres().src('yeoman.io', ['480x320', '1024x768', 'iphone 5s']);
+	await pageres.run();
+	pageres.successMessage();
+	t.true(/Generated 3 screenshots from 1 url and 1 size/.test(stub.firstCall.args[0]));
+	stub.restore();
 });
 
 test('remove special characters from the URL to create a valid filename', async t => {
