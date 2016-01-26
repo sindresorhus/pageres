@@ -60,7 +60,7 @@
     "filenamify-url": "^1.0.0",
     "fs-write-stream-atomic": "^1.0.2",
     "get-res": "^2.0.0",
-    "lodash.template": "^3.0.1",
+    "lodash.template": "^4.0.1",
     "log-symbols": "^1.0.2",
     "mem": "^0.1.0",
     "mkdirp": "^0.5.0",
@@ -89,7 +89,6 @@
   "xo": {
     "esnext": true,
     "ignores": [
-      "dist/**",
       "lib/index.js",
       "test/_*.js"
     ]
