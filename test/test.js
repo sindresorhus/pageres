@@ -74,6 +74,15 @@ test('crop image using the `crop` option', async t => {
 	t.is(size.height, 768);
 });
 
+test('have a `css` option', async t => {
+	const streams = await new Pageres({delay: 2, css: 'body { background-color: red; }'}).src('http://todomvc.com', ['1024x768']).run();
+	const png = new PNG(await getStream.buffer(streams[0]));
+	const pixels = await rfpify(png.decode.bind(png), Promise)();
+	t.is(pixels[0], 255);
+	t.is(pixels[1], 0);
+	t.is(pixels[2], 0);
+});
+
 test('rename image using the `filename` option', async t => {
 	const streams = await new Pageres()
 		.src('http://todomvc.com', ['1024x768'], {
