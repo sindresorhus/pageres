@@ -51,6 +51,12 @@ Default: `false`
 
 Crop to the set height.
 
+##### css
+
+Type: `string`
+
+Apply custom CSS to the webpage. Specify some CSS or the path to a CSS file.
+
 ##### cookies
 
 Type: `array` of `string`, `object`
