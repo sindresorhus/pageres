@@ -10,9 +10,19 @@ import rfpify from 'rfpify';
 import pathExists from 'path-exists';
 import sinon from 'sinon';
 import Pageres from '../dist';
-import Server from './_server';
+import {createServer} from './_server';
 
 const fsP = pify(fs);
+
+let s;
+
+test.before(async () => {
+	s = await createServer();
+});
+
+test.after(async () => {
+	s.close();
+});
 
 test('expose a constructor', t => {
 	t.is(typeof Pageres, 'function');
@@ -45,7 +55,7 @@ test('generate screenshots', async t => {
 
 test('success message', async t => {
 	const stub = sinon.stub(console, 'log');
-	const pageres = new Pageres().src('yeoman.io', ['480x320', '1024x768', 'iphone 5s']);
+	const pageres = new Pageres().src(s.url, ['480x320', '1024x768', 'iphone 5s']);
 	await pageres.run();
 	pageres.successMessage();
 	t.true(/Generated 3 screenshots from 1 url and 1 size/.test(stub.firstCall.args[0]));
@@ -53,21 +63,21 @@ test('success message', async t => {
 });
 
 test('remove special characters from the URL to create a valid filename', async t => {
-	const streams = await new Pageres().src('http://www.microsoft.com/?query=pageres*|<>:"\\', ['1024x768']).run();
+	const streams = await new Pageres().src(`${s.url}?query=pageres*|<>:"\\`, ['1024x768']).run();
 	t.is(streams.length, 1);
-	t.is(streams[0].filename, 'microsoft.com!query=pageres-1024x768.png');
+	t.is(streams[0].filename, `${s.host}!${s.port}!query=pageres-1024x768.png`);
 });
 
 test('have a `delay` option', async t => {
-	const streams = await new Pageres({delay: 2}).src('http://todomvc.com', ['1024x768']).run();
+	const streams = await new Pageres({delay: 2}).src(s.url, ['1024x768']).run();
 	const now = Date.now();
 	await getStream(streams[0]);
 	t.true(Date.now() - now > 2000);
 });
 
 test('crop image using the `crop` option', async t => {
-	const streams = await new Pageres({crop: true}).src('http://todomvc.com', ['1024x768']).run();
-	t.is(streams[0].filename, 'todomvc.com-1024x768-cropped.png');
+	const streams = await new Pageres({crop: true}).src(s.url, ['1024x768']).run();
+	t.is(streams[0].filename, `${s.host}!${s.port}-1024x768-cropped.png`);
 
 	const size = imageSize(await getStream.buffer(streams[0]));
 	t.is(size.width, 1024);
@@ -75,7 +85,7 @@ test('crop image using the `crop` option', async t => {
 });
 
 test('have a `css` option', async t => {
-	const streams = await new Pageres({delay: 2, css: 'body { background-color: red; }'}).src('http://todomvc.com', ['1024x768']).run();
+	const streams = await new Pageres({css: 'body { background-color: red !important; }'}).src(s.url, ['1024x768']).run();
 	const png = new PNG(await getStream.buffer(streams[0]));
 	const pixels = await rfpify(png.decode.bind(png), Promise)();
 	t.is(pixels[0], 255);
@@ -85,18 +95,18 @@ test('have a `css` option', async t => {
 
 test('rename image using the `filename` option', async t => {
 	const streams = await new Pageres()
-		.src('http://todomvc.com', ['1024x768'], {
+		.src(s.url, ['1024x768'], {
 			filename: '<%= date %> - <%= time %> - <%= url %>'
 		})
 		.run();
 
 	t.is(streams.length, 1);
-	t.regexTest(new RegExp(`${easydate('Y-M-d')} - \\d{2}-\\d{2}-\\d{2} - todomvc.com.png`), streams[0].filename);
+	t.regexTest(new RegExp(`${easydate('Y-M-d')} - \\d{2}-\\d{2}-\\d{2} - ${s.host}!${s.port}.png`), streams[0].filename);
 });
 
 test('capture a DOM element using the `selector` option', async t => {
-	const streams = await new Pageres({selector: '.page-header'}).src('http://yeoman.io', ['1024x768']).run();
-	t.is(streams[0].filename, 'yeoman.io-1024x768.png');
+	const streams = await new Pageres({selector: '#team'}).src(s.url, ['1024x768']).run();
+	t.is(streams[0].filename, `${s.host}!${s.port}-1024x768.png`);
 
 	const size = imageSize(await getStream.buffer(streams[0]));
 	t.is(size.width, 1024);
@@ -116,17 +126,17 @@ test('support local absolute files', async t => {
 });
 
 test('fetch resolutions from w3counter', async t => {
-	const streams = await new Pageres().src('yeoman.io', ['w3counter']).run();
+	const streams = await new Pageres().src(s.url, ['w3counter']).run();
 	t.is(streams.length, 10);
 	t.true((await getStream.buffer(streams[0])).length > 1000);
 });
 
 test('save image', async t => {
 	try {
-		await new Pageres().src('http://todomvc.com', ['1024x768']).dest(__dirname).run();
-		t.true(fs.existsSync('todomvc.com-1024x768.png'));
+		await new Pageres().src(s.url, ['1024x768']).dest(__dirname).run();
+		t.true(fs.existsSync(`${s.host}!${s.port}-1024x768.png`));
 	} finally {
-		await fsP.unlink('todomvc.com-1024x768.png');
+		await fsP.unlink(`${s.host}!${s.port}-1024x768.png`);
 	}
 });
 
@@ -144,37 +154,8 @@ test('auth using username and password', async t => {
 });
 
 test('scale webpage using the `scale` option', async t => {
-	const streams = await new Pageres({scale: 2, crop: true}).src('yeoman.io', ['120x120']).run();
+	const streams = await new Pageres({scale: 2, crop: true}).src(s.url, ['120x120']).run();
 	const size = imageSize(await getStream.buffer(streams[0]));
 	t.is(size.width, 240);
 	t.is(size.height, 240);
 });
-
-async function cookieTest(port, input, t) {
-	const server = new Server(port);
-	const filename = `localhost!${port}-320x480.png`;
-	const streams = await new Pageres({cookies: [input]})
-		.src(`http://localhost:${port}`, ['320x480']).run();
-
-	t.is(streams[0].filename, filename);
-
-	const data = await getStream.buffer(streams[0]);
-
-	server.close();
-
-	const png = new PNG(data);
-	const pixels = await rfpify(png.decode.bind(png))();
-
-	t.is(pixels[0], 0);
-	t.is(pixels[1], 0);
-	t.is(pixels[2], 0);
-	t.is(pixels[3], 255);
-}
-
-test('send cookie', cookieTest.bind(null, 5000, 'pageresColor=black; Path=/; Domain=localhost'));
-
-test('send cookie using an object', cookieTest.bind(null, 5001, {
-	name: 'pageresColor',
-	value: 'black',
-	domain: 'localhost'
-}));

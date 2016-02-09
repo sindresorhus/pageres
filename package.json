@@ -77,6 +77,7 @@
     "babel": "^5.8.34",
     "cookie": "^0.2.3",
     "coveralls": "^2.11.2",
+    "get-port": "^2.1.0",
     "get-stream": "^1.0.0",
     "image-size": "^0.4.0",
     "nyc": "^5.0.1",
