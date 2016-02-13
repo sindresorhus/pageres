@@ -61,7 +61,7 @@ Apply custom CSS to the webpage. Specify some CSS or the path to a CSS file.
 
 Type: `array` of `string`, `object`
 
-A string with the same format as a [browser cookie](http://en.wikipedia.org/wiki/HTTP_cookie) or an object of what [`phantomjs.addCookie`](http://phantomjs.org/api/phantom/method/add-cookie.html) accepts.
+A string with the same format as a [browser cookie](https://en.wikipedia.org/wiki/HTTP_cookie) or an object of what [`phantomjs.addCookie`](http://phantomjs.org/api/phantom/method/add-cookie.html) accepts.
 
 ###### Tip
 
@@ -71,7 +71,7 @@ Go to the website you want a cookie for and copy-paste it from Dev Tools.
 
 Type: `string`
 
-Define a customized filename using [Lo-Dash templates](http://lodash.com/docs#template).  
+Define a customized filename using [Lo-Dash templates](https://lodash.com/docs#template).  
 For example `<%= date %> - <%= url %>-<%= size %><%= crop %>`.
 
 Available variables:
@@ -195,11 +195,11 @@ For Gulp and Broccoli, just use the API directly. No need for a wrapper plugin.
 
 ## Team
 
-[![Sindre Sorhus](http://gravatar.com/avatar/d36a92237c75c5337c17b60d90686bf9?s=144)](http://sindresorhus.com) | [![Kevin Mårtensson](http://gravatar.com/avatar/48fa294e3cd41680b80d3ed6345c7b4d?s=144)](https://github.com/kevva) | [![Sam Verschueren](https://gravatar.com/avatar/30aba8d6414326b745aa2516f5067d53?s=144)](https://github.com/SamVerschueren)
+[![Sindre Sorhus](http://gravatar.com/avatar/d36a92237c75c5337c17b60d90686bf9?s=144)](https://sindresorhus.com) | [![Kevin Mårtensson](https://gravatar.com/avatar/48fa294e3cd41680b80d3ed6345c7b4d?s=144)](https://github.com/kevva) | [![Sam Verschueren](https://gravatar.com/avatar/30aba8d6414326b745aa2516f5067d53?s=144)](https://github.com/SamVerschueren)
 ---|---|---
-[Sindre Sorhus](http://sindresorhus.com) | [Kevin Mårtensson](https://github.com/kevva) | [Sam Verschueren](https://github.com/SamVerschueren)
+[Sindre Sorhus](https://sindresorhus.com) | [Kevin Mårtensson](https://github.com/kevva) | [Sam Verschueren](https://github.com/SamVerschueren)
 
 
 ## License
 
-MIT © [Sindre Sorhus](http://sindresorhus.com)
+MIT © [Sindre Sorhus](https://sindresorhus.com)
