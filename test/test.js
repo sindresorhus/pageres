@@ -101,7 +101,7 @@ test('rename image using the `filename` option', async t => {
 		.run();
 
 	t.is(streams.length, 1);
-	t.regexTest(new RegExp(`${easydate('Y-M-d')} - \\d{2}-\\d{2}-\\d{2} - ${s.host}!${s.port}.png`), streams[0].filename);
+	t.regex(streams[0].filename, new RegExp(`${easydate('Y-M-d')} - \\d{2}-\\d{2}-\\d{2} - ${s.host}!${s.port}.png`));
 });
 
 test('capture a DOM element using the `selector` option', async t => {
