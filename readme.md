@@ -44,6 +44,13 @@ Delay capturing the screenshot.
 
 Useful when the site does things after load that you want to capture.
 
+##### timeout
+
+Type: `number` *(seconds)*  
+Default: `60`
+
+Number of seconds after which PhantomJS aborts the request.
+
 ##### crop
 
 Type: `boolean`  
