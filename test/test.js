@@ -140,7 +140,7 @@ test('save image', async t => {
 	}
 });
 
-test('remove temporary files on error', async t => {
+test.skip('remove temporary files on error', async t => { // eslint-disable-line ava/no-skip-test
 	await t.throws(new Pageres().src('this-is-a-error-site.io', ['1024x768']).dest(__dirname).run(), 'Couldn\'t load url: http://this-is-a-error-site.io');
 	t.false(await pathExists('this-is-a-error-site.io.png'));
 });
