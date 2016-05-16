@@ -159,3 +159,14 @@ test('scale webpage using the `scale` option', async t => {
 	t.is(size.width, 240);
 	t.is(size.height, 240);
 });
+
+test('support data uri', async t => {
+	const uri = await fsP.readFile(path.join(__dirname, 'fixture.txt'), 'utf8');
+	const streams = await new Pageres().src(uri, ['100x100']).run();
+	const data = await getStream.buffer(streams[0]);
+	const png = new PNG(data);
+	const pixels = await rfpify(png.decode.bind(png), Promise)();
+	t.is(pixels[0], 0);
+	t.is(pixels[1], 0);
+	t.is(pixels[2], 0);
+});
