@@ -146,15 +146,20 @@ test.skip('remove temporary files on error', async t => { // eslint-disable-line
 });
 
 test('auth using username and password', async t => {
-	const streams = await new Pageres({username: 'user', password: 'passwd'})
-		.src('httpbin.org/basic-auth/user/passwd', ['120x120']).run();
+	const streams = await new Pageres({
+		username: 'user',
+		password: 'passwd'
+	}).src('httpbin.org/basic-auth/user/passwd', ['120x120']).run();
 
 	t.is(streams.length, 1);
 	t.true((await getStream.buffer(streams[0])).length > 0);
 });
 
 test('scale webpage using the `scale` option', async t => {
-	const streams = await new Pageres({scale: 2, crop: true}).src(s.url, ['120x120']).run();
+	const streams = await new Pageres({
+		scale: 2,
+		crop: true
+	}).src(s.url, ['120x120']).run();
 	const size = imageSize(await getStream.buffer(streams[0]));
 	t.is(size.width, 240);
 	t.is(size.height, 240);
