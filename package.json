@@ -22,7 +22,7 @@
     }
   ],
   "engines": {
-    "node": ">=0.12.0"
+    "node": ">=4"
   },
   "scripts": {
     "test": "xo && npm run prepublish && nyc ava",
@@ -70,7 +70,7 @@
     "easydate": "^2.0.0",
     "filenamify-url": "^1.0.0",
     "fs-write-stream-atomic": "^1.0.2",
-    "get-res": "^2.0.0",
+    "get-res": "^3.0.0",
     "lodash.template": "^4.0.1",
     "log-symbols": "^1.0.2",
     "mem": "^0.1.0",
@@ -81,7 +81,7 @@
     "protocolify": "^1.0.0",
     "rimraf": "^2.2.8",
     "screenshot-stream": "^3.1.0",
-    "viewport-list": "^4.0.1"
+    "viewport-list": "^5.0.1"
   },
   "devDependencies": {
     "ava": "*",
