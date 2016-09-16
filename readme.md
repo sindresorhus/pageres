@@ -184,7 +184,7 @@ Type: `string`
 
 Run pageres. Returns a promise for an array of streams.
 
-### pageres.on('warn', callback)
+### pageres.on('warning', callback)
 
 Warnings with e.g. page errors.
 
