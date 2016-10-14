@@ -20,7 +20,7 @@ test.before(async () => {
 	s = await createServer();
 });
 
-test.after(async () => {
+test.after(() => {
 	s.close();
 });
 
