@@ -65,6 +65,12 @@ Type: `string`
 
 Apply custom CSS to the webpage. Specify some CSS or the path to a CSS file.
 
+##### script
+
+Type: `string`
+
+Apply custom JavaScript to the webpage. Specify some JavaScript or the path to a file.
+
 ##### cookies
 
 Type: `array` of `string`, `object`
