@@ -80,7 +80,7 @@
     "plur": "^2.0.0",
     "protocolify": "^1.0.0",
     "rimraf": "^2.2.8",
-    "screenshot-stream": "^3.1.0",
+    "screenshot-stream": "^4.1.0",
     "viewport-list": "^5.0.1"
   },
   "devDependencies": {
