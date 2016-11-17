@@ -1,4 +1,5 @@
 'use strict';
+var path = require('path');
 var fs = require('fs');
 var http = require('http');
 var cookie = require('cookie');
@@ -26,7 +27,7 @@ function createServer(fn) {
 
 exports.createServer = createServer(function (req, res) {
 	res.writeHead(200, {'content-type': 'text/html'});
-	res.end(fs.readFileSync('fixture.html', 'utf8'));
+	res.end(fs.readFileSync(path.join(__dirname, 'fixture.html'), 'utf8'));
 });
 
 exports.createCookieServer = createServer(function (req, res) {

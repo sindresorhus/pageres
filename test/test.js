@@ -113,10 +113,13 @@ test('capture a DOM element using the `selector` option', async t => {
 	t.is(size.height, 80);
 });
 
-test('support local relative files', async t => {
+test.serial('support local relative files', async t => {
+	const _cwd = process.cwd();
+	process.chdir(__dirname);
 	const streams = await new Pageres().src('fixture.html', ['1024x768']).run();
 	t.is(streams[0].filename, 'fixture.html-1024x768.png');
 	t.true((await getStream.buffer(streams[0])).length > 1000);
+	process.chdir(_cwd);
 });
 
 test('support local absolute files', async t => {
@@ -134,15 +137,15 @@ test('fetch resolutions from w3counter', async t => {
 test('save image', async t => {
 	try {
 		await new Pageres().src(s.url, ['1024x768']).dest(__dirname).run();
-		t.true(fs.existsSync(`${s.host}!${s.port}-1024x768.png`));
+		t.true(fs.existsSync(path.join(__dirname, `${s.host}!${s.port}-1024x768.png`)));
 	} finally {
-		await fsP.unlink(`${s.host}!${s.port}-1024x768.png`);
+		await fsP.unlink(path.join(__dirname, `${s.host}!${s.port}-1024x768.png`));
 	}
 });
 
 test.skip('remove temporary files on error', async t => { // eslint-disable-line ava/no-skip-test
 	await t.throws(new Pageres().src('this-is-a-error-site.io', ['1024x768']).dest(__dirname).run(), 'Couldn\'t load url: http://this-is-a-error-site.io');
-	t.false(await pathExists('this-is-a-error-site.io.png'));
+	t.false(await pathExists(path.join(__dirname, 'this-is-a-error-site.io.png')));
 });
 
 test('auth using username and password', async t => {
