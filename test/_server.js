@@ -1,38 +1,36 @@
 'use strict';
-var path = require('path');
-var fs = require('fs');
-var http = require('http');
-var cookie = require('cookie');
-var getPort = require('get-port');
-var pify = require('pify');
-var host = exports.host = 'localhost';
+const path = require('path');
+const fs = require('fs');
+const http = require('http');
+const cookie = require('cookie');
+const getPort = require('get-port');
+const pify = require('pify');
+
+const host = exports.host = 'localhost';
 
 function createServer(fn) {
-	return function () {
-		return getPort().then(function (port) {
-			var server = http.createServer(fn);
+	return () => getPort().then(port => {
+		const server = http.createServer(fn);
 
-			server.host = host;
-			server.port = port;
-			server.url = 'http://' + host + ':' + port;
-			server.protocol = 'http';
+		server.host = host;
+		server.port = port;
+		server.url = `http://${host}:${port}`;
+		server.protocol = 'http';
+		server.listen(port);
+		server.close = pify(server.close);
 
-			server.listen(port);
-			server.close = pify(server.close);
-
-			return server;
-		});
-	};
+		return server;
+	});
 }
 
-exports.createServer = createServer(function (req, res) {
+exports.createServer = createServer((req, res) => {
 	res.writeHead(200, {'content-type': 'text/html'});
 	res.end(fs.readFileSync(path.join(__dirname, 'fixture.html'), 'utf8'));
 });
 
-exports.createCookieServer = createServer(function (req, res) {
-	var color = cookie.parse(req.headers.cookie).pageresColor || 'white';
+exports.createCookieServer = createServer((req, res) => {
+	const color = cookie.parse(req.headers.cookie).pageresColor || 'white';
 
 	res.writeHead(200, {'content-type': 'text/html'});
-	res.end('<body><div style="background: ' + color + ';position: absolute;top: 0;bottom: 0;left: 0;right: 0;"></div></body');
+	res.end(`<body><div style="background: ${color};position: absolute;top: 0;bottom: 0;left: 0;right: 0;"></div></body`);
 });
