@@ -73,7 +73,7 @@ Apply custom JavaScript to the webpage. Specify some JavaScript or the path to a
 
 ##### cookies
 
-Type: `array` of `string`, `object`
+Type: `Array<string>` `Object`
 
 A string with the same format as a [browser cookie](https://en.wikipedia.org/wiki/HTTP_cookie) or an object of what [`phantomjs.addCookie`](http://phantomjs.org/api/phantom/method/add-cookie.html) accepts.
 
@@ -102,13 +102,13 @@ Available variables:
 
 Type: `string`
 
-Capture a specific DOM element.
+Capture a specific DOM element matching a CSS selector.
 
 ##### hide
 
-Type: `array`
+Type: `Array<string>`
 
-Hide an array of DOM elements.
+Hide an array of DOM elements matching CSS selectors.
 
 ##### username
 
@@ -145,7 +145,7 @@ Custom user agent.
 
 ##### headers
 
-Type: `object`
+Type: `Object`
 
 Custom HTTP request headers.
 
@@ -164,7 +164,7 @@ URL or local path to the website you want to screenshot. You can also use a data
 #### sizes
 
 *Required*  
-Type: `array`
+Type: `Array<string>`
 
 Use a `<width>x<height>` notation or a keyword.
 
@@ -174,7 +174,7 @@ resolutions from [w3counter](http://www.w3counter.com/globalstats.php).
 
 #### options
 
-Type: `object`
+Type: `Object`
 
 Options set here will take precedence over the ones set in the constructor.
 

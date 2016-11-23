@@ -3,4 +3,7 @@ language: node_js
 node_js:
   - '6'
   - '4'
-after_success: npm run coveralls
+before_script:
+  - './node_modules/.bin/flow check'
+after_success:
+  - 'npm run coveralls'
