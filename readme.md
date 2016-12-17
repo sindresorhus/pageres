@@ -92,26 +92,19 @@ Available variables:
 
 - `url`: The URL in [slugified](https://github.com/ogt/slugify-url) form, eg. `http://yeoman.io/blog/` becomes `yeoman.io!blog`
 - `size`: Specified size, eg. `1024x1000`
-- `increment` : incremental value appended to filename
+- `increment`: Incremental value appended to filename
 - `width`: Width of the specified size, eg. `1024`
 - `height`: Height of the specified size, eg. `1000`
 - `crop`: Outputs `-cropped` when the crop option is true
 - `date`: The current date (Y-M-d), eg. 2015-05-18
 - `time`: The current time (h-m-s), eg. 21-15-11
 
-##### increment
+##### incrementalName
 
 Type: `boolean`  
 Default: `false`
 
 When a file exists, append an incremental number.
-
-##### defaultDelimiter
-
-Type: `boolean`  
-Default: `true`
-
-When increment enabled, use the default delimiter for appending the incremental number eg. `(1)`. Otherwise, the delimiter characters have to be inserted in the filename template.
 
 ##### selector
 
