@@ -38,7 +38,7 @@ const pageres = new Pageres({delay: 2})
 
 ##### delay
 
-Type: `number` *(seconds)*  
+Type: `number` *(seconds)*<br>
 Default: `0`
 
 Delay capturing the screenshot.
@@ -47,14 +47,14 @@ Useful when the site does things after load that you want to capture.
 
 ##### timeout
 
-Type: `number` *(seconds)*  
+Type: `number` *(seconds)*<br>
 Default: `60`
 
 Number of seconds after which PhantomJS aborts the request.
 
 ##### crop
 
-Type: `boolean`  
+Type: `boolean`<br>
 Default: `false`
 
 Crop to the set height.
@@ -85,7 +85,7 @@ Go to the website you want a cookie for and copy-paste it from Dev Tools.
 
 Type: `string`
 
-Define a customized filename using [Lo-Dash templates](https://lodash.com/docs#template).  
+Define a customized filename using [Lo-Dash templates](https://lodash.com/docs#template).<br>
 For example `<%= date %> - <%= url %>-<%= size %><%= crop %>`.
 
 Available variables:
@@ -100,7 +100,7 @@ Available variables:
 
 ##### incrementalName
 
-Type: `boolean`  
+Type: `boolean`<br>
 Default: `false`
 
 When a file exists, append an incremental number.
@@ -131,15 +131,15 @@ Password for authenticating with HTTP auth.
 
 ##### scale
 
-Type: `number`  
+Type: `number`<br>
 Default: `1`
 
 Scale webpage `n` times.
 
 ##### format
 
-Type: `string`  
-Default: `png`  
+Type: `string`<br>
+Default: `png`<br>
 Values: `png`, `jpg`
 
 Image format.
@@ -163,14 +163,14 @@ Add a page to screenshot.
 
 #### url
 
-*Required*  
+*Required*<br>
 Type: `string`
 
 URL or local path to the website you want to screenshot. You can also use a data URI.
 
 #### sizes
 
-*Required*  
+*Required*<br>
 Type: `Array<string>`
 
 Use a `<width>x<height>` notation or a keyword.
