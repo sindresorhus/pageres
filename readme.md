@@ -98,6 +98,13 @@ Available variables:
 - `date`: The current date (Y-M-d), eg. 2015-05-18
 - `time`: The current time (h-m-s), eg. 21-15-11
 
+##### incrementalName
+
+Type: `boolean`  
+Default: `false`
+
+When a file exists, append an incremental number.
+
 ##### selector
 
 Type: `string`

@@ -178,3 +178,16 @@ test('support data uri', async t => {
 	t.is(pixels[1], 0);
 	t.is(pixels[2], 0);
 });
+
+test('when a file exists, append an incrementer', async t => {
+	const folderPath = process.cwd();
+	try {
+		await new Pageres({delay: 2}).src('yeoman.io', ['1024x768', '480x320'], {incrementalName: true, filename: '<%= url %>'}).dest(folderPath).run();
+		t.true(fs.existsSync(path.join(folderPath, `yeoman.io.png`)));
+		await new Pageres({delay: 2}).src('yeoman.io', ['1024x768', '480x320'], {incrementalName: true, filename: '<%= url %>'}).dest(folderPath).run();
+		t.true(fs.existsSync(path.join(folderPath, `yeoman.io (1).png`)));
+	} finally {
+		await fsP.unlink(path.join(folderPath, `yeoman.io.png`));
+		await fsP.unlink(path.join(folderPath, `yeoman.io (1).png`));
+	}
+});

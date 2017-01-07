@@ -81,6 +81,7 @@
     "protocolify": "^1.0.0",
     "rimraf": "^2.2.8",
     "screenshot-stream": "^4.1.0",
+    "unused-filename": "^0.1.0",
     "viewport-list": "^5.0.1"
   },
   "devDependencies": {
