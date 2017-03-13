@@ -53,27 +53,27 @@ test('generate screenshots', async t => {
 	t.true((await getStream.buffer(streams[0])).length > 1000);
 });
 
-test('save filename discarding hash', async t => {
+test('save filename without hash', async t => {
 	const streams = await new Pageres()
-		.src('hb.wopian.me/#/', ['480x320'])
+		.src('example.com/#/product/listing', ['480x320'])
 		.run();
 
 	t.is(streams.length, 1);
-	t.is(streams[0].filename, 'hb.wopian.me-480x320.png');
+	t.is(streams[0].filename, 'example.com-480x320.png');
 	t.true((await getStream.buffer(streams[0])).length > 1000);
 });
 
 test('save filename with hash', async t => {
 	const streams = await new Pageres()
-		.src('hb.wopian.me/#/', ['480x320'], {hash: true})
-		.src('hb.wopian.me/#/@wopian', ['480x320'], {hash: true})
-		.src('hb.wopian.me/#/anime/cowboy-bebop', ['480x320'], {hash: true})
+		.src('example.com/#/', ['480x320'], {hash: true})
+		.src('example.com/#/@user', ['480x320'], {hash: true})
+		.src('example.com/#/product/listing', ['480x320'], {hash: true})
 		.run();
 
 	t.is(streams.length, 3);
-	t.is(streams[0].filename, 'hb.wopian.me#-480x320.png');
-	t.is(streams[1].filename, 'hb.wopian.me#!@wopian-480x320.png');
-	t.is(streams[2].filename, 'hb.wopian.me#!anime!cowboy-bebop-480x320.png');
+	t.is(streams[0].filename, 'example.com#-480x320.png');
+	t.is(streams[1].filename, 'example.com#!@user-480x320.png');
+	t.is(streams[2].filename, 'example.com#!product!listing-480x320.png');
 	t.true((await getStream.buffer(streams[0])).length > 1000);
 });
 
