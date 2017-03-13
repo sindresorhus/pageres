@@ -59,6 +59,15 @@ Default: `false`
 
 Crop to the set height.
 
+##### hash
+
+Type: `boolean`<br>
+Default: `false`
+
+Keep the hash fragment in the filename.
+
+Beneficial for single page applications using hash-style routing.
+
 ##### css
 
 Type: `string`
@@ -90,11 +99,12 @@ For example `<%= date %> - <%= url %>-<%= size %><%= crop %>`.
 
 Available variables:
 
-- `url`: The URL in [slugified](https://github.com/ogt/slugify-url) form, eg. `http://yeoman.io/blog/` becomes `yeoman.io!blog`
+- `url`: The URL in [slugified](https://github.com/sindresorhus/filenamify-url) form, eg. `http://yeoman.io/blog/` becomes `yeoman.io!blog`
 - `size`: Specified size, eg. `1024x1000`
 - `width`: Width of the specified size, eg. `1024`
 - `height`: Height of the specified size, eg. `1000`
 - `crop`: Outputs `-cropped` when the crop option is true
+- `hash`: Outputs the URL hash fragment in [slugified](https://github.com/sindresorhus/filenamify) form when the hash option is true, e.g. `https://example.com/#/products` becomes `#!products`
 - `date`: The current date (Y-M-d), eg. 2015-05-18
 - `time`: The current time (h-m-s), eg. 21-15-11
 

@@ -53,6 +53,30 @@ test('generate screenshots', async t => {
 	t.true((await getStream.buffer(streams[0])).length > 1000);
 });
 
+test('save filename discarding hash', async t => {
+	const streams = await new Pageres()
+		.src('hb.wopian.me/#/', ['480x320'])
+		.run();
+
+	t.is(streams.length, 1);
+	t.is(streams[0].filename, 'hb.wopian.me-480x320.png');
+	t.true((await getStream.buffer(streams[0])).length > 1000);
+});
+
+test('save filename with hash', async t => {
+	const streams = await new Pageres()
+		.src('hb.wopian.me/#/', ['480x320'], {hash: true})
+		.src('hb.wopian.me/#/@wopian', ['480x320'], {hash: true})
+		.src('hb.wopian.me/#/anime/cowboy-bebop', ['480x320'], {hash: true})
+		.run();
+
+	t.is(streams.length, 3);
+	t.is(streams[0].filename, 'hb.wopian.me#-480x320.png');
+	t.is(streams[1].filename, 'hb.wopian.me#!@wopian-480x320.png');
+	t.is(streams[2].filename, 'hb.wopian.me#!anime!cowboy-bebop-480x320.png');
+	t.true((await getStream.buffer(streams[0])).length > 1000);
+});
+
 test('success message', async t => {
 	const stub = sinon.stub(console, 'log');
 	const pageres = new Pageres().src(s.url, ['480x320', '1024x768', 'iphone 5s']);
