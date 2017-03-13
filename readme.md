@@ -95,7 +95,7 @@ Go to the website you want a cookie for and copy-paste it from Dev Tools.
 Type: `string`
 
 Define a customized filename using [Lo-Dash templates](https://lodash.com/docs#template).<br>
-For example `<%= date %> - <%= url %>-<%= size %><%= crop %>`.
+For example `<%= date %> - <%= url %><%= hash %>-<%= size %><%= crop %>`.
 
 Available variables:
 
@@ -104,7 +104,7 @@ Available variables:
 - `width`: Width of the specified size, eg. `1024`
 - `height`: Height of the specified size, eg. `1000`
 - `crop`: Outputs `-cropped` when the crop option is true
-- `hash`: Outputs the URL hash fragment in [slugified](https://github.com/sindresorhus/filenamify) form when the hash option is true, e.g. `https://example.com/#/products` becomes `#!products`
+- `hash`: Outputs the URL hash fragment in [slugified](https://github.com/sindresorhus/filenamify) form when the hash option is true, e.g. `https://example.com/#/product/listing` becomes `#!product!listing`
 - `date`: The current date (Y-M-d), eg. 2015-05-18
 - `time`: The current time (h-m-s), eg. 21-15-11
 
