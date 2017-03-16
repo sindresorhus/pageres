@@ -59,13 +59,15 @@ test('save filename with hash', async t => {
 		.src('example.com/#/@user', ['480x320'])
 		.src('example.com/#/product/listing', ['480x320'])
 		.src('example.com/#!/bang', ['480x320'])
+		.src('example.com#readme', ['480x320'])
 		.run();
 
-	t.is(streams.length, 4);
+	t.is(streams.length, 5);
 	t.is(streams[0].filename, 'example.com#-480x320.png');
 	t.is(streams[1].filename, 'example.com#!@user-480x320.png');
 	t.is(streams[2].filename, 'example.com#!product!listing-480x320.png');
 	t.is(streams[3].filename, 'example.com#!bang-480x320.png');
+	t.is(streams[4].filename, 'example.com#readme-480x320.png');
 	t.true((await getStream.buffer(streams[0])).length > 1000);
 });
 
