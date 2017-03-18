@@ -119,7 +119,6 @@
     "sourceMaps": "inline"
   },
   "xo": {
-    "esnext": true,
     "parser": "babel-eslint",
     "rules": {
       "generator-star-spacing": "off"

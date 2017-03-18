@@ -6,7 +6,8 @@ const cookie = require('cookie');
 const getPort = require('get-port');
 const pify = require('pify');
 
-const host = exports.host = 'localhost';
+exports.host = 'localhost';
+const host = exports.host;
 
 function createServer(fn) {
 	return () => getPort().then(port => {
