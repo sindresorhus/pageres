@@ -69,6 +69,7 @@
     "array-uniq": "^1.0.2",
     "babel-runtime": "^6.6.1",
     "easydate": "^2.0.0",
+    "filenamify": "^2.0.0",
     "filenamify-url": "^1.0.0",
     "fs-write-stream-atomic": "^1.0.2",
     "get-res": "^3.0.0",

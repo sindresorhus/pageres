@@ -53,6 +53,26 @@ test('generate screenshots', async t => {
 	t.true((await getStream.buffer(streams[0])).length > 1000);
 });
 
+test('save filename with hash', async t => {
+	const streams = await new Pageres()
+		.src('example.com#', ['480x320'])
+		.src('example.com/#/', ['480x320'])
+		.src('example.com/#/@user', ['480x320'])
+		.src('example.com/#/product/listing', ['480x320'])
+		.src('example.com/#!/bang', ['480x320'])
+		.src('example.com#readme', ['480x320'])
+		.run();
+
+	t.is(streams.length, 6);
+	t.is(streams[0].filename, 'example.com-480x320.png');
+	t.is(streams[1].filename, 'example.com-480x320.png');
+	t.is(streams[2].filename, 'example.com#!@user-480x320.png');
+	t.is(streams[3].filename, 'example.com#!product!listing-480x320.png');
+	t.is(streams[4].filename, 'example.com#!bang-480x320.png');
+	t.is(streams[5].filename, 'example.com#readme-480x320.png');
+	t.true((await getStream.buffer(streams[0])).length > 1000);
+});
+
 test('success message', async t => {
 	const stub = sinon.stub(console, 'log');
 	const pageres = new Pageres().src(s.url, ['480x320', '1024x768', 'iphone 5s']);
