@@ -156,6 +156,13 @@ Type: `Object`
 
 Custom HTTP request headers.
 
+##### transparent
+
+Type: `boolean`<br>
+Default: `false`
+
+Set background color to `transparent` instead of `white` if no background is set.
+
 
 ### pageres.src(url, sizes, options)
 
