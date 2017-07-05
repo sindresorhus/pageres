@@ -1,7 +1,7 @@
 import test from 'ava';
 import PNG from 'png-js';
 import getStream from 'get-stream';
-import rfpify from 'rfpify';
+import pify from 'pify';
 import Pageres from '../dist';
 import {createCookieServer} from './_server';
 
@@ -19,7 +19,7 @@ async function cookieTest(input, t) {
 	s.close();
 
 	const png = new PNG(data);
-	const pixels = await rfpify(png.decode.bind(png))();
+	const pixels = await pify(png.decode.bind(png), {errorFirst: false})();
 
 	t.is(pixels[0], 0);
 	t.is(pixels[1], 0);

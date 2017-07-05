@@ -6,7 +6,6 @@ import easydate from 'easydate';
 import PNG from 'png-js';
 import getStream from 'get-stream';
 import pify from 'pify';
-import rfpify from 'rfpify';
 import pathExists from 'path-exists';
 import sinon from 'sinon';
 import Pageres from '../dist';
@@ -107,7 +106,7 @@ test('crop image using the `crop` option', async t => {
 test('have a `css` option', async t => {
 	const streams = await new Pageres({css: 'body { background-color: red !important; }'}).src(s.url, ['1024x768']).run();
 	const png = new PNG(await getStream.buffer(streams[0]));
-	const pixels = await rfpify(png.decode.bind(png), Promise)();
+	const pixels = await pify(png.decode.bind(png), {errorFirst: false})();
 	t.is(pixels[0], 255);
 	t.is(pixels[1], 0);
 	t.is(pixels[2], 0);
@@ -193,7 +192,7 @@ test('support data uri', async t => {
 	const streams = await new Pageres().src(uri, ['100x100']).run();
 	const data = await getStream.buffer(streams[0]);
 	const png = new PNG(data);
-	const pixels = await rfpify(png.decode.bind(png), Promise)();
+	const pixels = await pify(png.decode.bind(png), {errorFirst: false})();
 	t.is(pixels[0], 0);
 	t.is(pixels[1], 0);
 	t.is(pixels[2], 0);

@@ -1,128 +1,127 @@
 {
-  "name": "pageres",
-  "version": "4.5.0",
-  "description": "Capture website screenshots",
-  "license": "MIT",
-  "repository": "sindresorhus/pageres",
-  "author": {
-    "name": "Sindre Sorhus",
-    "email": "sindresorhus@gmail.com",
-    "url": "sindresorhus.com"
-  },
-  "maintainers": [
-    {
-      "name": "Kevin Mårtensson",
-      "email": "kevinmartensson@gmail.com",
-      "url": "github.com/kevva"
-    },
-    {
-      "name": "Sam Verschueren",
-      "email": "sam.verschueren@gmail.com",
-      "url": "github.com/SamVerschueren"
-    }
-  ],
-  "main": "dist/index.js",
-  "engines": {
-    "node": ">=4"
-  },
-  "scripts": {
-    "test": "xo && npm run prepublish && nyc ava",
-    "flow": "flow || true",
-    "prepublish": "babel lib --out-dir=dist",
-    "coveralls": "nyc report --reporter=text-lcov | coveralls"
-  },
-  "files": [
-    "dist"
-  ],
-  "keywords": [
-    "page",
-    "website",
-    "site",
-    "web",
-    "url",
-    "resolution",
-    "size",
-    "screenshot",
-    "screenshots",
-    "screengrab",
-    "screen",
-    "snapshot",
-    "shot",
-    "responsive",
-    "gulpfriendly",
-    "phantom",
-    "phantomjs",
-    "image",
-    "svg",
-    "render",
-    "html",
-    "headless",
-    "capture",
-    "pic",
-    "picture",
-    "png",
-    "jpg",
-    "jpeg"
-  ],
-  "dependencies": {
-    "array-differ": "^1.0.0",
-    "array-uniq": "^1.0.2",
-    "babel-runtime": "^6.6.1",
-    "del": "^2.2.2",
-    "easydate": "^2.0.0",
-    "filenamify": "^2.0.0",
-    "filenamify-url": "^1.0.0",
-    "fs-write-stream-atomic": "^1.0.2",
-    "get-res": "^3.0.0",
-    "lodash.template": "^4.0.1",
-    "log-symbols": "^1.0.2",
-    "make-dir": "^1.0.0",
-    "mem": "^1.1.0",
-    "pify": "^2.3.0",
-    "plur": "^2.0.0",
-    "protocolify": "^2.0.0",
-    "screenshot-stream": "^4.1.0",
-    "unused-filename": "^0.1.0",
-    "viewport-list": "^5.0.1"
-  },
-  "devDependencies": {
-    "ava": "*",
-    "babel-cli": "^6.7.5",
-    "babel-eslint": "^7.1.1",
-    "babel-plugin-add-module-exports": "^0.2.1",
-    "babel-plugin-transform-async-to-generator": "^6.7.4",
-    "babel-plugin-transform-flow-strip-types": "^6.14.0",
-    "babel-plugin-transform-runtime": "^6.7.5",
-    "babel-preset-es2015-node4": "^2.1.0",
-    "cookie": "^0.3.1",
-    "coveralls": "^2.11.2",
-    "flow-bin": "^0.42.0",
-    "get-port": "^3.0.0",
-    "get-stream": "^3.0.0",
-    "image-size": "^0.5.0",
-    "nyc": "^10.0.0",
-    "path-exists": "^3.0.0",
-    "png-js": "^0.1.1",
-    "rfpify": "^1.0.0",
-    "sinon": "^2.0.0",
-    "xo": "*"
-  },
-  "babel": {
-    "plugins": [
-      "transform-async-to-generator",
-      "transform-runtime",
-      "transform-flow-strip-types",
-      "add-module-exports"
-    ],
-    "presets": [
-      "es2015-node4"
-    ],
-    "sourceMaps": "inline"
-  },
-  "xo": {
-    "parser": "babel-eslint",
-    "rules": {
-      "generator-star-spacing": "off"
-    }
-  }
+	"name": "pageres",
+	"version": "4.5.0",
+	"description": "Capture website screenshots",
+	"license": "MIT",
+	"repository": "sindresorhus/pageres",
+	"author": {
+		"name": "Sindre Sorhus",
+		"email": "sindresorhus@gmail.com",
+		"url": "sindresorhus.com"
+	},
+	"maintainers": [
+		{
+			"name": "Kevin Mårtensson",
+			"email": "kevinmartensson@gmail.com",
+			"url": "github.com/kevva"
+		},
+		{
+			"name": "Sam Verschueren",
+			"email": "sam.verschueren@gmail.com",
+			"url": "github.com/SamVerschueren"
+		}
+	],
+	"main": "dist/index.js",
+	"engines": {
+		"node": ">=4"
+	},
+	"scripts": {
+		"test": "xo && npm run prepublish && nyc ava",
+		"flow": "flow || true",
+		"prepublish": "babel lib --out-dir=dist",
+		"coveralls": "nyc report --reporter=text-lcov | coveralls"
+	},
+	"files": [
+		"dist"
+	],
+	"keywords": [
+		"page",
+		"website",
+		"site",
+		"web",
+		"url",
+		"resolution",
+		"size",
+		"screenshot",
+		"screenshots",
+		"screengrab",
+		"screen",
+		"snapshot",
+		"shot",
+		"responsive",
+		"gulpfriendly",
+		"phantom",
+		"phantomjs",
+		"image",
+		"svg",
+		"render",
+		"html",
+		"headless",
+		"capture",
+		"pic",
+		"picture",
+		"png",
+		"jpg",
+		"jpeg"
+	],
+	"dependencies": {
+		"array-differ": "^1.0.0",
+		"array-uniq": "^1.0.2",
+		"babel-runtime": "^6.6.1",
+		"del": "^3.0.0",
+		"easydate": "^2.0.0",
+		"filenamify": "^2.0.0",
+		"filenamify-url": "^1.0.0",
+		"fs-write-stream-atomic": "^1.0.2",
+		"get-res": "^3.0.0",
+		"lodash.template": "^4.0.1",
+		"log-symbols": "^1.0.2",
+		"make-dir": "^1.0.0",
+		"mem": "^1.1.0",
+		"plur": "^2.0.0",
+		"protocolify": "^2.0.0",
+		"screenshot-stream": "^4.1.0",
+		"unused-filename": "^1.0.0",
+		"viewport-list": "^5.0.1"
+	},
+	"devDependencies": {
+		"ava": "*",
+		"babel-cli": "^6.7.5",
+		"babel-eslint": "^7.1.1",
+		"babel-plugin-add-module-exports": "^0.2.1",
+		"babel-plugin-transform-async-to-generator": "^6.7.4",
+		"babel-plugin-transform-flow-strip-types": "^6.14.0",
+		"babel-plugin-transform-runtime": "^6.7.5",
+		"babel-preset-es2015-node4": "^2.1.0",
+		"cookie": "^0.3.1",
+		"coveralls": "^2.11.2",
+		"flow-bin": "^0.49.1",
+		"get-port": "^3.0.0",
+		"get-stream": "^3.0.0",
+		"image-size": "^0.6.0",
+		"nyc": "^11.0.3",
+		"path-exists": "^3.0.0",
+		"pify": "^3.0.0",
+		"png-js": "^0.1.1",
+		"sinon": "^2.0.0",
+		"xo": "*"
+	},
+	"babel": {
+		"plugins": [
+			"transform-async-to-generator",
+			"transform-runtime",
+			"transform-flow-strip-types",
+			"add-module-exports"
+		],
+		"presets": [
+			"es2015-node4"
+		],
+		"sourceMaps": "inline"
+	},
+	"xo": {
+		"parser": "babel-eslint",
+		"rules": {
+			"generator-star-spacing": "off"
+		}
+	}
 }
