@@ -7,10 +7,11 @@ const getPort = require('get-port');
 const pify = require('pify');
 
 exports.host = 'localhost';
-const host = exports.host;
+const {host} = exports;
 
 function createServer(fn) {
-	return () => getPort().then(port => {
+	return async () => {
+		const port = await getPort();
 		const server = http.createServer(fn);
 
 		server.host = host;
@@ -21,7 +22,7 @@ function createServer(fn) {
 		server.close = pify(server.close);
 
 		return server;
-	});
+	};
 }
 
 exports.createServer = createServer((req, res) => {

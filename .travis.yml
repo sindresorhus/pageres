@@ -1,10 +1,8 @@
-sudo: false
 language: node_js
 node_js:
+  - '10'
   - '8'
-  - '6'
-  - '4'
 before_script:
   - './node_modules/.bin/flow check'
 after_success:
-  - 'npm run coveralls'
+  - './node_modules/.bin/nyc report --reporter=text-lcov | ./node_modules/.bin/coveralls'

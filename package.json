@@ -23,13 +23,12 @@
 	],
 	"main": "dist/index.js",
 	"engines": {
-		"node": ">=4"
+		"node": ">=8"
 	},
 	"scripts": {
 		"test": "xo && npm run prepublish && nyc ava",
 		"flow": "flow || true",
-		"prepublish": "babel lib --out-dir=dist",
-		"coveralls": "nyc report --reporter=text-lcov | coveralls"
+		"prepublish": "babel lib --out-dir=dist"
 	},
 	"files": [
 		"dist"
@@ -91,6 +90,7 @@
 		"babel-plugin-add-module-exports": "^0.2.1",
 		"babel-plugin-transform-async-to-generator": "^6.7.4",
 		"babel-plugin-transform-flow-strip-types": "^6.14.0",
+		"babel-plugin-transform-object-rest-spread": "^6.26.0",
 		"babel-plugin-transform-runtime": "^6.7.5",
 		"babel-preset-es2015-node4": "^2.1.0",
 		"cookie": "^0.3.1",
@@ -109,6 +109,7 @@
 	"babel": {
 		"plugins": [
 			"transform-async-to-generator",
+			"transform-object-rest-spread",
 			"transform-runtime",
 			"transform-flow-strip-types",
 			"add-module-exports"
