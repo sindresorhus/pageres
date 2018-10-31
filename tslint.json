@@ -2,8 +2,8 @@
 	"extends": "tslint-xo",
 	"rules": {
 		"variable-name": [
-		  true,
-		  "allow-leading-underscore"
+			true,
+			"allow-leading-underscore"
 		]
-	  }
+	}
 }
