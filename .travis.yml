@@ -2,7 +2,5 @@ language: node_js
 node_js:
   - '10'
   - '8'
-before_script:
-  - './node_modules/.bin/tslint --format stylish --project .'
 after_success:
   - './node_modules/.bin/nyc report --reporter=text-lcov | ./node_modules/.bin/coveralls'
