@@ -1,5 +1,4 @@
 // @flow
-/* eslint-disable no-use-before-define */
 import path from 'path';
 import EventEmitter from 'events';
 import {Readable} from 'stream';
@@ -24,39 +23,39 @@ import unusedFilename from 'unused-filename';
 
 type PageresStream = Readable & {filename: string};
 
-type Options = {
+interface Options {
 	delay?: number;
 	timeout?: number;
 	crop?: boolean;
 	incrementalName?: boolean;
 	css?: string;
-	cookies?: Array<string> | {[key: string]: string};
+	cookies?: string[] | {[key: string]: string};
 	filename?: string;
 	selector?: string;
-	hide?: Array<string>;
+	hide?: string[];
 	username?: string;
 	password?: string;
 	scale?: number;
 	format?: string;
 	userAgent?: string;
 	headers?: {[key: string]: string};
-};
+}
 
-type Src = {
+interface Src {
 	url: string;
-	sizes: Array<string>;
+	sizes: string[];
 	options: Options;
-};
+}
 
-type Viewport = {
+interface Viewport {
 	url: string;
-	sizes: Array<string>;
-	keywords: Array<string>;
-};
+	sizes: string[];
+	keywords: string[];
+}
 
 type SrcFn<DestValue> =
-	& ((_: void, _: void, _: void) => Array<Src>)
-	& ((url: string, sizes: Array<string>, options: Options) => Pageres<DestValue>);
+	& ((_: void, _: void, _: void) => Src[])
+	& ((url: string, sizes: string[], options: Options) => Pageres<DestValue>);
 
 type DestFn<DestValue> =
 	& ((_: void) => DestValue)
@@ -72,15 +71,15 @@ export default class Pageres<DestValue: string> extends EventEmitter {
 
 	stats: Object;
 
-	items: Array<PageresStream>;
+	items: PageresStream[];
 
-	sizes: Array<string>;
+	sizes: string[];
 
-	urls: Array<string>;
+	urls: string[];
 
-	_src: Array<Src>;
+	SRC: Src[];
 
-	_dest: DestValue;
+	DEST: DestValue | undefined;
 
 	constructor(options: Options) {
 		super();
@@ -94,17 +93,17 @@ export default class Pageres<DestValue: string> extends EventEmitter {
 		this.items = [];
 		this.sizes = [];
 		this.urls = [];
-		this._src = [];
+		this.SRC = [];
 	}
 
 	src: SrcFn<DestValue>;
 
-	src(url: string, sizes: Array<string>, options: Options) {
+	src(url: string, sizes: string[], options: Options) {
 		if (url === undefined) {
-			return this._src;
+			return this.SRC;
 		}
 
-		this._src.push({url, sizes, options});
+		this.SRC.push({url, sizes, options});
 		return this;
 	}
 
@@ -112,15 +111,15 @@ export default class Pageres<DestValue: string> extends EventEmitter {
 
 	dest(dir: DestValue) {
 		if (dir === undefined) {
-			return this._dest;
+			return this.DEST;
 		}
 
-		this._dest = dir;
+		this.DEST = dir;
 		return this;
 	}
 
 	async run(): Promise<PageresStream[]> {
-		await Promise.all(this.src().map(src => { // eslint-disable-line array-callback-return
+		await Promise.all(this.src().map(src => {
 			const options = {...this.options, ...src.options};
 			const sizes = arrayUniq(src.sizes.filter(/./.test, /^\d{2,4}x\d{2,4}$/i));
 			const keywords = arrayDiffer(src.sizes, sizes);
@@ -176,7 +175,7 @@ export default class Pageres<DestValue: string> extends EventEmitter {
 		}
 	}
 
-	save(streams: Array<PageresStream>) {
+	save(streams: PageresStream[]) {
 		const files = [];
 
 		const end = () => del(files, {force: true});
@@ -189,7 +188,6 @@ export default class Pageres<DestValue: string> extends EventEmitter {
 		}
 
 		return Promise.all(streams.map(stream =>
-			// eslint-disable-next-line no-async-promise-executor
 			new Promise(async (resolve, reject) => {
 				await makeDir(this.dest());
 

@@ -1,10 +1,10 @@
 'use strict';
-const path = require('path');
-const fs = require('fs');
-const http = require('http');
-const cookie = require('cookie');
-const getPort = require('get-port');
-const pify = require('pify');
+import path from 'path';
+import fs from 'fs';
+import http from 'http';
+import cookie from 'cookie';
+import getPort from 'get-port';
+import pify from 'pify';
 
 exports.host = 'localhost';
 const {host} = exports;
