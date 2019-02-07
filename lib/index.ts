@@ -126,7 +126,7 @@ export default class Pageres extends EventEmitter {
 	}
 
 	async run(): Promise<PageresStream[]> {
-		await Promise.all(this.src().map((src : Src) : Promise<void> | void => {
+		await Promise.all(this.src().map((src: Src) : Promise<void> | void => {
 			if (!src.url) {
 				throw new Error('URL required');
 			}
@@ -183,7 +183,7 @@ export default class Pageres extends EventEmitter {
 	}
 
 	async save(streams: PageresStream[]) {
-		const files : any[] = [];
+		const files: any[] = [];
 
 		const end = () => del(files, {force: true});
 
@@ -211,7 +211,7 @@ export default class Pageres extends EventEmitter {
 				});
 
 				write.on('finish', resolve);
-				write.on('error', async (err : any) => {
+				write.on('error', async (err: any) => {
 					await end();
 					reject(err);
 				});
