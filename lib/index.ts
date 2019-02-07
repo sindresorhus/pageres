@@ -1,9 +1,7 @@
-// @flow
-/* eslint-disable no-use-before-define */
 import path from 'path';
 import EventEmitter from 'events';
 import {Readable} from 'stream';
-import url from 'url';
+import {parse as parseUrl} from 'url';
 import arrayUniq from 'array-uniq';
 import arrayDiffer from 'array-differ';
 import easydate from 'easydate';
@@ -22,63 +20,65 @@ import template from 'lodash.template';
 import plur from 'plur';
 import unusedFilename from 'unused-filename';
 
-type PageresStream = Readable & {filename: string};
+interface PageresStream extends Readable {
+	filename: string;
+}
 
-type Options = {
+interface Options {
 	delay?: number;
 	timeout?: number;
 	crop?: boolean;
 	incrementalName?: boolean;
 	css?: string;
-	cookies?: Array<string> | {[key: string]: string};
+	cookies?: string[] | {[key: string]: string};
 	filename?: string;
 	selector?: string;
-	hide?: Array<string>;
+	hide?: string[];
 	username?: string;
 	password?: string;
 	scale?: number;
 	format?: string;
 	userAgent?: string;
 	headers?: {[key: string]: string};
-};
+}
 
-type Src = {
+interface Src {
 	url: string;
-	sizes: Array<string>;
-	options: Options;
-};
+	sizes: string[];
+	options?: Options;
+}
 
-type Viewport = {
+type DestValue = string;
+
+interface Viewport {
 	url: string;
-	sizes: Array<string>;
-	keywords: Array<string>;
-};
+	sizes: string[];
+	keywords: string[];
+}
 
-type SrcFn<DestValue> =
-	& ((_: void, _: void, _: void) => Array<Src>)
-	& ((url: string, sizes: Array<string>, options: Options) => Pageres<DestValue>);
-
-type DestFn<DestValue> =
-	& ((_: void) => DestValue)
-	& ((dir: DestValue) => Pageres<DestValue>);
+interface Stats {
+	urls?: number;
+	sizes?: number;
+	screenshots?: number;
+}
 
 const getResMem = mem(getRes);
 const viewportListMem = mem(viewportList);
 
-let listener;
+let listener : NodeJS.Process;
 
-export default class Pageres<DestValue: string> extends EventEmitter {
+export default class Pageres extends EventEmitter {
 	options: Options;
 
-	stats: Object;
+	stats: Stats;
 
-	items: Array<PageresStream>;
+	items: PageresStream[];
 
-	sizes: Array<string>;
+	sizes: string[];
 
-	urls: Array<string>;
+	urls: string[];
 
-	_src: Array<Src>;
+	_src: Src[];
 
 	_dest: DestValue;
 
@@ -95,22 +95,28 @@ export default class Pageres<DestValue: string> extends EventEmitter {
 		this.sizes = [];
 		this.urls = [];
 		this._src = [];
+		this._dest = '';
 	}
 
-	src: SrcFn<DestValue>;
-
-	src(url: string, sizes: Array<string>, options: Options) {
+	src() : Src[];
+	src(url: string, sizes: string[], options?: Options) : this;
+	src(url?: string, sizes?: string[], options?: Options) : this | Src[] {
 		if (url === undefined) {
 			return this._src;
+		}
+
+		if (sizes === undefined) {
+			throw new TypeError('Sizes required');
 		}
 
 		this._src.push({url, sizes, options});
 		return this;
 	}
 
-	dest: DestFn<DestValue>;
+	dest() : DestValue;
+	dest(dir: DestValue) : this;
 
-	dest(dir: DestValue) {
+	dest(dir?: DestValue) : this | DestValue {
 		if (dir === undefined) {
 			return this._dest;
 		}
@@ -120,14 +126,14 @@ export default class Pageres<DestValue: string> extends EventEmitter {
 	}
 
 	async run(): Promise<PageresStream[]> {
-		await Promise.all(this.src().map(src => { // eslint-disable-line array-callback-return
-			const options = {...this.options, ...src.options};
-			const sizes = arrayUniq(src.sizes.filter(/./.test, /^\d{2,4}x\d{2,4}$/i));
-			const keywords = arrayDiffer(src.sizes, sizes);
-
+		await Promise.all(this.src().map((src: Src) : Promise<void> | void => {
 			if (!src.url) {
 				throw new Error('URL required');
 			}
+
+			const options = {...this.options, ...src.options};
+			const sizes = arrayUniq(src.sizes.filter(/./.test, /^\d{2,4}x\d{2,4}$/i));
+			const keywords = arrayDiffer(src.sizes, sizes);
 
 			this.urls.push(src.url);
 
@@ -176,8 +182,8 @@ export default class Pageres<DestValue: string> extends EventEmitter {
 		}
 	}
 
-	save(streams: Array<PageresStream>) {
-		const files = [];
+	async save(streams: PageresStream[]) {
+		const files: any[] = [];
 
 		const end = () => del(files, {force: true});
 
@@ -188,8 +194,7 @@ export default class Pageres<DestValue: string> extends EventEmitter {
 			});
 		}
 
-		return Promise.all(streams.map(stream =>
-			// eslint-disable-next-line no-async-promise-executor
+		return Promise.all(streams.map(async stream =>
 			new Promise(async (resolve, reject) => {
 				await makeDir(this.dest());
 
@@ -206,7 +211,7 @@ export default class Pageres<DestValue: string> extends EventEmitter {
 				});
 
 				write.on('finish', resolve);
-				write.on('error', async err => {
+				write.on('error', async (err: any) => {
 					await end();
 					reject(err);
 				});
@@ -218,16 +223,10 @@ export default class Pageres<DestValue: string> extends EventEmitter {
 	create(uri: string, size: string, options: Options) {
 		const sizes = size.split('x');
 		const stream = screenshotStream(protocolify(uri), size, options);
+		const filename = template(`${options.filename}.${options.format}`);
+		const basename = path.isAbsolute(uri) ? path.basename(uri) : uri;
 
-		// Coercing to string here to please Flow
-		// TODO: Should fix the Flow type so this isn't necessary
-		const filename = template(`${String(options.filename)}.${String(options.format)}`);
-
-		let hash = url.parse(uri).hash || '';
-
-		if (path.isAbsolute(uri)) {
-			uri = path.basename(uri);
-		}
+		let hash = parseUrl(uri).hash || '';
 
 		// Strip empty hash fragments: `#` `#/` `#!/`
 		if (/^#!?\/?$/.test(hash)) {
@@ -241,7 +240,7 @@ export default class Pageres<DestValue: string> extends EventEmitter {
 			size,
 			width: sizes[0],
 			height: sizes[1],
-			url: filenamifyUrl(uri) + filenamify(hash)
+			url: `${filenamifyUrl(basename)}${filenamify(hash)}`
 		});
 
 		if (options.incrementalName) {
@@ -252,8 +251,7 @@ export default class Pageres<DestValue: string> extends EventEmitter {
 	}
 
 	successMessage() {
-		const {stats} = this;
-		const {screenshots, sizes, urls} = stats;
+		const {screenshots, sizes, urls} = this.stats;
 		const words = {
 			screenshots: plur('screenshot', screenshots),
 			sizes: plur('size', sizes),

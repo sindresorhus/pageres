@@ -1,0 +1,30 @@
+{
+	"compilerOptions": {
+		"outDir": "dist",
+		"target": "es2016",
+		"lib": [
+			"es2016"
+		],
+		"module": "commonjs",
+		"moduleResolution": "node",
+		"esModuleInterop": true,
+		"allowSyntheticDefaultImports": true,
+		"sourceMap": true,
+		"declaration": true,
+		"pretty": true,
+		"newLine": "lf",
+		"stripInternal": true,
+		"strict": true,
+		"noImplicitReturns": true,
+		"noUnusedLocals": true,
+		"noUnusedParameters": true,
+		"noFallthroughCasesInSwitch": true,
+		"noEmitOnError": true,
+		"forceConsistentCasingInFileNames": true,
+		"skipLibCheck": true
+	},
+	"exclude": [
+		"node_modules",
+		"dist"
+	]
+}
