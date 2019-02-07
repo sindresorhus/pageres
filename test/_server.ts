@@ -1,15 +1,13 @@
-'use strict';
-const path = require('path');
-const fs = require('fs');
-const http = require('http');
-const cookie = require('cookie');
-const getPort = require('get-port');
-const pify = require('pify');
+import path from 'path';
+import fs from 'fs';
+import http from 'http';
+import cookie from 'cookie';
+import getPort from 'get-port';
+import pify from 'pify';
 
-exports.host = 'localhost';
-const {host} = exports;
+export const host = 'localhost';
 
-function createServer(fn) {
+const baseCreateServer = fn => {
 	return async () => {
 		const port = await getPort();
 		const server = http.createServer(fn);
@@ -23,14 +21,14 @@ function createServer(fn) {
 
 		return server;
 	};
-}
+};
 
-exports.createServer = createServer((req, res) => {
+export const createServer = baseCreateServer((_req, res) => {
 	res.writeHead(200, {'content-type': 'text/html'});
 	res.end(fs.readFileSync(path.join(__dirname, 'fixture.html'), 'utf8'));
 });
 
-exports.createCookieServer = createServer((req, res) => {
+export const createCookieServer = baseCreateServer((req, res) => {
 	const color = cookie.parse(req.headers.cookie).pageresColor || 'white';
 
 	res.writeHead(200, {'content-type': 'text/html'});

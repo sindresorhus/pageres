@@ -8,7 +8,7 @@ import getStream from 'get-stream';
 import pify from 'pify';
 import pathExists from 'path-exists';
 import sinon from 'sinon';
-import Pageres from '../dist';
+import Pageres from '../source';
 import {createServer} from './_server';
 
 const fsP = pify(fs);
@@ -37,7 +37,7 @@ test('set destination directory', t => {
 });
 
 test('error if no url is specified', async t => {
-	await t.throws(new Pageres().src('', []).run(), 'URL required');
+	await t.throwsAsync(new Pageres().src('', []).run(), 'URL required');
 });
 
 test('generate screenshots', async t => {
@@ -163,7 +163,7 @@ test('save image', async t => {
 });
 
 test.skip('remove temporary files on error', async t => { // eslint-disable-line ava/no-skip-test
-	await t.throws(new Pageres().src('this-is-a-error-site.io', ['1024x768']).dest(__dirname).run(), 'Couldn\'t load url: http://this-is-a-error-site.io');
+	await t.throwsAsync(new Pageres().src('this-is-a-error-site.io', ['1024x768']).dest(__dirname).run(), 'Couldn\'t load url: http://this-is-a-error-site.io');
 	t.false(await pathExists(path.join(__dirname, 'this-is-a-error-site.io.png')));
 });
 

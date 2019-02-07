@@ -1,7 +1,7 @@
 import path from 'path';
 import EventEmitter from 'events';
 import {Readable} from 'stream';
-import {parse as parseUrl} from 'url';
+import {parse as parseUrl} from 'url'; // eslint-disable-line node/no-deprecated-api
 import arrayUniq from 'array-uniq';
 import arrayDiffer from 'array-differ';
 import easydate from 'easydate';
@@ -24,7 +24,7 @@ interface PageresStream extends Readable {
 	filename: string;
 }
 
-interface Options {
+export interface Options {
 	delay?: number;
 	timeout?: number;
 	crop?: boolean;
@@ -42,13 +42,13 @@ interface Options {
 	headers?: {[key: string]: string};
 }
 
-interface Src {
+export interface Source {
 	url: string;
 	sizes: string[];
 	options?: Options;
 }
 
-type DestValue = string;
+type Destination = string;
 
 interface Viewport {
 	url: string;
@@ -65,7 +65,7 @@ interface Stats {
 const getResMem = mem(getRes);
 const viewportListMem = mem(viewportList);
 
-let listener : NodeJS.Process;
+let listener: NodeJS.Process;
 
 export default class Pageres extends EventEmitter {
 	options: Options;
@@ -78,11 +78,11 @@ export default class Pageres extends EventEmitter {
 
 	urls: string[];
 
-	_src: Src[];
+	_src: Source[];
 
-	_dest: DestValue;
+	_dest: Destination;
 
-	constructor(options: Options) {
+	constructor(options: Options = {}) {
 		super();
 
 		this.options = {...options};
@@ -98,35 +98,48 @@ export default class Pageres extends EventEmitter {
 		this._dest = '';
 	}
 
-	src() : Src[];
-	src(url: string, sizes: string[], options?: Options) : this;
-	src(url?: string, sizes?: string[], options?: Options) : this | Src[] {
+	src(): Source[];
+
+	src(url: string, sizes: string[], options?: Options): this;
+
+	src(url?: string, sizes?: string[], options?: Options): this | Source[] {
 		if (url === undefined) {
 			return this._src;
 		}
 
-		if (sizes === undefined) {
+		if (typeof url !== 'string') {
+			throw new TypeError('URL required');
+		}
+
+		if (!Array.isArray(sizes)) {
 			throw new TypeError('Sizes required');
 		}
 
 		this._src.push({url, sizes, options});
+
 		return this;
 	}
 
-	dest() : DestValue;
-	dest(dir: DestValue) : this;
+	dest(): Destination;
 
-	dest(dir?: DestValue) : this | DestValue {
+	dest(dir: Destination): this;
+
+	dest(dir?: Destination): this | Destination {
 		if (dir === undefined) {
 			return this._dest;
 		}
 
+		if (typeof dir !== 'string') {
+			throw new TypeError('Directory required');
+		}
+
 		this._dest = dir;
+
 		return this;
 	}
 
 	async run(): Promise<PageresStream[]> {
-		await Promise.all(this.src().map((src: Src) : Promise<void> | void => {
+		await Promise.all(this.src().map((src: Source): Promise<void> | void => {
 			if (!src.url) {
 				throw new Error('URL required');
 			}
@@ -149,6 +162,8 @@ export default class Pageres extends EventEmitter {
 				this.sizes.push(size);
 				this.items.push(this.create(src.url, size, options));
 			}
+
+			return undefined;
 		}));
 
 		this.stats.urls = arrayUniq(this.urls).length;
@@ -164,14 +179,14 @@ export default class Pageres extends EventEmitter {
 		return this.items;
 	}
 
-	async resolution(url: string, options: Options) {
+	async resolution(url: string, options: Options): Promise<void> {
 		for (const item of await getResMem()) {
 			this.sizes.push(item.item);
 			this.items.push(this.create(url, item.item, options));
 		}
 	}
 
-	async viewport(obj: Viewport, options: Options) {
+	async viewport(obj: Viewport, options: Options): Promise<void> {
 		for (const item of await viewportListMem(obj.keywords)) {
 			this.sizes.push(item.size);
 			obj.sizes.push(item.size);
@@ -182,10 +197,10 @@ export default class Pageres extends EventEmitter {
 		}
 	}
 
-	async save(streams: PageresStream[]) {
+	async save(streams: PageresStream[]): Promise<void> {
 		const files: any[] = [];
 
-		const end = () => del(files, {force: true});
+		const end = (): Promise<void> => del(files, {force: true});
 
 		if (!listener) {
 			listener = process.on('SIGINT', async () => {
@@ -194,7 +209,7 @@ export default class Pageres extends EventEmitter {
 			});
 		}
 
-		return Promise.all(streams.map(async stream =>
+		await Promise.all(streams.map(async stream =>
 			new Promise(async (resolve, reject) => {
 				await makeDir(this.dest());
 
@@ -217,10 +232,11 @@ export default class Pageres extends EventEmitter {
 				});
 
 				stream.pipe(write);
-			})));
+			})
+		));
 	}
 
-	create(uri: string, size: string, options: Options) {
+	create(uri: string, size: string, options: Options): any {
 		const sizes = size.split('x');
 		const stream = screenshotStream(protocolify(uri), size, options);
 		const filename = template(`${options.filename}.${options.format}`);
@@ -250,7 +266,7 @@ export default class Pageres extends EventEmitter {
 		return stream;
 	}
 
-	successMessage() {
+	successMessage(): void {
 		const {screenshots, sizes, urls} = this.stats;
 		const words = {
 			screenshots: plur('screenshot', screenshots),
