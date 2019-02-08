@@ -4,6 +4,11 @@
 	"description": "Capture website screenshots",
 	"license": "MIT",
 	"repository": "sindresorhus/pageres",
+	"author": {
+		"name": "Sindre Sorhus",
+		"email": "sindresorhus@gmail.com",
+		"url": "sindresorhus.com"
+	},
 	"main": "dist",
 	"engines": {
 		"node": ">=8"
@@ -33,8 +38,8 @@
 		"shot",
 		"responsive",
 		"gulpfriendly",
-		"phantom",
-		"phantomjs",
+		"puppeteer",
+		"chrome",
 		"image",
 		"svg",
 		"render",
@@ -50,19 +55,16 @@
 	"dependencies": {
 		"array-differ": "^2.0.3",
 		"array-uniq": "^2.0.0",
-		"del": "^3.0.0",
+		"capture-website": "^0.1.2",
 		"easydate": "^2.0.0",
 		"filenamify": "^2.0.0",
 		"filenamify-url": "^1.0.0",
-		"fs-write-stream-atomic": "^1.0.2",
 		"get-res": "^3.0.0",
 		"lodash.template": "^4.0.1",
 		"log-symbols": "^2.1.0",
 		"make-dir": "^2.0.0",
 		"mem": "^4.1.0",
 		"plur": "^3.0.1",
-		"protocolify": "^2.0.0",
-		"screenshot-stream": "^4.1.0",
 		"unused-filename": "^1.0.0",
 		"viewport-list": "^5.0.1"
 	},
@@ -76,8 +78,8 @@
 		"coveralls": "^3.0.0",
 		"del-cli": "^1.1.0",
 		"eslint-config-xo-typescript": "^0.7.0",
+		"file-type": "^10.7.1",
 		"get-port": "^4.1.0",
-		"get-stream": "^4.1.0",
 		"image-size": "^0.7.1",
 		"nyc": "^13.2.0",
 		"path-exists": "^3.0.0",
@@ -109,9 +111,9 @@
 			"import/named": "off",
 			"import/no-unresolved": "off",
 			"no-dupe-class-members": "off",
-			"async-promise-executor": "off",
 			"ava/no-ignored-test-files": "off",
-			"no-async-promise-executor": "off"
+			"no-await-in-loop": "off",
+			"@typescript-eslint/member-naming": "off"
 		}
 	},
 	"nyc": {

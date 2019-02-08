@@ -1,37 +1,34 @@
+import {promisify} from 'util';
 import path from 'path';
+import fs from 'fs';
 import EventEmitter from 'events';
-import {Readable} from 'stream';
 import {parse as parseUrl} from 'url'; // eslint-disable-line node/no-deprecated-api
 import arrayUniq from 'array-uniq';
 import arrayDiffer from 'array-differ';
 import easydate from 'easydate';
-import fsWriteStreamAtomic from 'fs-write-stream-atomic';
 import getRes from 'get-res';
 import logSymbols from 'log-symbols';
 import mem from 'mem';
 import makeDir from 'make-dir';
-import del from 'del';
-import screenshotStream from 'screenshot-stream';
+import captureWebsite from 'capture-website';
 import viewportList from 'viewport-list';
-import protocolify from 'protocolify';
 import filenamify from 'filenamify';
 import filenamifyUrl from 'filenamify-url';
 import template from 'lodash.template';
 import plur from 'plur';
 import unusedFilename from 'unused-filename';
 
-interface PageresStream extends Readable {
-	filename: string;
-}
+const writeFile = promisify(fs.writeFile);
 
 export interface Options {
 	delay?: number;
 	timeout?: number;
 	crop?: boolean;
-	incrementalName?: boolean;
 	css?: string;
-	cookies?: string[] | {[key: string]: string};
+	script?: string;
+	cookies?: (string | {[key: string]: string})[];
 	filename?: string;
+	incrementalName?: boolean;
 	selector?: string;
 	hide?: string[];
 	username?: string;
@@ -40,6 +37,7 @@ export interface Options {
 	format?: string;
 	userAgent?: string;
 	headers?: {[key: string]: string};
+	transparent?: boolean;
 }
 
 export interface Source {
@@ -48,9 +46,9 @@ export interface Source {
 	options?: Options;
 }
 
-type Destination = string;
+export type Destination = string;
 
-interface Viewport {
+export interface Viewport {
 	url: string;
 	sizes: string[];
 	keywords: string[];
@@ -62,28 +60,33 @@ interface Stats {
 	screenshots?: number;
 }
 
+export type Screenshot = Buffer & {filename: string};
+
 const getResMem = mem(getRes);
 const viewportListMem = mem(viewportList);
 
-let listener: NodeJS.Process;
-
 export default class Pageres extends EventEmitter {
-	options: Options;
+	private options: Options;
 
-	stats: Stats;
+	private stats: Stats;
 
-	items: PageresStream[];
+	private items: Screenshot[];
 
-	sizes: string[];
+	private sizes: string[];
 
-	urls: string[];
+	private urls: string[];
 
-	_src: Source[];
+	private _source: Source[];
 
-	_dest: Destination;
+	private _destination: Destination;
+
+	private _filename: string;
 
 	constructor(options: Options = {}) {
 		super();
+
+		// Prevent false-positive `MaxListenersExceededWarning` warnings
+		this.setMaxListeners(Infinity);
 
 		this.options = {...options};
 		this.options.filename = this.options.filename || '<%= url %>-<%= size %><%= crop %>';
@@ -94,8 +97,8 @@ export default class Pageres extends EventEmitter {
 		this.items = [];
 		this.sizes = [];
 		this.urls = [];
-		this._src = [];
-		this._dest = '';
+		this._source = [];
+		this._destination = '';
 	}
 
 	src(): Source[];
@@ -104,7 +107,7 @@ export default class Pageres extends EventEmitter {
 
 	src(url?: string, sizes?: string[], options?: Options): this | Source[] {
 		if (url === undefined) {
-			return this._src;
+			return this._source;
 		}
 
 		if (typeof url !== 'string') {
@@ -115,31 +118,31 @@ export default class Pageres extends EventEmitter {
 			throw new TypeError('Sizes required');
 		}
 
-		this._src.push({url, sizes, options});
+		this._source.push({url, sizes, options});
 
 		return this;
 	}
 
 	dest(): Destination;
 
-	dest(dir: Destination): this;
+	dest(directory: Destination): this;
 
-	dest(dir?: Destination): this | Destination {
-		if (dir === undefined) {
-			return this._dest;
+	dest(directory?: Destination): this | Destination {
+		if (directory === undefined) {
+			return this._destination;
 		}
 
-		if (typeof dir !== 'string') {
+		if (typeof directory !== 'string') {
 			throw new TypeError('Directory required');
 		}
 
-		this._dest = dir;
+		this._destination = directory;
 
 		return this;
 	}
 
-	async run(): Promise<PageresStream[]> {
-		await Promise.all(this.src().map((src: Source): Promise<void> | void => {
+	async run(): Promise<Screenshot[]> {
+		await Promise.all(this.src().map(async (src: Source): Promise<void> => {
 			if (!src.url) {
 				throw new Error('URL required');
 			}
@@ -160,7 +163,10 @@ export default class Pageres extends EventEmitter {
 
 			for (const size of sizes) {
 				this.sizes.push(size);
-				this.items.push(this.create(src.url, size, options));
+				// TODO: Make this concurrent
+				const screenshot = await this.create(src.url, size, options) as Screenshot;
+				screenshot.filename = this._filename;
+				this.items.push(screenshot);
 			}
 
 			return undefined;
@@ -179,93 +185,6 @@ export default class Pageres extends EventEmitter {
 		return this.items;
 	}
 
-	async resolution(url: string, options: Options): Promise<void> {
-		for (const item of await getResMem()) {
-			this.sizes.push(item.item);
-			this.items.push(this.create(url, item.item, options));
-		}
-	}
-
-	async viewport(obj: Viewport, options: Options): Promise<void> {
-		for (const item of await viewportListMem(obj.keywords)) {
-			this.sizes.push(item.size);
-			obj.sizes.push(item.size);
-		}
-
-		for (const size of arrayUniq(obj.sizes)) {
-			this.items.push(this.create(obj.url, size, options));
-		}
-	}
-
-	async save(streams: PageresStream[]): Promise<void> {
-		const files: any[] = [];
-
-		const end = (): Promise<void> => del(files, {force: true});
-
-		if (!listener) {
-			listener = process.on('SIGINT', async () => {
-				await end();
-				process.exit(1);
-			});
-		}
-
-		await Promise.all(streams.map(async stream =>
-			new Promise(async (resolve, reject) => {
-				await makeDir(this.dest());
-
-				const dest = path.join(this.dest(), stream.filename);
-				const write = fsWriteStreamAtomic(dest);
-
-				files.push(write.__atomicTmp);
-
-				stream.on('warning', this.emit.bind(this, 'warning'));
-				stream.on('warn', this.emit.bind(this, 'warn'));
-				stream.on('error', async err => {
-					await end();
-					reject(err);
-				});
-
-				write.on('finish', resolve);
-				write.on('error', async (err: any) => {
-					await end();
-					reject(err);
-				});
-
-				stream.pipe(write);
-			})
-		));
-	}
-
-	create(uri: string, size: string, options: Options): any {
-		const sizes = size.split('x');
-		const stream = screenshotStream(protocolify(uri), size, options);
-		const filename = template(`${options.filename}.${options.format}`);
-		const basename = path.isAbsolute(uri) ? path.basename(uri) : uri;
-
-		let hash = parseUrl(uri).hash || '';
-
-		// Strip empty hash fragments: `#` `#/` `#!/`
-		if (/^#!?\/?$/.test(hash)) {
-			hash = '';
-		}
-
-		stream.filename = filename({
-			crop: options.crop ? '-cropped' : '',
-			date: easydate('Y-M-d'),
-			time: easydate('h-m-s'),
-			size,
-			width: sizes[0],
-			height: sizes[1],
-			url: `${filenamifyUrl(basename)}${filenamify(hash)}`
-		});
-
-		if (options.incrementalName) {
-			stream.filename = unusedFilename.sync(stream.filename);
-		}
-
-		return stream;
-	}
-
 	successMessage(): void {
 		const {screenshots, sizes, urls} = this.stats;
 		const words = {
@@ -276,4 +195,94 @@ export default class Pageres extends EventEmitter {
 
 		console.log(`\n${logSymbols.success} Generated ${screenshots} ${words.screenshots} from ${urls} ${words.urls} and ${sizes} ${words.sizes}`);
 	}
+
+	private async resolution(url: string, options: Options): Promise<void> {
+		for (const item of await getResMem()) {
+			this.sizes.push(item.item);
+			const screenshot = await this.create(url, item.item, options) as Screenshot;
+			screenshot.filename = this._filename;
+			this.items.push(screenshot);
+		}
+	}
+
+	private async viewport(obj: Viewport, options: Options): Promise<void> {
+		for (const item of await viewportListMem(obj.keywords)) {
+			this.sizes.push(item.size);
+			obj.sizes.push(item.size);
+		}
+
+		for (const size of arrayUniq(obj.sizes)) {
+			const screenshot = await this.create(obj.url, size, options) as Screenshot;
+			screenshot.filename = this._filename;
+			this.items.push(screenshot);
+		}
+	}
+
+	private async save(streams: Screenshot[]): Promise<void> {
+		await Promise.all(streams.map(async stream => {
+			await makeDir(this.dest());
+			const dest = path.join(this.dest(), this._filename);
+			await writeFile(dest, stream);
+		}));
+	}
+
+	private create(uri: string, size: string, options: Options): Promise<Buffer> {
+		const basename = path.isAbsolute(uri) ? path.basename(uri) : uri;
+
+		let hash = parseUrl(uri).hash || '';
+		// Strip empty hash fragments: `#` `#/` `#!/`
+		if (/^#!?\/?$/.test(hash)) {
+			hash = '';
+		}
+
+		const [width, height] = size.split('x');
+
+		const filenameTemplate = template(`${options.filename}.${options.format}`);
+
+		let filename = filenameTemplate({
+			crop: options.crop ? '-cropped' : '',
+			date: easydate('Y-M-d'),
+			time: easydate('h-m-s'),
+			size,
+			width,
+			height,
+			url: `${filenamifyUrl(basename)}${filenamify(hash)}`
+		});
+
+		if (options.incrementalName) {
+			filename = unusedFilename.sync(filename);
+		}
+
+		const finalOptions: any = {
+			width: Number(width),
+			height: Number(height),
+			delay: options.delay,
+			timeout: options.timeout,
+			fullPage: !options.crop,
+			styles: options.css && [options.css],
+			scripts: options.script && [options.script],
+			cookies: options.cookies, // TODO: Support string cookies in capture-website
+			element: options.selector,
+			hideElements: options.hide,
+			scaleFactor: options.scale === undefined ? 1 : options.scale,
+			format: options.format === 'jpg' ? 'jpeg' : 'png',
+			userAgent: options.userAgent,
+			headers: options.headers
+		};
+
+		if (options.username && options.password) {
+			finalOptions.authentication = {
+				username: options.username,
+				password: options.password
+			};
+		}
+
+		this._filename = filename;
+
+		return captureWebsite.buffer(uri, finalOptions);
+	}
 }
+
+// For CommonJS default export support
+module.exports = Pageres;
+module.exports.default = Pageres;

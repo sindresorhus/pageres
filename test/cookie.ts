@@ -1,24 +1,19 @@
 import test from 'ava';
 import PNG from 'png-js';
-import getStream from 'get-stream';
 import pify from 'pify';
 import Pageres from '../source';
 import {createCookieServer} from './_server';
 
 async function cookieTest(input, t): Promise<void> {
-	const s = await createCookieServer();
-	const filename = `${s.host}!${s.port}-320x480.png`;
-	const streams = await new Pageres({cookies: [input]})
-		.src(s.url, ['320x480'])
+	const server = await createCookieServer();
+
+	const screenshots = await new Pageres({cookies: [input]})
+		.src(server.url, ['320x480'])
 		.run();
 
-	t.is(streams[0].filename, filename);
+	server.close();
 
-	const data = await getStream.buffer(streams[0]);
-
-	s.close();
-
-	const png = new PNG(data);
+	const png = new PNG(screenshots[0]);
 	const pixels = await pify(png.decode.bind(png), {errorFirst: false})();
 
 	t.is(pixels[0], 0);

@@ -14,7 +14,7 @@ interface TestServer extends http.Server {
 	protocol: string;
 }
 
-const baseCreateServer = fn => {
+const baseCreateServer = (fn): (() => Promise<TestServer>) => {
 	return async (): Promise<TestServer> => {
 		const port = await getPort();
 		const server = http.createServer(fn) as TestServer;
@@ -37,7 +37,6 @@ export const createServer = baseCreateServer((_request, response) => {
 
 export const createCookieServer = baseCreateServer((request, response) => {
 	const color = cookie.parse(request.headers.cookie).pageresColor || 'white';
-
 	response.writeHead(200, {'content-type': 'text/html'});
 	response.end(`<body><div style="background: ${color}; position: absolute; top: 0; bottom: 0; left: 0; right: 0;"></div></body`);
 });

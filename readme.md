@@ -13,12 +13,11 @@ Capture screenshots of websites in various resolutions. A good way to make sure 
 $ npm install pageres
 ```
 
+Note to Linux users: If you get a "No usable sandbox!" error, you need to enable [system sandboxing](https://github.com/GoogleChrome/puppeteer/blob/master/docs/troubleshooting.md#setting-up-chrome-linux-sandbox).
+
 <a href="https://www.patreon.com/sindresorhus">
 	<img src="https://c5.patreon.com/external/logo/become_a_patron_button@2x.png" width="160">
 </a>
-
-
-*PhantomJS, which is used for generating the screenshots, is installed automagically, but in some [rare cases](https://github.com/Obvious/phantomjs/issues/102) it might fail to and you'll get an `Error: spawn EACCES` error. [Download](http://phantomjs.org/download.html) PhantomJS manually and reinstall pageres if that happens.*
 
 
 ## Usage
@@ -26,13 +25,14 @@ $ npm install pageres
 ```js
 const Pageres = require('pageres');
 
-const pageres = new Pageres({delay: 2})
-	.src('yeoman.io', ['480x320', '1024x768', 'iphone 5s'], {crop: true})
-	.src('todomvc.com', ['1280x1024', '1920x1080'])
-	.src('data:text/html;base64,PGgxPkZPTzwvaDE+', ['1024x768'])
-	.dest(__dirname)
-	.run()
-	.then(() => console.log('done'));
+(async () => {
+	await new Pageres({delay: 2})
+		.src('https://github.com/sindresorhus/pageres', ['480x320', '1024x768', 'iphone 5s'], {crop: true})
+		.src('https://sindresorhus.com', ['1280x1024', '1920x1080'])
+		.src('data:text/html,<h1>Awesome!</h1>', ['1024x768'])
+		.dest(__dirname)
+		.run();
+})();
 ```
 
 ## API
@@ -40,6 +40,8 @@ const pageres = new Pageres({delay: 2})
 ### Pageres([options])
 
 #### options
+
+Type: `Object`
 
 ##### delay
 
@@ -55,7 +57,7 @@ Useful when the site does things after load that you want to capture.
 Type: `number` *(seconds)*<br>
 Default: `60`
 
-Number of seconds after which PhantomJS aborts the request.
+Number of seconds after which the request is aborted.
 
 ##### crop
 
@@ -78,13 +80,11 @@ Apply custom JavaScript to the webpage. Specify some JavaScript or the path to a
 
 ##### cookies
 
-Type: `Array<string>` `Object`
+Type: `Array<string | Object>`
 
-A string with the same format as a [browser cookie](https://en.wikipedia.org/wiki/HTTP_cookie) or an object of what [`phantomjs.addCookie`](http://phantomjs.org/api/phantom/method/add-cookie.html) accepts.
+A string with the same format as a [browser cookie](https://developer.mozilla.org/en-US/docs/Web/HTTP/Cookies) or [an object](https://github.com/GoogleChrome/puppeteer/blob/master/docs/api.md#pagesetcookiecookies).
 
-###### Tip
-
-Go to the website you want a cookie for and copy-paste it from Dev Tools.
+Tip: Go to the website you want a cookie for and [copy-paste it from DevTools](https://stackoverflow.com/a/24961735/64949).
 
 ##### filename
 
@@ -118,7 +118,7 @@ Capture a specific DOM element matching a CSS selector.
 
 ##### hide
 
-Type: `Array<string>`
+Type: `string[]`
 
 Hide an array of DOM elements matching CSS selectors.
 
@@ -168,8 +168,7 @@ Default: `false`
 
 Set background color to `transparent` instead of `white` if no background is set.
 
-
-### pageres.src(url, sizes, options)
+### pageres.src(url, sizes, [options])
 
 Add a page to screenshot.
 
@@ -183,7 +182,7 @@ URL or local path to the website you want to screenshot. You can also use a data
 #### sizes
 
 *Required*<br>
-Type: `Array<string>`
+Type: `string[]`
 
 Use a `<width>x<height>` notation or a keyword.
 
@@ -207,11 +206,7 @@ Type: `string`
 
 ### pageres.run()
 
-Run pageres. Returns a promise for an array of streams.
-
-### pageres.on('warning', callback)
-
-Warnings with e.g. page errors.
+Run pageres. Returns `Promise<Buffer[]>`.
 
 
 ## Task runners
