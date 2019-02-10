@@ -80,8 +80,6 @@ export default class Pageres extends EventEmitter {
 
 	private _destination: Destination;
 
-	private _filename: string;
-
 	constructor(options: Options = {}) {
 		super();
 
@@ -164,9 +162,7 @@ export default class Pageres extends EventEmitter {
 			for (const size of sizes) {
 				this.sizes.push(size);
 				// TODO: Make this concurrent
-				const screenshot = await this.create(src.url, size, options) as Screenshot;
-				screenshot.filename = this._filename;
-				this.items.push(screenshot);
+				this.items.push(await this.create(src.url, size, options));
 			}
 
 			return undefined;
@@ -199,9 +195,7 @@ export default class Pageres extends EventEmitter {
 	private async resolution(url: string, options: Options): Promise<void> {
 		for (const item of await getResMem()) {
 			this.sizes.push(item.item);
-			const screenshot = await this.create(url, item.item, options) as Screenshot;
-			screenshot.filename = this._filename;
-			this.items.push(screenshot);
+			this.items.push(await this.create(url, item.item, options));
 		}
 	}
 
@@ -212,21 +206,19 @@ export default class Pageres extends EventEmitter {
 		}
 
 		for (const size of arrayUniq(obj.sizes)) {
-			const screenshot = await this.create(obj.url, size, options) as Screenshot;
-			screenshot.filename = this._filename;
-			this.items.push(screenshot);
+			this.items.push(await this.create(obj.url, size, options));
 		}
 	}
 
-	private async save(streams: Screenshot[]): Promise<void> {
-		await Promise.all(streams.map(async stream => {
+	private async save(screenshots: Screenshot[]): Promise<void> {
+		await Promise.all(screenshots.map(async screenshot => {
 			await makeDir(this.dest());
-			const dest = path.join(this.dest(), this._filename);
-			await writeFile(dest, stream);
+			const dest = path.join(this.dest(), screenshot.filename);
+			await writeFile(dest, screenshot);
 		}));
 	}
 
-	private create(uri: string, size: string, options: Options): Promise<Buffer> {
+	private async create(uri: string, size: string, options: Options): Promise<Screenshot> {
 		const basename = path.isAbsolute(uri) ? path.basename(uri) : uri;
 
 		let hash = parseUrl(uri).hash || '';
@@ -277,9 +269,9 @@ export default class Pageres extends EventEmitter {
 			};
 		}
 
-		this._filename = filename;
-
-		return captureWebsite.buffer(uri, finalOptions);
+		const screenshot = await captureWebsite.buffer(uri, finalOptions);
+		screenshot.filename = filename;
+		return screenshot;
 	}
 }
 

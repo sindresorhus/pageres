@@ -63,6 +63,17 @@ test('generate screenshots', async t => {
 	t.true(screenshots[0].length > 1000);
 });
 
+test('generate screenshots - multiple sizes for one URL', async t => {
+	const screenshots = await new Pageres()
+		.src('https://sindresorhus.com', ['1280x1024', '1920x1080'])
+		.run();
+
+	t.is(screenshots.length, 2);
+	t.true(hasScreenshotsWithFilenames(screenshots, ['sindresorhus.com-1280x1024.png']));
+	t.true(hasScreenshotsWithFilenames(screenshots, ['sindresorhus.com-1920x1080.png']));
+	t.true(screenshots[0].length > 1000);
+});
+
 test('save filename with hash', async t => {
 	const screenshots = await new Pageres()
 		.src('https://example.com#', ['480x320'])
