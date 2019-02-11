@@ -90,7 +90,7 @@
 		"typescript": "^3.3.3",
 		"xo": "^0.24.0"
 	},
-	"typings": "dist",
+	"types": "dist",
 	"ava": {
 		"babel": false,
 		"compileEnhancements": false,
