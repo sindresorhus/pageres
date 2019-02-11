@@ -108,7 +108,7 @@ export default class Pageres extends EventEmitter {
 			return this._source;
 		}
 
-		if (typeof url !== 'string') {
+		if (!(typeof url === 'string' && url.length > 0)) {
 			throw new TypeError('URL required');
 		}
 
@@ -130,7 +130,7 @@ export default class Pageres extends EventEmitter {
 			return this._destination;
 		}
 
-		if (typeof directory !== 'string') {
+		if (!(typeof directory === 'string' && directory.length > 0)) {
 			throw new TypeError('Directory required');
 		}
 
@@ -141,10 +141,6 @@ export default class Pageres extends EventEmitter {
 
 	async run(): Promise<Screenshot[]> {
 		await Promise.all(this.src().map(async (src: Source): Promise<void> => {
-			if (!src.url) {
-				throw new Error('URL required');
-			}
-
 			const options = {...this.options, ...src.options};
 			const sizes = arrayUniq(src.sizes.filter(/./.test, /^\d{2,4}x\d{2,4}$/i));
 			const keywords = arrayDiffer(src.sizes, sizes);
@@ -257,7 +253,7 @@ export default class Pageres extends EventEmitter {
 			element: options.selector,
 			hideElements: options.hide,
 			scaleFactor: options.scale === undefined ? 1 : options.scale,
-			format: options.format === 'jpg' ? 'jpeg' : 'png',
+			type: options.format === 'jpg' ? 'jpeg' : 'png',
 			userAgent: options.userAgent,
 			headers: options.headers
 		};

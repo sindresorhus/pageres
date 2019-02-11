@@ -47,8 +47,24 @@ test('set destination directory', t => {
 	t.is((new Pageres().dest('tmp') as any)._destination, 'tmp');
 });
 
-test('error if no url is specified', async t => {
-	await t.throwsAsync(new Pageres().src('', []).run(), 'URL required');
+test('`.src()` - error if no correct `url` is specified', t => {
+	t.throws(() => {
+		// @ts-ignore
+		new Pageres().src('');
+	}, 'URL required');
+});
+
+test('`.src()` - error if no `sizes` is specified', t => {
+	t.throws(() => {
+		// @ts-ignore
+		new Pageres().src('https://sindresorhus.com');
+	}, 'Sizes required');
+});
+
+test('`.dest()` - error if no correct `directory` is specified', t => {
+	t.throws(() => {
+		new Pageres().dest('');
+	}, 'Directory required');
 });
 
 test('generate screenshots', async t => {
@@ -130,6 +146,16 @@ test('`crop` option', async t => {
 
 test('`css` option', async t => {
 	const screenshots = await new Pageres({css: 'body { background-color: red !important; }'}).src(server.url, ['1024x768']).run();
+	const pixels = await getPngPixels(screenshots[0]);
+	t.is(pixels[0], 255);
+	t.is(pixels[1], 0);
+	t.is(pixels[2], 0);
+});
+
+test('`script` option', async t => {
+	const screenshots = await new Pageres({
+		script: 'document.body.style.backgroundColor = \'red\';'
+	}).src(server.url, ['1024x768']).run();
 	const pixels = await getPngPixels(screenshots[0]);
 	t.is(pixels[0], 255);
 	t.is(pixels[1], 0);
@@ -218,6 +244,11 @@ test('`scale` option', async t => {
 test('support data URL', async t => {
 	const screenshots = await new Pageres().src('data:text/html;base64,PGgxPkZPTzwvaDE+', ['100x100']).run();
 	t.is(fileType(screenshots[0]).mime, 'image/png');
+});
+
+test('`format` option', async t => {
+	const screenshots = await new Pageres().src('https://sindresorhus.com', ['100x100'], {format: 'jpg'}).run();
+	t.is(fileType(screenshots[0]).mime, 'image/jpeg');
 });
 
 test('when a file exists, append an incrementer', async t => {
