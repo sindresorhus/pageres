@@ -7,14 +7,14 @@ import pify from 'pify';
 
 export const host = 'localhost';
 
-interface TestServer extends http.Server {
+export interface TestServer extends http.Server {
 	host: string;
 	port: number;
 	url: string;
 	protocol: string;
 }
 
-const baseCreateServer = (fn): (() => Promise<TestServer>) => {
+const baseCreateServer = (fn: http.RequestListener): (() => Promise<TestServer>) => {
 	return async (): Promise<TestServer> => {
 		const port = await getPort();
 		const server = http.createServer(fn) as TestServer;
@@ -24,6 +24,7 @@ const baseCreateServer = (fn): (() => Promise<TestServer>) => {
 		server.url = `http://${host}:${port}`;
 		server.protocol = 'http';
 		server.listen(port);
+		// @ts-ignore
 		server.close = pify(server.close);
 
 		return server;
@@ -36,6 +37,7 @@ export const createServer = baseCreateServer((_request, response) => {
 });
 
 export const createCookieServer = baseCreateServer((request, response) => {
+	// @ts-ignore
 	const color = cookie.parse(request.headers.cookie).pageresColor || 'white';
 	response.writeHead(200, {'content-type': 'text/html'});
 	response.end(`<body><div style="background: ${color}; position: absolute; top: 0; bottom: 0; left: 0; right: 0;"></div></body`);
