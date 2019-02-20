@@ -21,42 +21,159 @@ import unusedFilename from 'unused-filename';
 const writeFile = promisify(fs.writeFile);
 
 export interface Options {
+	/**
+	 * Delay capturing the screenshot (seconds).
+	 *
+	 * @default 0
+	 */
 	delay?: number;
+
+	/**
+	 * Number of seconds after which the request is aborted.
+	 *
+	 * @default 60
+	 */
 	timeout?: number;
+
+	/**
+	 * Crop to the set height.
+	 *
+	 * @default false
+	 */
 	crop?: boolean;
+
+	/**
+	 * Apply custom CSS to the webpage.
+	 */
 	css?: string;
+
+	/**
+	 * Apply custom JavaScript to the webpage.
+	 */
 	script?: string;
+
+	/**
+	 * A string with the same format as a browser cookie or an object.
+	 */
 	cookies?: (string | {[key: string]: string})[];
+
+	/**
+	 * Define a customized filename using Lo-Dash templates.
+	 */
 	filename?: string;
+
+	/**
+	 * When a file exists, append an incremental number.
+	 *
+	 * @default false
+	 */
 	incrementalName?: boolean;
+
+	/**
+	 * Capture a specific DOM element matching a CSS selector.
+	 */
 	selector?: string;
+
+	/**
+	 * Hide an array of DOM elements matching CSS selectors.
+	 */
 	hide?: string[];
+
+	/**
+	 * Username for authenticating with HTTP auth.
+	 */
 	username?: string;
+
+	/**
+	 * Password for authenticating with HTTP auth.
+	 */
 	password?: string;
+
+	/**
+	 * Scale webpage number times.
+	 *
+	 * @default 1
+	 */
 	scale?: number;
+
+	/**
+	 * Image format.
+	 *
+	 * @default png
+	 */
 	format?: string;
+
+	/**
+	 * Custom user agent.
+	 */
 	userAgent?: string;
+
+	/**
+	 * Custom HTTP request headers.
+	 */
 	headers?: {[key: string]: string};
+
+	/**
+	 * Set background color to `transparent` instead of `white` if no background is set.
+	 *
+	 * @default false
+	 */
 	transparent?: boolean;
 }
 
 export interface Source {
+	/**
+	 * URL or local path to the website you want to screenshot. You can also use a data URI.
+	 */
 	url: string;
+
+	/**
+	 * Use a `<width>x<height>` notation or a keyword.
+	 */
 	sizes: string[];
+
+	/**
+	 * Options set here will take precedence over the ones set in the constructor.
+	 */
 	options?: Options;
 }
 
+/**
+* Set the destination directory.
+*/
 export type Destination = string;
 
 export interface Viewport {
+	/**
+	* URL or local path to the website you want to screenshot. You can also use a data URI.
+	*/
 	url: string;
+
+	/**
+	* Use a <width>x<height> notation.
+	*/
 	sizes: string[];
+
+	/**
+	* A keyword is a version of a device.
+	*/
 	keywords: string[];
 }
 
 interface Stats {
+	/**
+	* Number of URLs.
+	*/
 	urls?: number;
+
+	/**
+	* Number of sizes.
+	*/
 	sizes?: number;
+
+	/**
+	* Number of screenshots.
+	*/
 	screenshots?: number;
 }
 
