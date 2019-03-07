@@ -4,7 +4,7 @@ import pify from 'pify';
 import Pageres from '../source';
 import {createCookieServer} from './_server';
 
-async function cookieTest(input, t): Promise<void> {
+async function cookieTest(input: any, t: any): Promise<void> {
 	const server = await createCookieServer();
 
 	const screenshots = await new Pageres({cookies: [input]})

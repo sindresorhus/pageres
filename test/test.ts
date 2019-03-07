@@ -17,13 +17,13 @@ const hasScreenshotsWithFilenames = (screenshots: Screenshot[], filenames: strin
 	return screenshots.some(screenshot => filenames.includes(screenshot.filename));
 };
 
-const getPngPixels = async (buffer): Promise<Buffer> => {
+const getPngPixels = async (buffer: any): Promise<Buffer> => {
 	const png = new PNG(buffer);
 	const pixels = await pify(png.decode.bind(png), {errorFirst: false})();
 	return pixels;
 };
 
-let server;
+let server: any;
 test.before(async () => {
 	server = await createServer();
 });
@@ -38,12 +38,10 @@ test('expose a constructor', t => {
 
 test('add a source', t => {
 	const pageres = new Pageres().src('https://yeoman.io', ['1280x1024', '1920x1080']);
-	// eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
 	t.is((pageres as any)._source[0].url, 'https://yeoman.io');
 });
 
 test('set destination directory', t => {
-	// eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
 	t.is((new Pageres().dest('tmp') as any)._destination, 'tmp');
 });
 
@@ -243,12 +241,12 @@ test('`scale` option', async t => {
 
 test('support data URL', async t => {
 	const screenshots = await new Pageres().src('data:text/html;base64,PGgxPkZPTzwvaDE+', ['100x100']).run();
-	t.is(fileType(screenshots[0]).mime, 'image/png');
+	t.is((fileType(screenshots[0]) as any).mime, 'image/png');
 });
 
 test('`format` option', async t => {
 	const screenshots = await new Pageres().src('https://sindresorhus.com', ['100x100'], {format: 'jpg'}).run();
-	t.is(fileType(screenshots[0]).mime, 'image/jpeg');
+	t.is((fileType(screenshots[0]) as any).mime, 'image/jpeg');
 });
 
 test('when a file exists, append an incrementer', async t => {
