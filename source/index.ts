@@ -180,9 +180,9 @@ export default class Pageres extends EventEmitter {
 	successMessage(): void {
 		const {screenshots, sizes, urls} = this.stats;
 		const words = {
-			screenshots: plur('screenshot', screenshots),
-			sizes: plur('size', sizes),
-			urls: plur('url', urls)
+			screenshots: plur('screenshot', screenshots || ''),
+			sizes: plur('size', sizes || ''),
+			urls: plur('url', urls || '')
 		};
 
 		console.log(`\n${logSymbols.success} Generated ${screenshots} ${words.screenshots} from ${urls} ${words.urls} and ${sizes} ${words.sizes}`);
