@@ -7,8 +7,8 @@
 			"es2016"
 		],
 
-		// TODO: Remove this
-		"strict": false
+		"strict": true,
+		"typeRoots": ["node_modules/@types"]
 	},
 	"include": [
 		"source"
