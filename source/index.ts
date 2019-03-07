@@ -234,7 +234,7 @@ export default class Pageres extends EventEmitter {
 			size,
 			width,
 			height,
-			url: `${filenamifyUrl(basename)}${filenamify(hash)}`
+			url: `${filenamifyUrl.path(basename)}${filenamify(hash)}`
 		});
 
 		if (options.incrementalName) {
