@@ -38,12 +38,10 @@ test('expose a constructor', t => {
 
 test('add a source', t => {
 	const pageres = new Pageres().src('https://yeoman.io', ['1280x1024', '1920x1080']);
-	// eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
 	t.is((pageres as any)._source[0].url, 'https://yeoman.io');
 });
 
 test('set destination directory', t => {
-	// eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
 	t.is((new Pageres().dest('tmp') as any)._destination, 'tmp');
 });
 
