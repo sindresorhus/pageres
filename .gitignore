@@ -3,3 +3,4 @@ yarn.lock
 .nyc_output
 coverage
 dist
+localhost*.png
