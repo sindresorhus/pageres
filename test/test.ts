@@ -24,8 +24,12 @@ const getPngPixels = async (buffer): Promise<Buffer> => {
 };
 
 let server;
+let serverFileName;
 test.before(async () => {
 	server = await createServer();
+	serverFileName = server.url
+		.replace('http://', '')
+		.replace(':', '!');
 });
 
 test.after(() => {
@@ -37,13 +41,11 @@ test('expose a constructor', t => {
 });
 
 test('add a source', t => {
-	const pageres = new Pageres().src('https://yeoman.io', ['1280x1024', '1920x1080']);
-	// eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
-	t.is((pageres as any)._source[0].url, 'https://yeoman.io');
+	const pageres = new Pageres().src(server.url, ['1280x1024', '1920x1080']);
+	t.is((pageres as any)._source[0].url, server.url);
 });
 
 test('set destination directory', t => {
-	// eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
 	t.is((new Pageres().dest('tmp') as any)._destination, 'tmp');
 });
 
@@ -57,7 +59,7 @@ test('`.src()` - error if no correct `url` is specified', t => {
 test('`.src()` - error if no `sizes` is specified', t => {
 	t.throws(() => {
 		// @ts-ignore
-		new Pageres().src('https://sindresorhus.com');
+		new Pageres().src(server.url);
 	}, 'Sizes required');
 });
 
@@ -69,24 +71,24 @@ test('`.dest()` - error if no correct `directory` is specified', t => {
 
 test('generate screenshots', async t => {
 	const screenshots = await new Pageres()
-		.src('https://yeoman.io', ['480x320', '1024x768', 'iphone 5s'])
-		.src('https://sindresorhus.com', ['1280x1024', '1920x1080'])
+		.src(server.url, ['480x320', '1024x768', 'iphone 5s'])
+		.src(server.url, ['1280x1024', '1920x1080'])
 		.run();
 
 	t.is(screenshots.length, 5);
-	t.true(hasScreenshotsWithFilenames(screenshots, ['yeoman.io-480x320.png']));
-	t.true(hasScreenshotsWithFilenames(screenshots, ['sindresorhus.com-1920x1080.png']));
+	t.true(hasScreenshotsWithFilenames(screenshots, [`${serverFileName}-480x320.png`]));
+	t.true(hasScreenshotsWithFilenames(screenshots, [`${serverFileName}-1920x1080.png`]));
 	t.true(screenshots[0].length > 1000);
 });
 
 test('generate screenshots - multiple sizes for one URL', async t => {
 	const screenshots = await new Pageres()
-		.src('https://sindresorhus.com', ['1280x1024', '1920x1080'])
+		.src(server.url, ['1280x1024', '1920x1080'])
 		.run();
 
 	t.is(screenshots.length, 2);
-	t.true(hasScreenshotsWithFilenames(screenshots, ['sindresorhus.com-1280x1024.png']));
-	t.true(hasScreenshotsWithFilenames(screenshots, ['sindresorhus.com-1920x1080.png']));
+	t.true(hasScreenshotsWithFilenames(screenshots, [`${serverFileName}-1280x1024.png`]));
+	t.true(hasScreenshotsWithFilenames(screenshots, [`${serverFileName}-1920x1080.png`]));
 	t.true(screenshots[0].length > 1000);
 });
 
@@ -247,19 +249,19 @@ test('support data URL', async t => {
 });
 
 test('`format` option', async t => {
-	const screenshots = await new Pageres().src('https://sindresorhus.com', ['100x100'], {format: 'jpg'}).run();
+	const screenshots = await new Pageres().src(server.url, ['100x100'], {format: 'jpg'}).run();
 	t.is(fileType(screenshots[0]).mime, 'image/jpeg');
 });
 
 test('when a file exists, append an incrementer', async t => {
 	const folderPath = process.cwd();
 	try {
-		await new Pageres({delay: 2}).src('https://yeoman.io', ['1024x768', '480x320'], {incrementalName: true, filename: '<%= url %>'}).dest(folderPath).run();
-		t.true(fs.existsSync(path.join(folderPath, 'yeoman.io.png')));
-		await new Pageres({delay: 2}).src('https://yeoman.io', ['1024x768', '480x320'], {incrementalName: true, filename: '<%= url %>'}).dest(folderPath).run();
-		t.true(fs.existsSync(path.join(folderPath, 'yeoman.io (1).png')));
+		await new Pageres({delay: 2}).src(server.url, ['1024x768', '480x320'], {incrementalName: true, filename: '<%= url %>'}).dest(folderPath).run();
+		t.true(fs.existsSync(path.join(folderPath, `${serverFileName}.png`)));
+		await new Pageres({delay: 2}).src(server.url, ['1024x768', '480x320'], {incrementalName: true, filename: '<%= url %>'}).dest(folderPath).run();
+		t.true(fs.existsSync(path.join(folderPath, `${serverFileName} (1).png`)));
 	} finally {
-		await fsP.unlink(path.join(folderPath, 'yeoman.io.png'));
-		await fsP.unlink(path.join(folderPath, 'yeoman.io (1).png'));
+		await fsP.unlink(path.join(folderPath, `${serverFileName}.png`));
+		await fsP.unlink(path.join(folderPath, `${serverFileName} (1).png`));
 	}
 });

@@ -189,14 +189,14 @@ export default class Pageres extends EventEmitter {
 	}
 
 	private async resolution(url: string, options: Options): Promise<void> {
-		for (const item of await getResMem()) {
+		for (const item of await getResMem() as {item: string}[]) {
 			this.sizes.push(item.item);
 			this.items.push(await this.create(url, item.item, options));
 		}
 	}
 
 	private async viewport(obj: Viewport, options: Options): Promise<void> {
-		for (const item of await viewportListMem(obj.keywords)) {
+		for (const item of await viewportListMem(obj.keywords) as {size: string}[]) {
 			this.sizes.push(item.size);
 			obj.sizes.push(item.size);
 		}
