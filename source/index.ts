@@ -5,7 +5,7 @@ import EventEmitter from 'events';
 import {parse as parseUrl} from 'url'; // eslint-disable-line node/no-deprecated-api
 import arrayUniq from 'array-uniq';
 import arrayDiffer from 'array-differ';
-import easydate from 'easydate';
+import dateFns from 'date-fns';
 import getRes from 'get-res';
 import logSymbols from 'log-symbols';
 import mem from 'mem';
@@ -227,10 +227,11 @@ export default class Pageres extends EventEmitter {
 
 		const filenameTemplate = template(`${options.filename}.${options.format}`);
 
+		const now = Date.now();
 		let filename = filenameTemplate({
 			crop: options.crop ? '-cropped' : '',
-			date: easydate('Y-M-d'),
-			time: easydate('h-m-s'),
+			date: dateFns.format(now, 'YYYY-MM-DD'),
+			time: dateFns.format(now, 'HH-mm-ss'),
 			size,
 			width,
 			height,

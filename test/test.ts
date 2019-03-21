@@ -2,7 +2,7 @@ import fs from 'fs';
 import path from 'path';
 import test from 'ava';
 import imageSize from 'image-size';
-import easydate from 'easydate';
+import dateFns from 'date-fns';
 import PNG from 'png-js';
 import pify from 'pify';
 import pathExists from 'path-exists';
@@ -172,7 +172,7 @@ test('`filename` option', async t => {
 		.run();
 
 	t.is(screenshots.length, 1);
-	t.regex(screenshots[0].filename, new RegExp(`${easydate('Y-M-d')} - \\d{2}-\\d{2}-\\d{2} - ${server.host}!${server.port}.png`));
+	t.regex(screenshots[0].filename, new RegExp(`${dateFns.format(Date.now(), 'YYYY-MM-DD')} - \\d{2}-\\d{2}-\\d{2} - ${server.host}!${server.port}.png`));
 });
 
 test('`selector` option', async t => {
