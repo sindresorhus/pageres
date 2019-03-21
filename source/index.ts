@@ -140,25 +140,29 @@ export default class Pageres extends EventEmitter {
 	}
 
 	async run(): Promise<Screenshot[]> {
-		await Promise.all(this.src().map(async (src: Source): Promise<void> => {
-			const options = {...this.options, ...src.options};
-			const sizes = arrayUniq(src.sizes.filter(/./.test, /^\d{2,4}x\d{2,4}$/i));
-			const keywords = arrayDiffer(src.sizes, sizes);
+		await Promise.all(this.src().map(async (source: Source): Promise<void> => {
+			const options = {
+				...this.options,
+				...source.options
+			};
 
-			this.urls.push(src.url);
+			const sizes = arrayUniq(source.sizes.filter(/./.test, /^\d{2,4}x\d{2,4}$/i));
+			const keywords = arrayDiffer(source.sizes, sizes);
 
-			if (sizes.length === 0 && keywords.indexOf('w3counter') !== -1) {
-				return this.resolution(src.url, options);
+			this.urls.push(source.url);
+
+			if (sizes.length === 0 && keywords.includes('w3counter')) {
+				return this.resolution(source.url, options);
 			}
 
 			if (keywords.length > 0) {
-				return this.viewport({url: src.url, sizes, keywords}, options);
+				return this.viewport({url: source.url, sizes, keywords}, options);
 			}
 
 			for (const size of sizes) {
 				this.sizes.push(size);
 				// TODO: Make this concurrent
-				this.items.push(await this.create(src.url, size, options));
+				this.items.push(await this.create(source.url, size, options));
 			}
 
 			return undefined;
@@ -195,14 +199,14 @@ export default class Pageres extends EventEmitter {
 		}
 	}
 
-	private async viewport(obj: Viewport, options: Options): Promise<void> {
-		for (const item of await viewportListMem(obj.keywords) as {size: string}[]) {
+	private async viewport(viewport: Viewport, options: Options): Promise<void> {
+		for (const item of await viewportListMem(viewport.keywords) as {size: string}[]) {
 			this.sizes.push(item.size);
-			obj.sizes.push(item.size);
+			viewport.sizes.push(item.size);
 		}
 
-		for (const size of arrayUniq(obj.sizes)) {
-			this.items.push(await this.create(obj.url, size, options));
+		for (const size of arrayUniq(viewport.sizes)) {
+			this.items.push(await this.create(viewport.url, size, options));
 		}
 	}
 
@@ -214,10 +218,10 @@ export default class Pageres extends EventEmitter {
 		}));
 	}
 
-	private async create(uri: string, size: string, options: Options): Promise<Screenshot> {
-		const basename = path.isAbsolute(uri) ? path.basename(uri) : uri;
+	private async create(url: string, size: string, options: Options): Promise<Screenshot> {
+		const basename = path.isAbsolute(url) ? path.basename(url) : url;
 
-		let hash = parseUrl(uri).hash || '';
+		let hash = parseUrl(url).hash || '';
 		// Strip empty hash fragments: `#` `#/` `#!/`
 		if (/^#!?\/?$/.test(hash)) {
 			hash = '';
@@ -266,7 +270,7 @@ export default class Pageres extends EventEmitter {
 			};
 		}
 
-		const screenshot = await captureWebsite.buffer(uri, finalOptions);
+		const screenshot = await captureWebsite.buffer(url, finalOptions) as any;
 		screenshot.filename = filename;
 		return screenshot;
 	}
