@@ -3,7 +3,8 @@ import path from 'path';
 import test from 'ava';
 import imageSize from 'image-size';
 import dateFns from 'date-fns';
-import PNG from 'png-js';
+// eslint-disable-next-line ava/no-import-test-files
+import PNG from 'png.js';
 import pify from 'pify';
 import pathExists from 'path-exists';
 import sinon from 'sinon';
@@ -19,7 +20,7 @@ const hasScreenshotsWithFilenames = (screenshots: Screenshot[], filenames: strin
 
 const getPngPixels = async (buffer): Promise<Buffer> => {
 	const png = new PNG(buffer);
-	const pixels = await pify(png.decode.bind(png), {errorFirst: false})();
+	const {pixels} = await pify(png.parse.bind(png))();
 	return pixels;
 };
 
