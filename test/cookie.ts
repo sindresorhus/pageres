@@ -1,5 +1,6 @@
 import test from 'ava';
-import PNG from 'png-js';
+// eslint-disable-next-line ava/no-import-test-files
+import PNG from 'png.js';
 import pify from 'pify';
 import Pageres from '../source';
 import {createCookieServer} from './_server';
@@ -14,7 +15,7 @@ async function cookieTest(input, t): Promise<void> {
 	server.close();
 
 	const png = new PNG(screenshots[0]);
-	const pixels = await pify(png.decode.bind(png), {errorFirst: false})();
+	const {pixels} = await pify(png.parse.bind(png))();
 
 	t.is(pixels[0], 0);
 	t.is(pixels[1], 0);
