@@ -18,40 +18,43 @@ import template from 'lodash.template';
 import plur from 'plur';
 import unusedFilename from 'unused-filename';
 
+// TODO: Move this to `type-fest`
+type Mutable<ObjectType> = {-readonly [KeyType in keyof ObjectType]: ObjectType[KeyType]};
+
 const writeFile = promisify(fs.writeFile);
 
 export interface Options {
-	delay?: number;
-	timeout?: number;
-	crop?: boolean;
-	css?: string;
-	script?: string;
-	cookies?: (string | {[key: string]: string})[];
-	filename?: string;
-	incrementalName?: boolean;
-	selector?: string;
-	hide?: string[];
-	username?: string;
-	password?: string;
-	scale?: number;
-	format?: string;
-	userAgent?: string;
-	headers?: {[key: string]: string};
-	transparent?: boolean;
+	readonly delay?: number;
+	readonly timeout?: number;
+	readonly crop?: boolean;
+	readonly css?: string;
+	readonly script?: string;
+	readonly cookies?: readonly (string | {[key: string]: string})[];
+	readonly filename?: string;
+	readonly incrementalName?: boolean;
+	readonly selector?: string;
+	readonly hide?: readonly string[];
+	readonly username?: string;
+	readonly password?: string;
+	readonly scale?: number;
+	readonly format?: string;
+	readonly userAgent?: string;
+	readonly headers?: {[key: string]: string};
+	readonly transparent?: boolean;
 }
 
 export interface Source {
-	url: string;
-	sizes: string[];
-	options?: Options;
+	readonly url: string;
+	readonly sizes: string[];
+	readonly options?: Options;
 }
 
 export type Destination = string;
 
 export interface Viewport {
-	url: string;
-	sizes: string[];
-	keywords: string[];
+	readonly url: string;
+	readonly sizes: string[];
+	readonly keywords: string[];
 }
 
 interface Stats {
@@ -66,7 +69,7 @@ const getResMem = mem(getRes);
 const viewportListMem = mem(viewportList);
 
 export default class Pageres extends EventEmitter {
-	private options: Options;
+	private options: Mutable<Options>;
 
 	private stats: Stats;
 
@@ -101,9 +104,9 @@ export default class Pageres extends EventEmitter {
 
 	src(): Source[];
 
-	src(url: string, sizes: string[], options?: Options): this;
+	src(url: string, sizes: readonly string[], options?: Options): this;
 
-	src(url?: string, sizes?: string[], options?: Options): this | Source[] {
+	src(url?: string, sizes?: readonly string[], options?: Options): this | Source[] {
 		if (url === undefined) {
 			return this._source;
 		}
@@ -246,6 +249,7 @@ export default class Pageres extends EventEmitter {
 			filename = unusedFilename.sync(filename);
 		}
 
+		// TODO: Type this using the `capture-website` types
 		const finalOptions: any = {
 			width: Number(width),
 			height: Number(height),
