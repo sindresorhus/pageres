@@ -14,7 +14,7 @@ import {createServer} from './_server';
 
 const fsP = pify(fs);
 
-const hasScreenshotsWithFilenames = (screenshots: Screenshot[], filenames: string[]): boolean => {
+const hasScreenshotsWithFilenames = (screenshots: readonly Screenshot[], filenames: readonly string[]): boolean => {
 	return screenshots.some(screenshot => filenames.includes(screenshot.filename));
 };
 
