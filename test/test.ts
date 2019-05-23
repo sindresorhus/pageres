@@ -10,7 +10,7 @@ import pathExists from 'path-exists';
 import sinon from 'sinon';
 import fileType from 'file-type';
 import Pageres, {Screenshot} from '../source';
-import {createServer} from './_server';
+import {createServer, TestServer} from './_server';
 
 const fsP = pify(fs);
 
@@ -18,14 +18,14 @@ const hasScreenshotsWithFilenames = (screenshots: Screenshot[], filenames: strin
 	return screenshots.some(screenshot => filenames.includes(screenshot.filename));
 };
 
-const getPngPixels = async (buffer): Promise<Buffer> => {
+const getPngPixels = async (buffer: Buffer): Promise<Buffer> => {
 	const png = new PNG(buffer);
 	const {pixels} = await pify(png.parse.bind(png))();
 	return pixels;
 };
 
-let server;
-let serverFileName;
+let server: TestServer;
+let serverFileName: string;
 test.before(async () => {
 	server = await createServer();
 	serverFileName = server.url
@@ -246,12 +246,22 @@ test('`scale` option', async t => {
 
 test('support data URL', async t => {
 	const screenshots = await new Pageres().src('data:text/html;base64,PGgxPkZPTzwvaDE+', ['100x100']).run();
-	t.is(fileType(screenshots[0]).mime, 'image/png');
+	const _fileType = fileType(screenshots[0]);
+	if (_fileType === null) {
+		throw new Error('Could not detect file type or MIME type');
+	}
+
+	t.is(_fileType.mime, 'image/png');
 });
 
 test('`format` option', async t => {
 	const screenshots = await new Pageres().src(server.url, ['100x100'], {format: 'jpg'}).run();
-	t.is(fileType(screenshots[0]).mime, 'image/jpeg');
+	const _fileType = fileType(screenshots[0]);
+	if (_fileType === null) {
+		throw new Error('Could not detect file type or MIME type');
+	}
+
+	t.is(_fileType.mime, 'image/jpeg');
 });
 
 test('when a file exists, append an incrementer', async t => {

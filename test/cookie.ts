@@ -1,11 +1,14 @@
-import test from 'ava';
+import test, {ExecutionContext} from 'ava';
 // eslint-disable-next-line ava/no-import-test-files
 import PNG from 'png.js';
 import pify from 'pify';
 import Pageres from '../source';
 import {createCookieServer} from './_server';
 
-async function cookieTest(input, t): Promise<void> {
+async function cookieTest(
+	input: string | { [key: string]: string },
+	t: ExecutionContext
+): Promise<void> {
 	const server = await createCookieServer();
 
 	const screenshots = await new Pageres({cookies: [input]})
