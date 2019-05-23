@@ -15,10 +15,6 @@ $ npm install pageres
 
 Note to Linux users: If you get a "No usable sandbox!" error, you need to enable [system sandboxing](https://github.com/GoogleChrome/puppeteer/blob/master/docs/troubleshooting.md#setting-up-chrome-linux-sandbox).
 
-<a href="https://www.patreon.com/sindresorhus">
-	<img src="https://c5.patreon.com/external/logo/become_a_patron_button@2x.png" width="160">
-</a>
-
 
 ## Usage
 
@@ -41,11 +37,11 @@ const Pageres = require('pageres');
 
 #### options
 
-Type: `Object`
+Type: `object`
 
 ##### delay
 
-Type: `number` *(seconds)*<br>
+Type: `number` *(Seconds)*<br>
 Default: `0`
 
 Delay capturing the screenshot.
@@ -54,7 +50,7 @@ Useful when the site does things after load that you want to capture.
 
 ##### timeout
 
-Type: `number` *(seconds)*<br>
+Type: `number` *(Seconds)*<br>
 Default: `60`
 
 Number of seconds after which the request is aborted.
@@ -80,7 +76,7 @@ Apply custom JavaScript to the webpage. Specify some JavaScript or the path to a
 
 ##### cookies
 
-Type: `Array<string | Object>`
+Type: `Array<string | object>`
 
 A string with the same format as a [browser cookie](https://developer.mozilla.org/en-US/docs/Web/HTTP/Cookies) or [an object](https://github.com/GoogleChrome/puppeteer/blob/master/docs/api.md#pagesetcookiecookies).
 
@@ -145,7 +141,7 @@ Scale webpage `n` times.
 
 Type: `string`<br>
 Default: `png`<br>
-Values: `png`, `jpg`
+Values: `png` `jpg`
 
 Image format.
 
@@ -157,7 +153,7 @@ Custom user agent.
 
 ##### headers
 
-Type: `Object`
+Type: `object`
 
 Custom HTTP request headers.
 
@@ -192,7 +188,7 @@ resolutions from [w3counter](http://www.w3counter.com/globalstats.php).
 
 #### options
 
-Type: `Object`
+Type: `object`
 
 Options set here will take precedence over the ones set in the constructor.
 
@@ -224,15 +220,3 @@ For Gulp and Broccoli, just use the API directly. No need for a wrapper plugin.
 ## Related
 
 - [capture-website](https://github.com/sindresorhus/capture-website) - A different take on screenshotting websites
-
-
-## Team
-
-[![Sindre Sorhus](http://gravatar.com/avatar/d36a92237c75c5337c17b60d90686bf9?s=144)](https://sindresorhus.com) | [![Kevin Mårtensson](https://gravatar.com/avatar/48fa294e3cd41680b80d3ed6345c7b4d?s=144)](https://github.com/kevva) | [![Sam Verschueren](https://gravatar.com/avatar/30aba8d6414326b745aa2516f5067d53?s=144)](https://github.com/SamVerschueren)
----|---|---
-[Sindre Sorhus](https://sindresorhus.com) | [Kevin Mårtensson](https://github.com/kevva) | [Sam Verschueren](https://github.com/SamVerschueren)
-
-
-## License
-
-MIT © [Sindre Sorhus](https://sindresorhus.com)
