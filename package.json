@@ -117,6 +117,9 @@
 		"extensions": [
 			"ts"
 		],
+		"parserOptions": {
+			"project": "./test/tsconfig.json"
+		},
 		"rules": {
 			"import/named": "off",
 			"import/no-unresolved": "off",
