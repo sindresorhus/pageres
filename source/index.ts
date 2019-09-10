@@ -18,7 +18,7 @@ import plur from 'plur';
 import unusedFilename from 'unused-filename';
 import * as _filenamifyUrl from 'filenamify-url';
 
-// TODO: update filenamifyUrl and fix the import after https://github.com/sindresorhus/filenamify-url/issues/4 is resolved.
+// TODO: Update filenamifyUrl and fix the import after https://github.com/sindresorhus/filenamify-url/issues/4 is resolved.
 const filenamifyUrl = _filenamifyUrl.default;
 // TODO: Move this to `type-fest`
 type Mutable<ObjectType> = {-readonly [KeyType in keyof ObjectType]: ObjectType[KeyType]};
@@ -189,9 +189,9 @@ export default class Pageres extends EventEmitter {
 	successMessage(): void {
 		const {screenshots, sizes, urls} = this.stats;
 		const words = {
-			screenshots: plur('screenshot', Number(screenshots)),
-			sizes: plur('size', Number(sizes)),
-			urls: plur('url', Number(urls))
+			screenshots: plur('screenshot', screenshots),
+			sizes: plur('size', sizes),
+			urls: plur('url', urls)
 		};
 
 		console.log(`\n${logSymbols.success} Generated ${screenshots} ${words.screenshots} from ${urls} ${words.urls} and ${sizes} ${words.sizes}`);
