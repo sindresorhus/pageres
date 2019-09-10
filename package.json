@@ -58,7 +58,7 @@
 		"capture-website": "^0.3.1",
 		"date-fns": "^1.30.1",
 		"filenamify": "^3.0.0",
-		"filenamify-url": "^2.0.0",
+		"filenamify-url": "^1.0.0",
 		"get-res": "^3.0.0",
 		"lodash.template": "^4.0.1",
 		"log-symbols": "^2.1.0",
@@ -70,6 +70,7 @@
 	},
 	"devDependencies": {
 		"@sindresorhus/tsconfig": "^0.3.0",
+		"@types/filenamify-url": "1.0.0",
 		"@types/array-uniq": "^1.0.1",
 		"@types/cookie": "^0.3.2",
 		"@types/get-res": "^3.0.1",
