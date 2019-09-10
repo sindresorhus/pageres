@@ -52,15 +52,13 @@ test('set destination directory', t => {
 
 test('`.src()` - error if no correct `url` is specified', t => {
 	t.throws(() => {
-		// @ts-ignore
-		new Pageres().src('');
+		new Pageres().src('', ['1280x1024', '1920x1080']);
 	}, 'URL required');
 });
 
 test('`.src()` - error if no `sizes` is specified', t => {
 	t.throws(() => {
-		// @ts-ignore
-		new Pageres().src(server.url);
+		new Pageres().src(server.url, []);
 	}, 'Sizes required');
 });
 
@@ -246,14 +244,22 @@ test('`scale` option', async t => {
 
 test('support data URL', async t => {
 	const screenshots = await new Pageres().src('data:text/html;base64,PGgxPkZPTzwvaDE+', ['100x100']).run();
-	// @ts-ignore
-	t.is(fileType(screenshots[0]).mime, 'image/png');
+	const _fileType = fileType(screenshots[0]);
+	if (_fileType === null) {
+		throw new Error('Could not detect the file type');
+	}
+
+	t.is((_fileType).mime, 'image/png');
 });
 
 test('`format` option', async t => {
 	const screenshots = await new Pageres().src(server.url, ['100x100'], {format: 'jpg'}).run();
-	// @ts-ignore
-	t.is(fileType(screenshots[0]).mime, 'image/jpeg');
+	const _fileType = fileType(screenshots[0]);
+	if (_fileType === null) {
+		throw new Error('Could not detect the file type');
+	}
+
+	t.is((_fileType).mime, 'image/jpeg');
 });
 
 test('when a file exists, append an incrementer', async t => {
