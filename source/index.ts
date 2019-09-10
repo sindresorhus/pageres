@@ -117,7 +117,7 @@ export default class Pageres extends EventEmitter {
 			throw new TypeError('URL required');
 		}
 
-		if (!Array.isArray(sizes)) {
+		if (!(Array.isArray(sizes) && sizes.length > 0)) {
 			throw new TypeError('Sizes required');
 		}
 
