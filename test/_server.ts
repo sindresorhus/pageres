@@ -1,9 +1,9 @@
-import path from 'path';
-import fs from 'fs';
-import http from 'http';
-import cookie from 'cookie';
-import getPort from 'get-port';
-import pify from 'pify';
+import path = require('path');
+import fs = require('fs');
+import http = require('http');
+import cookie = require('cookie');
+import getPort = require('get-port');
+import pify = require('pify');
 
 export const host = 'localhost';
 
@@ -17,14 +17,15 @@ export interface TestServer extends http.Server {
 const baseCreateServer = (fn: http.RequestListener): (() => Promise<TestServer>) => {
 	return async (): Promise<TestServer> => {
 		const port = await getPort();
-		const server = http.createServer(fn) as TestServer;
+		const server = http.createServer(fn) as unknown as TestServer;
 
 		server.host = host;
 		server.port = port;
 		server.url = `http://${host}:${port}`;
 		server.protocol = 'http';
 		server.listen(port);
-		server.close = pify(server.close) as any;
+		// @ts-ignore
+		server.close = pify(server.close) as typeof server.close;
 
 		return server;
 	};

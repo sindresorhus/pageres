@@ -1,16 +1,15 @@
-import fs from 'fs';
-import path from 'path';
 import test from 'ava';
-import imageSize from 'image-size';
-import dateFns from 'date-fns';
-// eslint-disable-next-line ava/no-import-test-files
-import PNG from 'png.js';
-import pify from 'pify';
-import pathExists from 'path-exists';
-import sinon from 'sinon';
-import fileType from 'file-type';
+import {imageSize} from 'image-size';
 import Pageres, {Screenshot} from '../source';
 import {createServer, TestServer} from './_server';
+import fs = require('fs');
+import path = require('path');
+import dateFns = require('date-fns');
+import PNG = require('png.js');
+import pify = require('pify');
+import pathExists = require('path-exists');
+import sinon = require('sinon');
+import fileType = require('file-type');
 
 const fsP = pify(fs);
 
@@ -120,7 +119,7 @@ test('success message', async t => {
 	const pageres = new Pageres().src(server.url, ['480x320', '1024x768', 'iphone 5s']);
 	await pageres.run();
 	pageres.successMessage();
-	t.true(/Generated 3 screenshots from 1 url and 1 size/.test(stub.firstCall.args[0]));
+	t.true(stub.firstCall.args[0].includes('Generated 3 screenshots from 1 url and 1 size'));
 	stub.restore();
 });
 
@@ -140,7 +139,7 @@ test('`crop` option', async t => {
 	const screenshots = await new Pageres({crop: true}).src(server.url, ['1024x768']).run();
 	t.is(screenshots[0].filename, `${server.host}!${server.port}-1024x768-cropped.png`);
 
-	const size = imageSize(screenshots[0]);
+	const size = imageSize(screenshots[0]) as any;
 	t.is(size.width, 1024);
 	t.is(size.height, 768);
 });
@@ -171,14 +170,14 @@ test('`filename` option', async t => {
 		.run();
 
 	t.is(screenshots.length, 1);
-	t.regex(screenshots[0].filename, new RegExp(`${dateFns.format(Date.now(), 'YYYY-MM-DD')} - \\d{2}-\\d{2}-\\d{2} - ${server.host}!${server.port}.png`));
+	t.regex(screenshots[0].filename, new RegExp(`${dateFns.format(Date.now(), 'yyyy-MM-dd')} - \\d{2}-\\d{2}-\\d{2} - ${server.host}!${server.port}.png`));
 });
 
 test('`selector` option', async t => {
 	const screenshots = await new Pageres({selector: '#team'}).src(server.url, ['1024x768']).run();
 	t.is(screenshots[0].filename, `${server.host}!${server.port}-1024x768.png`);
 
-	const size = imageSize(screenshots[0]);
+	const size = imageSize(screenshots[0]) as any;
 	t.is(size.width, 1024);
 	t.is(size.height, 80);
 });
@@ -237,7 +236,7 @@ test('`scale` option', async t => {
 		crop: true
 	}).src(server.url, ['120x120']).run();
 
-	const size = imageSize(screenshots[0]);
+	const size = imageSize(screenshots[0]) as any;
 	t.is(size.width, 240);
 	t.is(size.height, 240);
 });
@@ -245,7 +244,7 @@ test('`scale` option', async t => {
 test('support data URL', async t => {
 	const screenshots = await new Pageres().src('data:text/html;base64,PGgxPkZPTzwvaDE+', ['100x100']).run();
 	const _fileType = fileType(screenshots[0]);
-	if (_fileType === null) {
+	if (_fileType === undefined) {
 		throw new Error('Could not detect the file type');
 	}
 
@@ -255,7 +254,7 @@ test('support data URL', async t => {
 test('`format` option', async t => {
 	const screenshots = await new Pageres().src(server.url, ['100x100'], {format: 'jpg'}).run();
 	const _fileType = fileType(screenshots[0]);
-	if (_fileType === null) {
+	if (_fileType === undefined) {
 		throw new Error('Could not detect the file type');
 	}
 

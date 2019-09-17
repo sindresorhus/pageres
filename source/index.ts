@@ -1,25 +1,24 @@
 import {promisify} from 'util';
-import path from 'path';
-import fs from 'fs';
-import EventEmitter from 'events';
 import {parse as parseUrl} from 'url'; // eslint-disable-line node/no-deprecated-api
-import arrayUniq from 'array-uniq';
-import arrayDiffer from 'array-differ';
-import dateFns from 'date-fns';
-import getRes from 'get-res';
-import logSymbols from 'log-symbols';
-import mem from 'mem';
-import makeDir from 'make-dir';
-import captureWebsite from 'capture-website';
-import viewportList from 'viewport-list';
+import pMemoize from 'p-memoize';
 import filenamify from 'filenamify';
-import template from 'lodash.template';
-import plur from 'plur';
 import unusedFilename from 'unused-filename';
-import * as _filenamifyUrl from 'filenamify-url';
+import path = require('path');
+import fs = require('fs');
+import EventEmitter = require('events');
+import arrayUniq = require('array-uniq');
+import arrayDiffer = require('array-differ');
+import dateFns = require('date-fns');
+import getRes = require('get-res');
+import logSymbols = require('log-symbols');
+import makeDir = require('make-dir');
+import captureWebsite = require('capture-website');
+import viewportList = require('viewport-list');
+import template = require('lodash.template');
+import plur = require('plur');
+// @ts-ignore
+import filenamifyUrl = require('filenamify-url'); // TODO: Update filenamifyUrl and fix the import after https://github.com/sindresorhus/filenamify-url/issues/4 is resolved.
 
-// TODO: Update filenamifyUrl and fix the import after https://github.com/sindresorhus/filenamify-url/issues/4 is resolved.
-const filenamifyUrl = _filenamifyUrl.default;
 // TODO: Move this to `type-fest`
 type Mutable<ObjectType> = {-readonly [KeyType in keyof ObjectType]: ObjectType[KeyType]};
 
@@ -31,7 +30,7 @@ export interface Options {
 	readonly crop?: boolean;
 	readonly css?: string;
 	readonly script?: string;
-	readonly cookies?: readonly (string | {[key: string]: string})[];
+	readonly cookies?: ReadonlyArray<string | {[key: string]: string}>;
 	readonly filename?: string;
 	readonly incrementalName?: boolean;
 	readonly selector?: string;
@@ -67,21 +66,22 @@ interface Stats {
 
 export type Screenshot = Buffer & {filename: string};
 
-const getResMem = mem(getRes);
-const viewportListMem = mem(viewportList);
+const getResMem = pMemoize(getRes);
+// @ts-ignore
+const viewportListMem = pMemoize(viewportList);
 
 export default class Pageres extends EventEmitter {
-	private options: Mutable<Options>;
+	private readonly options: Mutable<Options>;
 
 	private stats: Stats;
 
-	private items: Screenshot[];
+	private readonly items: Screenshot[];
 
-	private sizes: string[];
+	private readonly sizes: string[];
 
-	private urls: string[];
+	private readonly urls: string[];
 
-	private _source: Source[];
+	private readonly _source: Source[];
 
 	private _destination: Destination;
 
@@ -198,14 +198,14 @@ export default class Pageres extends EventEmitter {
 	}
 
 	private async resolution(url: string, options: Options): Promise<void> {
-		for (const item of await getResMem() as {item: string}[]) {
+		for (const item of await getResMem() as Array<{item: string}>) {
 			this.sizes.push(item.item);
 			this.items.push(await this.create(url, item.item, options));
 		}
 	}
 
 	private async viewport(viewport: Viewport, options: Options): Promise<void> {
-		for (const item of await viewportListMem(viewport.keywords) as {size: string}[]) {
+		for (const item of await viewportListMem(viewport.keywords) as Array<{size: string}>) {
 			this.sizes.push(item.size);
 			viewport.sizes.push(item.size);
 		}
@@ -239,7 +239,7 @@ export default class Pageres extends EventEmitter {
 		const now = Date.now();
 		let filename = filenameTemplate({
 			crop: options.crop ? '-cropped' : '',
-			date: dateFns.format(now, 'YYYY-MM-DD'),
+			date: dateFns.format(now, 'yyyy-MM-dd'),
 			time: dateFns.format(now, 'HH-mm-ss'),
 			size,
 			width,

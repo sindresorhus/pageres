@@ -1,9 +1,8 @@
 import test, {ExecutionContext} from 'ava';
-// eslint-disable-next-line ava/no-import-test-files
-import PNG from 'png.js';
-import pify from 'pify';
 import Pageres from '../source';
 import {createCookieServer} from './_server';
+import PNG = require('png.js');
+import pify = require('pify');
 
 interface Cookie {
 	[key: string]: string;
