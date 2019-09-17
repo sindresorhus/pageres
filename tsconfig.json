@@ -5,10 +5,7 @@
 		"target": "es2016",
 		"lib": [
 			"es2016"
-		],
-
-		// TODO: Remove this
-		"strict": false
+		]
 	},
 	"include": [
 		"source"

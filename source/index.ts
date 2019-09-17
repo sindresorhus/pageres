@@ -13,11 +13,13 @@ import makeDir from 'make-dir';
 import captureWebsite from 'capture-website';
 import viewportList from 'viewport-list';
 import filenamify from 'filenamify';
-import filenamifyUrl from 'filenamify-url';
 import template from 'lodash.template';
 import plur from 'plur';
 import unusedFilename from 'unused-filename';
+import * as _filenamifyUrl from 'filenamify-url';
 
+// TODO: Update filenamifyUrl and fix the import after https://github.com/sindresorhus/filenamify-url/issues/4 is resolved.
+const filenamifyUrl = _filenamifyUrl.default;
 // TODO: Move this to `type-fest`
 type Mutable<ObjectType> = {-readonly [KeyType in keyof ObjectType]: ObjectType[KeyType]};
 
@@ -115,7 +117,7 @@ export default class Pageres extends EventEmitter {
 			throw new TypeError('URL required');
 		}
 
-		if (!Array.isArray(sizes)) {
+		if (!(Array.isArray(sizes) && sizes.length > 0)) {
 			throw new TypeError('Sizes required');
 		}
 
