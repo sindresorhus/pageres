@@ -6,7 +6,6 @@ Capture screenshots of websites in various resolutions. A good way to make sure 
 
 *See [pageres-cli](https://github.com/sindresorhus/pageres-cli) for the command-line tool.*
 
-
 ## Install
 
 ```
@@ -14,7 +13,6 @@ $ npm install pageres
 ```
 
 Note to Linux users: If you get a "No usable sandbox!" error, you need to enable [system sandboxing](https://github.com/GoogleChrome/puppeteer/blob/master/docs/troubleshooting.md#setting-up-chrome-linux-sandbox).
-
 
 ## Usage
 
@@ -28,12 +26,14 @@ const Pageres = require('pageres');
 		.src('data:text/html,<h1>Awesome!</h1>', ['1024x768'])
 		.dest(__dirname)
 		.run();
+		
+	console.log('Finished generating screenshots!');
 })();
 ```
 
 ## API
 
-### Pageres([options])
+### Pageres(options?)
 
 #### options
 
@@ -41,7 +41,7 @@ Type: `object`
 
 ##### delay
 
-Type: `number` *(Seconds)*<br>
+Type: `number` *(Seconds)*\
 Default: `0`
 
 Delay capturing the screenshot.
@@ -50,14 +50,14 @@ Useful when the site does things after load that you want to capture.
 
 ##### timeout
 
-Type: `number` *(Seconds)*<br>
+Type: `number` *(Seconds)*\
 Default: `60`
 
 Number of seconds after which the request is aborted.
 
 ##### crop
 
-Type: `boolean`<br>
+Type: `boolean`\
 Default: `false`
 
 Crop to the set height.
@@ -86,8 +86,8 @@ Tip: Go to the website you want a cookie for and [copy-paste it from DevTools](h
 
 Type: `string`
 
-Define a customized filename using [Lo-Dash templates](https://lodash.com/docs#template).<br>
-For example `<%= date %> - <%= url %>-<%= size %><%= crop %>`.
+Define a customized filename using [Lo-Dash templates](https://lodash.com/docs#template).\
+For example: `<%= date %> - <%= url %>-<%= size %><%= crop %>`.
 
 Available variables:
 
@@ -101,7 +101,7 @@ Available variables:
 
 ##### incrementalName
 
-Type: `boolean`<br>
+Type: `boolean`\
 Default: `false`
 
 When a file exists, append an incremental number.
@@ -132,16 +132,16 @@ Password for authenticating with HTTP auth.
 
 ##### scale
 
-Type: `number`<br>
+Type: `number`\
 Default: `1`
 
 Scale webpage `n` times.
 
 ##### format
 
-Type: `string`<br>
-Default: `png`<br>
-Values: `png` `jpg`
+Type: `string`\
+Default: `png`\
+Values: `'png' | 'jpg'`
 
 Image format.
 
@@ -159,32 +159,32 @@ Custom HTTP request headers.
 
 ##### transparent
 
-Type: `boolean`<br>
+Type: `boolean`\
 Default: `false`
 
 Set background color to `transparent` instead of `white` if no background is set.
 
-### pageres.src(url, sizes, [options])
+### pageres.src(url, sizes, options?)
 
 Add a page to screenshot.
 
 #### url
 
-*Required*<br>
+*Required*\
 Type: `string`
 
 URL or local path to the website you want to screenshot. You can also use a data URI.
 
 #### sizes
 
-*Required*<br>
+*Required*\
 Type: `string[]`
 
 Use a `<width>x<height>` notation or a keyword.
 
 A keyword is a version of a device from [this list](https://github.com/kevva/viewport-list/blob/master/data.json).
-You can also pass in the `w3counter` keyword to use the ten most popular
-resolutions from [w3counter](http://www.w3counter.com/globalstats.php).
+
+You can also pass in the `w3counter` keyword to use the ten most popular resolutions from [w3counter](http://www.w3counter.com/globalstats.php).
 
 #### options
 
@@ -204,18 +204,15 @@ Type: `string`
 
 Run pageres. Returns `Promise<Buffer[]>`.
 
-
 ## Task runners
 
 Check out [grunt-pageres](https://github.com/sindresorhus/grunt-pageres) if you're using Grunt.
 
 For Gulp and Broccoli, just use the API directly. No need for a wrapper plugin.
 
-
 ## Built with Pageres
 
 - [Break Shot](https://github.com/victorferraz/break-shot) - Desktop app for capturing screenshots of responsive websites.
-
 
 ## Related
 
