@@ -1,11 +1,11 @@
 import {promisify} from 'util';
 import {parse as parseUrl} from 'url'; // eslint-disable-line node/no-deprecated-api
-import pMemoize from 'p-memoize';
-import filenamify from 'filenamify';
-import unusedFilename from 'unused-filename';
 import path = require('path');
 import fs = require('fs');
 import EventEmitter = require('events');
+import pMemoize from 'p-memoize';
+import filenamify from 'filenamify';
+import unusedFilename from 'unused-filename';
 import arrayUniq = require('array-uniq');
 import arrayDiffer = require('array-differ');
 import dateFns = require('date-fns');

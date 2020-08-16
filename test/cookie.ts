@@ -1,8 +1,8 @@
 import test, {ExecutionContext} from 'ava';
-import Pageres from '../source';
-import {createCookieServer} from './_server';
 import PNG = require('png.js');
 import pify = require('pify');
+import Pageres from '../source';
+import {createCookieServer} from './_server';
 
 interface Cookie {
 	[key: string]: string;

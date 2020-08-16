@@ -9,7 +9,7 @@
 		"email": "sindresorhus@gmail.com",
 		"url": "sindresorhus.com"
 	},
-	"main": "dist",
+	"main": "dist/index.js",
 	"engines": {
 		"node": ">=8"
 	},
@@ -98,7 +98,7 @@
 		"typescript": "^3.4.1",
 		"xo": "^0.24.0"
 	},
-	"types": "dist",
+	"types": "dist/index.d.ts",
 	"ava": {
 		"babel": false,
 		"compileEnhancements": false,
@@ -120,6 +120,7 @@
 		"rules": {
 			"import/named": "off",
 			"import/no-unresolved": "off",
+			"import/first": "off",
 			"import/newline-after-import": "off",
 			"no-dupe-class-members": "off",
 			"ava/no-ignored-test-files": "off",

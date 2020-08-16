@@ -1,15 +1,15 @@
-import test from 'ava';
-import {imageSize} from 'image-size';
-import Pageres, {Screenshot} from '../source';
-import {createServer, TestServer} from './_server';
 import fs = require('fs');
 import path = require('path');
+import test from 'ava';
+import {imageSize} from 'image-size';
 import dateFns = require('date-fns');
 import PNG = require('png.js');
 import pify = require('pify');
 import pathExists = require('path-exists');
 import sinon = require('sinon');
 import fileType = require('file-type');
+import Pageres, {Screenshot} from '../source';
+import {createServer, TestServer} from './_server';
 
 const fsP = pify(fs);
 
