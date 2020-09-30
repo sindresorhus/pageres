@@ -1,13 +1,16 @@
 {
-	"extends": "@sindresorhus/tsconfig",
-	"compilerOptions": {
-		"outDir": "dist",
-		"target": "es2017", // Node.js 8
-		"lib": [
-			"es2017"
-		]
-	},
-	"include": [
-		"source"
-	]
+   "extends": "@sindresorhus/tsconfig",
+   "compilerOptions":
+  {
+     "outDir": "dist",
+     "target": "es2017", // Node.js 8
+     "lib":
+         [
+           "es2017"
+                   ]
+  }
+	"include":
+	[
+          "source"
+	           ]
 }
