@@ -197,7 +197,7 @@ Options set here will take precedence over the ones set in the constructor.
 Set the destination directory.
 
 #### directory
-
+diractory is a file.
 Type: `string`
 
 ### pageres.run()
