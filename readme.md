@@ -44,7 +44,7 @@ Type: `object`
 Type: `number` *(Seconds)*\
 Default: `0`
 
-Delay capturing the screenshot.
+Delay in capturing the screenshot.
 
 Useful when the site does things after load that you want to capture.
 
