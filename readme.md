@@ -6,7 +6,7 @@ Capture screenshots of websites in various resolutions. A good way to make sure 
 
 *See [pageres-cli](https://github.com/sindresorhus/pageres-cli) for the command-line tool.*
 
-## Install
+## Install:-
 
 ```
 $ npm install pageres
