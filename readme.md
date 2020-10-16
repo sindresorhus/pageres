@@ -217,3 +217,6 @@ For Gulp and Broccoli, just use the API directly. No need for a wrapper plugin.
 ## Related
 
 - [capture-website](https://github.com/sindresorhus/capture-website) - A different take on screenshotting websites
+
+
+developed by:- pageres
