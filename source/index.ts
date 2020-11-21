@@ -2,7 +2,8 @@ import {promisify} from 'util';
 import {parse as parseUrl} from 'url'; // eslint-disable-line node/no-deprecated-api
 import path = require('path');
 import fs = require('fs');
-import EventEmitter = require('events');
+// import EventEmitter = require('events');
+import { EventEmitter} from 'events';
 import pMemoize from 'p-memoize';
 import filenamify from 'filenamify';
 import unusedFilename from 'unused-filename';
