@@ -164,6 +164,13 @@ Default: `false`
 
 Set background color to `transparent` instead of `white` if no background is set.
 
+##### darkMode
+
+Type: `boolean`\
+Default: `false`
+
+Emulate preference of dark color scheme.
+
 ### pageres.src(url, sizes, options?)
 
 Add a page to screenshot.
