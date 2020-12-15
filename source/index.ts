@@ -42,6 +42,7 @@ export interface Options {
 	readonly userAgent?: string;
 	readonly headers?: {[key: string]: string};
 	readonly transparent?: boolean;
+	readonly darkMode?: boolean;
 }
 
 export interface Source {
@@ -266,7 +267,8 @@ export default class Pageres extends EventEmitter {
 			scaleFactor: options.scale === undefined ? 1 : options.scale,
 			type: options.format === 'jpg' ? 'jpeg' : 'png',
 			userAgent: options.userAgent,
-			headers: options.headers
+			headers: options.headers,
+			darkMode: options.darkMode
 		};
 
 		if (options.username && options.password) {
