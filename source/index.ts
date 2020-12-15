@@ -2,22 +2,21 @@ import {promisify} from 'util';
 import {parse as parseUrl} from 'url'; // eslint-disable-line node/no-deprecated-api
 import path = require('path');
 import fs = require('fs');
-import EventEmitter = require('events');
-import pMemoize from 'p-memoize';
-import filenamify from 'filenamify';
+import {EventEmitter} from 'events';
+import pMemoize = require('p-memoize');
+import filenamify = require('filenamify');
 import unusedFilename from 'unused-filename';
 import arrayUniq = require('array-uniq');
 import arrayDiffer = require('array-differ');
 import dateFns = require('date-fns');
-import getRes = require('get-res');
+import getResolutions = require('get-res');
 import logSymbols = require('log-symbols');
 import makeDir = require('make-dir');
 import captureWebsite = require('capture-website');
 import viewportList = require('viewport-list');
 import template = require('lodash.template');
 import plur = require('plur');
-// @ts-ignore
-import filenamifyUrl = require('filenamify-url'); // TODO: Update filenamifyUrl and fix the import after https://github.com/sindresorhus/filenamify-url/issues/4 is resolved.
+import filenamifyUrl = require('filenamify-url');
 
 // TODO: Move this to `type-fest`
 type Mutable<ObjectType> = {-readonly [KeyType in keyof ObjectType]: ObjectType[KeyType]};
@@ -30,7 +29,7 @@ export interface Options {
 	readonly crop?: boolean;
 	readonly css?: string;
 	readonly script?: string;
-	readonly cookies?: ReadonlyArray<string | {[key: string]: string}>;
+	readonly cookies?: ReadonlyArray<string | Record<string, string>>;
 	readonly filename?: string;
 	readonly incrementalName?: boolean;
 	readonly selector?: string;
@@ -40,7 +39,7 @@ export interface Options {
 	readonly scale?: number;
 	readonly format?: string;
 	readonly userAgent?: string;
-	readonly headers?: {[key: string]: string};
+	readonly headers?: Record<string, string>;
 	readonly transparent?: boolean;
 	readonly darkMode?: boolean;
 }
@@ -60,17 +59,18 @@ export interface Viewport {
 }
 
 interface Stats {
-	urls?: number;
-	sizes?: number;
-	screenshots?: number;
+	urls: number;
+	sizes: number;
+	screenshots: number;
 }
 
 export type Screenshot = Buffer & {filename: string};
 
-const getResMem = pMemoize(getRes);
-// @ts-ignore
-const viewportListMem = pMemoize(viewportList);
+const getResolutionsMemoized = pMemoize(getResolutions);
+// @ts-expect-error
+const viewportListMemoized = pMemoize(viewportList);
 
+// TODO: Use private class fields when targeting Node.js 12.
 export default class Pageres extends EventEmitter {
 	private readonly options: Mutable<Options>;
 
@@ -93,11 +93,12 @@ export default class Pageres extends EventEmitter {
 		this.setMaxListeners(Infinity);
 
 		this.options = {...options};
-		this.options.filename = this.options.filename || '<%= url %>-<%= size %><%= crop %>';
-		this.options.format = this.options.format || 'png';
-		this.options.incrementalName = this.options.incrementalName || false;
+		this.options.filename = this.options.filename ?? '<%= url %>-<%= size %><%= crop %>';
+		this.options.format = this.options.format ?? 'png';
+		this.options.incrementalName = this.options.incrementalName ?? false;
 
-		this.stats = {};
+		// FIXME
+		this.stats = {} as Stats; // eslint-disable-line @typescript-eslint/consistent-type-assertions
 		this.items = [];
 		this.sizes = [];
 		this.urls = [];
@@ -152,7 +153,7 @@ export default class Pageres extends EventEmitter {
 				...source.options
 			};
 
-			const sizes = arrayUniq(source.sizes.filter(/./.test, /^\d{2,4}x\d{2,4}$/i));
+			const sizes = arrayUniq(source.sizes.filter(size => /^\d{2,4}x\d{2,4}$/i.test(size)));
 			const keywords = arrayDiffer(source.sizes, sizes);
 
 			this.urls.push(source.url);
@@ -199,14 +200,14 @@ export default class Pageres extends EventEmitter {
 	}
 
 	private async resolution(url: string, options: Options): Promise<void> {
-		for (const item of await getResMem() as Array<{item: string}>) {
+		for (const item of await getResolutionsMemoized() as Array<{item: string}>) {
 			this.sizes.push(item.item);
 			this.items.push(await this.create(url, item.item, options));
 		}
 	}
 
 	private async viewport(viewport: Viewport, options: Options): Promise<void> {
-		for (const item of await viewportListMem(viewport.keywords) as Array<{size: string}>) {
+		for (const item of await viewportListMemoized(viewport.keywords) as Array<{size: string}>) {
 			this.sizes.push(item.size);
 			viewport.sizes.push(item.size);
 		}
@@ -227,7 +228,7 @@ export default class Pageres extends EventEmitter {
 	private async create(url: string, size: string, options: Options): Promise<Screenshot> {
 		const basename = path.isAbsolute(url) ? path.basename(url) : url;
 
-		let hash = parseUrl(url).hash || '';
+		let hash = parseUrl(url).hash ?? '';
 		// Strip empty hash fragments: `#` `#/` `#!/`
 		if (/^#!?\/?$/.test(hash)) {
 			hash = '';
@@ -235,7 +236,7 @@ export default class Pageres extends EventEmitter {
 
 		const [width, height] = size.split('x');
 
-		const filenameTemplate = template(`${options.filename}.${options.format}`);
+		const filenameTemplate = template(`${options.filename!}.${options.format!}`);
 
 		const now = Date.now();
 		let filename = filenameTemplate({

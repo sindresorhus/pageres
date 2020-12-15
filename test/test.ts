@@ -52,19 +52,19 @@ test('set destination directory', t => {
 test('`.src()` - error if no correct `url` is specified', t => {
 	t.throws(() => {
 		new Pageres().src('', ['1280x1024', '1920x1080']);
-	}, 'URL required');
+	}, {message: 'URL required'});
 });
 
 test('`.src()` - error if no `sizes` is specified', t => {
 	t.throws(() => {
 		new Pageres().src(server.url, []);
-	}, 'Sizes required');
+	}, {message: 'Sizes required'});
 });
 
 test('`.dest()` - error if no correct `directory` is specified', t => {
 	t.throws(() => {
 		new Pageres().dest('');
-	}, 'Directory required');
+	}, {message: 'Directory required'});
 });
 
 test('generate screenshots', async t => {
@@ -103,11 +103,11 @@ test('save filename with hash', async t => {
 	t.is(screenshots.length, 6);
 
 	t.true(hasScreenshotsWithFilenames(screenshots, [
-		'example.com-480x320.png',
-		'example.com-480x320.png',
-		'example.com#!@user-480x320.png',
-		'example.com#!product!listing-480x320.png',
-		'example.com#!bang-480x320.png',
+		'example.com!#-480x320.png',
+		'example.com!#-480x320.png',
+		'example.com!#!@user-480x320.png',
+		'example.com!#!product!listing-480x320.png',
+		'example.com!#!bang-480x320.png',
 		'example.com#readme-480x320.png'
 	]));
 
@@ -215,7 +215,9 @@ test('save image', async t => {
 test('remove temporary files on error', async t => {
 	await t.throwsAsync(
 		new Pageres().src('https://this-is-a-error-site.io', ['1024x768']).dest(__dirname).run(),
-		/ERR_NAME_NOT_RESOLVED/
+		{
+			message: /ERR_NAME_NOT_RESOLVED/
+		}
 	);
 	t.false(await pathExists(path.join(__dirname, 'this-is-a-error-site.io.png')));
 });

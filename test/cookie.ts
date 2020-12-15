@@ -4,9 +4,7 @@ import pify = require('pify');
 import Pageres from '../source';
 import {createCookieServer} from './_server';
 
-interface Cookie {
-	[key: string]: string;
-}
+type Cookie = Record<string, string>;
 
 async function cookieTest(input: string | Cookie, t: ExecutionContext): Promise<void> {
 	const server = await createCookieServer();

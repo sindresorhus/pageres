@@ -24,7 +24,7 @@ const baseCreateServer = (fn: http.RequestListener): (() => Promise<TestServer>)
 		server.url = `http://${host}:${port}`;
 		server.protocol = 'http';
 		server.listen(port);
-		// @ts-ignore
+		// @ts-expect-error
 		server.close = pify(server.close) as typeof server.close;
 
 		return server;
