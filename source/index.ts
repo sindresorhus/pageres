@@ -30,6 +30,7 @@ export interface Options {
 	readonly css?: string;
 	readonly script?: string;
 	readonly cookies?: ReadonlyArray<string | Record<string, string>>;
+	readonly launchOptions?: {[key: string]: string[]};
 	readonly filename?: string;
 	readonly incrementalName?: boolean;
 	readonly selector?: string;
@@ -96,6 +97,7 @@ export default class Pageres extends EventEmitter {
 		this.options.filename = this.options.filename ?? '<%= url %>-<%= size %><%= crop %>';
 		this.options.format = this.options.format ?? 'png';
 		this.options.incrementalName = this.options.incrementalName ?? false;
+		this.options.launchOptions = this.options.launchOptions || {};
 
 		// FIXME
 		this.stats = {} as Stats; // eslint-disable-line @typescript-eslint/consistent-type-assertions
@@ -263,6 +265,7 @@ export default class Pageres extends EventEmitter {
 			styles: options.css && [options.css],
 			scripts: options.script && [options.script],
 			cookies: options.cookies, // TODO: Support string cookies in capture-website
+			launchOptions: options.launchOptions,
 			element: options.selector,
 			hideElements: options.hide,
 			scaleFactor: options.scale === undefined ? 1 : options.scale,
