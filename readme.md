@@ -172,6 +172,13 @@ Default: `false`
 
 Emulate preference of dark color scheme.
 
+##### launchOptions
+
+Type: `object`\
+Default: `{}`
+
+Specify launch options to be passed to the underlying library and consequently to `puppeteer.launch()`.
+
 ### pageres.src(url, sizes, options?)
 
 Add a page to screenshot.
