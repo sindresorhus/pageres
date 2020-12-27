@@ -177,7 +177,7 @@ Emulate preference of dark color scheme.
 Type: `object`\
 Default: `{}`
 
-Specify launch options to be passed to the underlying library and consequently to `puppeteer.launch()`.
+Options passed to [`puppeteer.launch()`](https://github.com/GoogleChrome/puppeteer/blob/master/docs/api.md#puppeteerlaunchoptions).
 
 ### pageres.src(url, sizes, options?)
 
