@@ -172,6 +172,13 @@ Default: `false`
 
 Emulate preference of dark color scheme.
 
+##### launchOptions
+
+Type: `object`\
+Default: `{}`
+
+Options passed to [`puppeteer.launch()`](https://github.com/GoogleChrome/puppeteer/blob/master/docs/api.md#puppeteerlaunchoptions).
+
 ### pageres.src(url, sizes, options?)
 
 Add a page to screenshot.

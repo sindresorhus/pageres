@@ -42,6 +42,7 @@ export interface Options {
 	readonly headers?: Record<string, string>;
 	readonly transparent?: boolean;
 	readonly darkMode?: boolean;
+	readonly launchOptions?: captureWebsite.Options['launchOptions'];
 }
 
 export interface Source {
@@ -96,6 +97,7 @@ export default class Pageres extends EventEmitter {
 		this.options.filename = this.options.filename ?? '<%= url %>-<%= size %><%= crop %>';
 		this.options.format = this.options.format ?? 'png';
 		this.options.incrementalName = this.options.incrementalName ?? false;
+		this.options.launchOptions = this.options.launchOptions ?? {};
 
 		// FIXME
 		this.stats = {} as Stats; // eslint-disable-line @typescript-eslint/consistent-type-assertions
@@ -269,7 +271,8 @@ export default class Pageres extends EventEmitter {
 			type: options.format === 'jpg' ? 'jpeg' : 'png',
 			userAgent: options.userAgent,
 			headers: options.headers,
-			darkMode: options.darkMode
+			darkMode: options.darkMode,
+			launchOptions: options.launchOptions
 		};
 
 		if (options.username && options.password) {
