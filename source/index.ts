@@ -30,7 +30,7 @@ export interface Options {
 	readonly css?: string;
 	readonly script?: string;
 	readonly cookies?: ReadonlyArray<string | Record<string, string>>;
-	readonly launchOptions?: Record<string, string[]>;
+	readonly launchOptions?: captureWebsite.Options['launchOptions'];
 	readonly filename?: string;
 	readonly incrementalName?: boolean;
 	readonly selector?: string;
