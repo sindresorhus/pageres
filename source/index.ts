@@ -30,7 +30,6 @@ export interface Options {
 	readonly css?: string;
 	readonly script?: string;
 	readonly cookies?: ReadonlyArray<string | Record<string, string>>;
-	readonly launchOptions?: captureWebsite.Options['launchOptions'];
 	readonly filename?: string;
 	readonly incrementalName?: boolean;
 	readonly selector?: string;
@@ -43,6 +42,7 @@ export interface Options {
 	readonly headers?: Record<string, string>;
 	readonly transparent?: boolean;
 	readonly darkMode?: boolean;
+	readonly launchOptions?: captureWebsite.Options['launchOptions'];
 }
 
 export interface Source {
@@ -265,14 +265,14 @@ export default class Pageres extends EventEmitter {
 			styles: options.css && [options.css],
 			scripts: options.script && [options.script],
 			cookies: options.cookies, // TODO: Support string cookies in capture-website
-			launchOptions: options.launchOptions,
 			element: options.selector,
 			hideElements: options.hide,
 			scaleFactor: options.scale === undefined ? 1 : options.scale,
 			type: options.format === 'jpg' ? 'jpeg' : 'png',
 			userAgent: options.userAgent,
 			headers: options.headers,
-			darkMode: options.darkMode
+			darkMode: options.darkMode,
+			launchOptions: options.launchOptions
 		};
 
 		if (options.username && options.password) {
