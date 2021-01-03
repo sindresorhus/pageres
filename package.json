@@ -114,6 +114,10 @@
 		}
 	},
 	"nyc": {
+		"reporter": [
+			"text",
+			"lcov"
+		],
 		"extension": [
 			".ts"
 		]
