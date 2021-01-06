@@ -170,9 +170,10 @@ export default class Pageres extends EventEmitter {
 
 			for (const size of sizes) {
 				this.sizes.push(size);
-				// TODO: Make this concurrent
-				this.items.push(await this.create(source.url, size, options));
+				this.items.push(this.create(source.url, size, options));
 			}
+
+			await Promise.all(this.items);
 
 			return undefined;
 		}));
