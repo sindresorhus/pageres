@@ -168,12 +168,13 @@ export default class Pageres extends EventEmitter {
 				return this.viewport({url: source.url, sizes, keywords}, options);
 			}
 
+			const items = [];
 			for (const size of sizes) {
 				this.sizes.push(size);
-				this.items.push(this.create(source.url, size, options));
+				items.push(this.create(source.url, size, options));
 			}
 
-			await Promise.all(this.items);
+			this.items.push(...await Promise.all(this.items));
 
 			return undefined;
 		}));
