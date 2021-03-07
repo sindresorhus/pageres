@@ -177,7 +177,7 @@ export default class Pageres extends EventEmitter {
 				items.push(this.create(source.url, size, options));
 			}
 
-			await pAll(this.items, { concurrency: cpuCount * 2 });
+			await pAll(this.items, {concurrency: cpuCount * 2});
 
 			return undefined;
 		}));
