@@ -17,11 +17,14 @@ import viewportList = require('viewport-list');
 import template = require('lodash.template');
 import plur = require('plur');
 import filenamifyUrl = require('filenamify-url');
+import pAll = require('p-all');
+import os = require('os');
 
 // TODO: Move this to `type-fest`
 type Mutable<ObjectType> = {-readonly [KeyType in keyof ObjectType]: ObjectType[KeyType]};
 
 const writeFile = promisify(fs.writeFile);
+const cpuCount = os.cpus().length;
 
 export interface Options {
 	readonly delay?: number;
@@ -174,7 +177,7 @@ export default class Pageres extends EventEmitter {
 				items.push(this.create(source.url, size, options));
 			}
 
-			this.items.push(...await Promise.all(this.items));
+			await pAll(this.items, { concurrency: cpuCount * 2 });
 
 			return undefined;
 		}));
