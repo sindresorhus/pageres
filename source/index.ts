@@ -171,13 +171,11 @@ export default class Pageres extends EventEmitter {
 				return this.viewport({url: source.url, sizes, keywords}, options);
 			}
 
-			const items = [];
-			for (const size of sizes) {
-				this.sizes.push(size);
-				items.push(this.create(source.url, size, options));
-			}
+			const screenshots: Screenshot[] = await pAll(this.sizes.map(async (size: string): Promise<Screenshot> => {
+				return this.create(source.url, size, options);
+			}), {concurrency: cpuCount * 2});
 
-			await pAll(this.items, {concurrency: cpuCount * 2});
+			this.items.push(...screenshots);
 
 			return undefined;
 		}));
