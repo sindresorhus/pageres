@@ -2,6 +2,7 @@ import {promisify} from 'util';
 import {parse as parseUrl} from 'url'; // eslint-disable-line node/no-deprecated-api
 import path = require('path');
 import fs = require('fs');
+import os = require('os');
 import {EventEmitter} from 'events';
 import pMemoize = require('p-memoize');
 import filenamify = require('filenamify');
@@ -18,7 +19,6 @@ import template = require('lodash.template');
 import plur = require('plur');
 import filenamifyUrl = require('filenamify-url');
 import pMap = require('p-map');
-import os = require('os');
 
 // TODO: Move this to `type-fest`
 type Mutable<ObjectType> = {-readonly [KeyType in keyof ObjectType]: ObjectType[KeyType]};
