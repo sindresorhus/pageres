@@ -4,5 +4,3 @@ yarn.lock
 coverage
 dist
 localhost*.png
-.DS_Store
-.vscode/
