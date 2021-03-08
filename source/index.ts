@@ -1,5 +1,5 @@
-import {parse as parseUrl} from 'url'; // eslint-disable-line node/no-deprecated-api
 import {promisify} from 'util';
+import {parse as parseUrl} from 'url'; // eslint-disable-line node/no-deprecated-api
 import path = require('path');
 import fs = require('fs');
 import {EventEmitter} from 'events';
@@ -171,14 +171,14 @@ export default class Pageres extends EventEmitter {
 				return this.viewport({url: source.url, sizes, keywords}, options);
 			}
 
-			await pMap(
-				this.sizes,
-				async (size: string) => {
+			this.items.push(...await pMap(
+				sizes,
+				async (size: string): Promise<Screenshot> => {
 					this.sizes.push(size);
-					this.items.push(await this.create(source.url, size, options));
+					return this.create(source.url, size, options);
 				},
 				{concurrency: cpuCount * 2}
-			);
+			));
 
 			return undefined;
 		}));
