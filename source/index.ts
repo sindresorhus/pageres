@@ -1,5 +1,5 @@
-import {promisify} from 'util';
 import {parse as parseUrl} from 'url'; // eslint-disable-line node/no-deprecated-api
+import {promisify} from 'util';
 import path = require('path');
 import fs = require('fs');
 import {EventEmitter} from 'events';
@@ -17,7 +17,7 @@ import viewportList = require('viewport-list');
 import template = require('lodash.template');
 import plur = require('plur');
 import filenamifyUrl = require('filenamify-url');
-import pAll = require('p-all');
+import pMap = require('p-map');
 import os = require('os');
 
 // TODO: Move this to `type-fest`
@@ -171,11 +171,14 @@ export default class Pageres extends EventEmitter {
 				return this.viewport({url: source.url, sizes, keywords}, options);
 			}
 
-			const screenshots: Screenshot[] = await pAll(this.sizes.map(async (size: string): Promise<Screenshot> => {
-				return this.create(source.url, size, options);
-			}), {concurrency: cpuCount * 2});
-
-			this.items.push(...screenshots);
+			await pMap(
+				this.sizes,
+				async (size: string) => {
+					this.sizes.push(size);
+					this.items.push(await this.create(source.url, size, options));
+				},
+				{concurrency: cpuCount * 2}
+			);
 
 			return undefined;
 		}));
