@@ -94,7 +94,7 @@ export default class Pageres extends EventEmitter {
 		super();
 
 		// Prevent false-positive `MaxListenersExceededWarning` warnings
-		this.setMaxListeners(Infinity);
+		this.setMaxListeners(Number.POSITIVE_INFINITY);
 
 		this.options = {...options};
 		this.options.filename = this.options.filename ?? '<%= url %>-<%= size %><%= crop %>';
