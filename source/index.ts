@@ -2,6 +2,7 @@ import {promisify} from 'util';
 import {parse as parseUrl} from 'url'; // eslint-disable-line node/no-deprecated-api
 import path = require('path');
 import fs = require('fs');
+import os = require('os');
 import {EventEmitter} from 'events';
 import pMemoize = require('p-memoize');
 import filenamify = require('filenamify');
@@ -17,11 +18,13 @@ import viewportList = require('viewport-list');
 import template = require('lodash.template');
 import plur = require('plur');
 import filenamifyUrl = require('filenamify-url');
+import pMap = require('p-map');
 
 // TODO: Move this to `type-fest`
 type Mutable<ObjectType> = {-readonly [KeyType in keyof ObjectType]: ObjectType[KeyType]};
 
 const writeFile = promisify(fs.writeFile);
+const cpuCount = os.cpus().length;
 
 export interface Options {
 	readonly delay?: number;
@@ -168,11 +171,15 @@ export default class Pageres extends EventEmitter {
 				return this.viewport({url: source.url, sizes, keywords}, options);
 			}
 
-			for (const size of sizes) {
-				this.sizes.push(size);
-				// TODO: Make this concurrent
-				this.items.push(await this.create(source.url, size, options));
-			}
+			const screenshots = await pMap(
+				sizes,
+				async (size: string): Promise<Screenshot> => {
+					this.sizes.push(size);
+					return this.create(source.url, size, options);
+				},
+				{concurrency: cpuCount * 2}
+			);
+			this.items.push(...screenshots);
 
 			return undefined;
 		}));
