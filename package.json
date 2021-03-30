@@ -18,7 +18,7 @@
 		"test": "xo && nyc ava",
 		"release": "np",
 		"build": "del-cli dist && tsc",
-		"prepublishOnly": "npm run build"
+		"prepare": "npm run build"
 	},
 	"files": [
 		"dist"
