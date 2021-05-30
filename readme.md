@@ -85,7 +85,8 @@ Tip: Go to the website you want a cookie for and [copy-paste it from DevTools](h
 
 ##### filename
 
-Type: `string`
+Type: `string`\
+Default: `'<%= url %>-<%= size %><%= crop %>'`
 
 Define a customized filename using [Lo-Dash templates](https://lodash.com/docs#template).\
 For example: `<%= date %> - <%= url %>-<%= size %><%= crop %>`.
