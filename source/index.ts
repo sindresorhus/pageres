@@ -450,7 +450,7 @@ export default class Pageres extends EventEmitter {
 	}
 
 	private async create(url: string, size: string, options: Options): Promise<Screenshot> {
-		const basename = path.isAbsolute(url) ? path.basename(url) : url;
+		const basename = fs.existsSync(url) ? path.basename(url) : url;
 
 		let hash = parseUrl(url).hash ?? '';
 		// Strip empty hash fragments: `#` `#/` `#!/`
