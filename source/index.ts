@@ -1,6 +1,6 @@
 import {promisify} from 'util';
 import {parse as parseUrl} from 'url'; // eslint-disable-line node/no-deprecated-api
-import type { BeforeScreenshot } from 'capture-website';
+import type {BeforeScreenshot} from 'capture-website';
 import path = require('path');
 import fs = require('fs');
 import os = require('os');
@@ -166,7 +166,9 @@ export interface Options {
 
 	/**
 	The specified function is called right before the screenshot is captured, as well as before any bounding rectangle is calculated as part of `options.element`. It receives the Puppeteer [`Page` instance](https://github.com/GoogleChrome/puppeteer/blob/master/docs/api.md#class-page) as the first argument and the [`browser` instance](https://github.com/GoogleChrome/puppeteer/blob/master/docs/api.md#class-browser) as the second argument. This gives you a lot of power to do custom stuff. The function can be async.
+
 	Note: Make sure to not call `page.close()` or `browser.close()`.
+
 	@example
 	```
 	const Pageres = require('pageres');
