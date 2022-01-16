@@ -485,6 +485,7 @@ export default class Pageres extends EventEmitter {
 			timeout: options.timeout,
 			fullPage: !options.crop,
 			styles: options.css && [options.css],
+			defaultBackground: !options.transparent,
 			scripts: options.script && [options.script],
 			cookies: options.cookies, // TODO: Support string cookies in capture-website
 			element: options.selector,
