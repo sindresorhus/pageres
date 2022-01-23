@@ -180,6 +180,34 @@ Default: `{}`
 
 Options passed to [`puppeteer.launch()`](https://github.com/GoogleChrome/puppeteer/blob/master/docs/api.md#puppeteerlaunchoptions).
 
+##### beforeScreenshot
+
+Type: `Function`
+
+The specified function is called right before the screenshot is captured, as well as before any bounding rectangle is calculated as part of `options.element`. It receives the Puppeteer [`Page` instance](https://github.com/GoogleChrome/puppeteer/blob/master/docs/api.md#class-page) as the first argument and the [`browser` instance](https://github.com/GoogleChrome/puppeteer/blob/master/docs/api.md#class-browser) as the second argument. This gives you a lot of power to do custom stuff. The function can be async.
+
+Note: Make sure to not call `page.close()` or `browser.close()`.
+
+```js
+const Pageres = require('pageres');
+
+(async () => {
+	await new Pageres({
+		delay: 2,
+		beforeScreenshot: async (page, browser) => {
+			await checkSomething();
+			await page.click('#activate-button');
+			await page.waitForSelector('.finished');
+		}
+	})
+		.src('https://github.com/sindresorhus/pageres', ['480x320', '1024x768', 'iphone 5s'], {crop: true})
+		.dest(__dirname)
+		.run();
+
+	console.log('Finished generating screenshots!');
+})();
+```
+
 ### pageres.src(url, sizes, options?)
 
 Add a page to screenshot.
