@@ -1,6 +1,6 @@
 {
 	"name": "pageres",
-	"version": "6.2.4",
+	"version": "6.3.0",
 	"description": "Capture website screenshots",
 	"license": "MIT",
 	"repository": "sindresorhus/pageres",
