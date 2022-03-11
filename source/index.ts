@@ -190,7 +190,7 @@ export interface Options {
 	})();
 	```
 	*/
-	readonly beforeScreenShot?: BeforeScreenshot;
+	readonly beforeScreenshot?: BeforeScreenshot;
 }
 
 /**
@@ -525,7 +525,7 @@ export default class Pageres extends EventEmitter {
 			headers: options.headers,
 			darkMode: options.darkMode,
 			launchOptions: options.launchOptions,
-			beforeScreenShot: options.beforeScreenShot
+			beforeScreenshot: options.beforeScreenshot
 		};
 
 		if (options.username && options.password) {
