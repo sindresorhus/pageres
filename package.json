@@ -56,7 +56,7 @@
 	"dependencies": {
 		"array-differ": "^3.0.0",
 		"array-uniq": "^2.1.0",
-		"capture-website": "^1.4.0",
+		"capture-website": "^2.4.0",
 		"date-fns": "^2.16.1",
 		"filenamify": "^4.2.0",
 		"filenamify-url": "^2.1.1",
