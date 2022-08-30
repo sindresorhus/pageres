@@ -2,12 +2,14 @@
 	"extends": "@sindresorhus/tsconfig",
 	"compilerOptions": {
 		"outDir": "dist",
-		"target": "es2017", // Node.js 8
-		"lib": [
-			"es2017"
-		]
+		"isolatedModules": true
 	},
 	"include": [
 		"source"
-	]
+	],
+	"ts-node": {
+		"transpileOnly": true,
+		"files": true,
+		"experimentalResolver": true
+	}
 }

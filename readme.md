@@ -9,8 +9,8 @@ Capture screenshots of websites in various resolutions. A good way to make sure 
 
 ## Install
 
-```
-$ npm install pageres
+```sh
+npm install pageres
 ```
 
 Note to Linux users: If you get a "No usable sandbox!" error, you need to enable [system sandboxing](https://github.com/GoogleChrome/puppeteer/blob/master/docs/troubleshooting.md#setting-up-chrome-linux-sandbox).
@@ -18,18 +18,16 @@ Note to Linux users: If you get a "No usable sandbox!" error, you need to enable
 ## Usage
 
 ```js
-const Pageres = require('pageres');
+import Pageres from 'pageres';
 
-(async () => {
-	await new Pageres({delay: 2})
-		.src('https://github.com/sindresorhus/pageres', ['480x320', '1024x768', 'iphone 5s'], {crop: true})
-		.src('https://sindresorhus.com', ['1280x1024', '1920x1080'])
-		.src('data:text/html,<h1>Awesome!</h1>', ['1024x768'])
-		.dest(__dirname)
-		.run();
+await new Pageres({delay: 2})
+	.src('https://github.com/sindresorhus/pageres', ['480x320', '1024x768'], {crop: true})
+	.src('https://sindresorhus.com', ['1280x1024', '1920x1080'])
+	.src('data:text/html,<h1>Awesome!</h1>', ['1024x768'])
+	.dest('screenshots')
+	.run();
 
-	console.log('Finished generating screenshots!');
-})();
+console.log('Finished generating screenshots!');
 ```
 
 ## API
@@ -189,23 +187,21 @@ The specified function is called right before the screenshot is captured, as wel
 Note: Make sure to not call `page.close()` or `browser.close()`.
 
 ```js
-const Pageres = require('pageres');
+import Pageres from 'pageres';
 
-(async () => {
-	await new Pageres({
-		delay: 2,
-		beforeScreenshot: async (page, browser) => {
-			await checkSomething();
-			await page.click('#activate-button');
-			await page.waitForSelector('.finished');
-		}
-	})
-		.src('https://github.com/sindresorhus/pageres', ['480x320', '1024x768', 'iphone 5s'], {crop: true})
-		.dest(__dirname)
-		.run();
+await new Pageres({
+	delay: 2,
+	beforeScreenshot: async (page, browser) => {
+		await checkSomething();
+		await page.click('#activate-button');
+		await page.waitForSelector('.finished');
+	}
+})
+	.src('https://github.com/sindresorhus/pageres', ['480x320', '1024x768', 'iphone 5s'], {crop: true})
+	.dest(__dirname)
+	.run();
 
-	console.log('Finished generating screenshots!');
-})();
+console.log('Finished generating screenshots!');
 ```
 
 ### pageres.src(url, sizes, options?)

@@ -1,21 +1,24 @@
-import fs = require('fs');
-import path = require('path');
+import type {Buffer} from 'node:buffer';
+import process from 'node:process';
+import fs from 'node:fs';
+import fsPromises from 'node:fs/promises';
+import {fileURLToPath} from 'node:url';
+import path from 'node:path';
 import test from 'ava';
 import {imageSize} from 'image-size';
-import dateFns = require('date-fns');
-import PNG = require('png.js');
-import pify = require('pify');
-import pathExists = require('path-exists');
-import sinon = require('sinon');
-import fileType = require('file-type');
-import Pageres, {Screenshot} from '../source';
-import {createServer, TestServer} from './_server';
+import dateFns from 'date-fns';
+import PNG from 'png.js';
+import pify from 'pify';
+import {pathExists} from 'path-exists';
+import {stub as sinonStub} from 'sinon';
+import {fileTypeFromBuffer} from 'file-type';
+import Pageres, {type Screenshot} from '../source/index.js';
+import type {TestServer} from './_server.js';
+import {createServer} from './_server.js';
 
-const fsP = pify(fs);
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
-const hasScreenshotsWithFilenames = (screenshots: readonly Screenshot[], filenames: readonly string[]): boolean => {
-	return screenshots.some(screenshot => filenames.includes(screenshot.filename));
-};
+const hasScreenshotsWithFilenames = (screenshots: readonly Screenshot[], filenames: readonly string[]): boolean => screenshots.some(screenshot => filenames.includes(screenshot.filename));
 
 const getPngPixels = async (buffer: Buffer): Promise<Buffer> => {
 	const png = new PNG(buffer);
@@ -108,14 +111,14 @@ test('save filename with hash', async t => {
 		'example.com!#!@user-480x320.png',
 		'example.com!#!product!listing-480x320.png',
 		'example.com!#!bang-480x320.png',
-		'example.com#readme-480x320.png'
+		'example.com#readme-480x320.png',
 	]));
 
 	t.true(screenshots[0].length > 1000);
 });
 
 test('success message', async t => {
-	const stub = sinon.stub(console, 'log');
+	const stub = sinonStub(console, 'log');
 	const pageres = new Pageres().src(server.url, ['480x320', '1024x768', 'iphone 5s']);
 	await pageres.run();
 	pageres.successMessage();
@@ -154,7 +157,7 @@ test('`css` option', async t => {
 
 test('`script` option', async t => {
 	const screenshots = await new Pageres({
-		script: 'document.body.style.backgroundColor = \'red\';'
+		script: 'document.body.style.backgroundColor = \'red\';',
 	}).src(server.url, ['1024x768']).run();
 	const pixels = await getPngPixels(screenshots[0]);
 	t.is(pixels[0], 255);
@@ -165,7 +168,7 @@ test('`script` option', async t => {
 test('`filename` option', async t => {
 	const screenshots = await new Pageres()
 		.src(server.url, ['1024x768'], {
-			filename: '<%= date %> - <%= time %> - <%= url %>'
+			filename: '<%= date %> - <%= time %> - <%= url %>',
 		})
 		.run();
 
@@ -208,7 +211,7 @@ test('save image', async t => {
 		await new Pageres().src(server.url, ['1024x768']).dest(__dirname).run();
 		t.true(fs.existsSync(path.join(__dirname, `${server.host}!${server.port}-1024x768.png`)));
 	} finally {
-		await fsP.unlink(path.join(__dirname, `${server.host}!${server.port}-1024x768.png`));
+		await fsPromises.unlink(path.join(__dirname, `${server.host}!${server.port}-1024x768.png`));
 	}
 });
 
@@ -216,8 +219,8 @@ test('remove temporary files on error', async t => {
 	await t.throwsAsync(
 		new Pageres().src('https://this-is-a-error-site.io', ['1024x768']).dest(__dirname).run(),
 		{
-			message: /ERR_NAME_NOT_RESOLVED/
-		}
+			message: /ERR_NAME_NOT_RESOLVED/,
+		},
 	);
 	t.false(await pathExists(path.join(__dirname, 'this-is-a-error-site.io.png')));
 });
@@ -225,7 +228,7 @@ test('remove temporary files on error', async t => {
 test('auth using username and password', async t => {
 	const screenshots = await new Pageres({
 		username: 'user',
-		password: 'passwd'
+		password: 'passwd',
 	}).src('https://httpbin.org/basic-auth/user/passwd', ['120x120']).run();
 
 	t.is(screenshots.length, 1);
@@ -235,7 +238,7 @@ test('auth using username and password', async t => {
 test('`scale` option', async t => {
 	const screenshots = await new Pageres({
 		scale: 2,
-		crop: true
+		crop: true,
 	}).src(server.url, ['120x120']).run();
 
 	const size = imageSize(screenshots[0]) as any;
@@ -245,22 +248,14 @@ test('`scale` option', async t => {
 
 test('support data URL', async t => {
 	const screenshots = await new Pageres().src('data:text/html;base64,PGgxPkZPTzwvaDE+', ['100x100']).run();
-	const _fileType = fileType(screenshots[0]);
-	if (_fileType === undefined) {
-		throw new Error('Could not detect the file type');
-	}
-
-	t.is((_fileType).mime, 'image/png');
+	const fileType = await fileTypeFromBuffer(screenshots[0]);
+	t.is(fileType?.mime, 'image/png');
 });
 
 test('`format` option', async t => {
 	const screenshots = await new Pageres().src(server.url, ['100x100'], {format: 'jpg'}).run();
-	const _fileType = fileType(screenshots[0]);
-	if (_fileType === undefined) {
-		throw new Error('Could not detect the file type');
-	}
-
-	t.is((_fileType).mime, 'image/jpeg');
+	const fileType = await fileTypeFromBuffer(screenshots[0]);
+	t.is(fileType?.mime, 'image/jpeg');
 });
 
 test('when a file exists, append an incrementer', async t => {
@@ -271,7 +266,7 @@ test('when a file exists, append an incrementer', async t => {
 		await new Pageres({delay: 2}).src(server.url, ['1024x768', '480x320'], {incrementalName: true, filename: '<%= url %>'}).dest(folderPath).run();
 		t.true(fs.existsSync(path.join(folderPath, `${serverFileName} (1).png`)));
 	} finally {
-		await fsP.unlink(path.join(folderPath, `${serverFileName}.png`));
-		await fsP.unlink(path.join(folderPath, `${serverFileName} (1).png`));
+		await fsPromises.unlink(path.join(folderPath, `${serverFileName}.png`));
+		await fsPromises.unlink(path.join(folderPath, `${serverFileName} (1).png`));
 	}
 });

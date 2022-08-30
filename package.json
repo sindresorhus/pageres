@@ -10,9 +10,11 @@
 		"email": "sindresorhus@gmail.com",
 		"url": "https://sindresorhus.com"
 	},
-	"main": "dist/index.js",
+	"type": "module",
+	"exports": "./dist/index.js",
+	"types": "./dist/index.d.ts",
 	"engines": {
-		"node": ">=10"
+		"node": ">=14.16"
 	},
 	"scripts": {
 		"test": "xo && nyc ava",
@@ -54,55 +56,55 @@
 		"jpeg"
 	],
 	"dependencies": {
-		"array-differ": "^3.0.0",
-		"array-uniq": "^2.1.0",
-		"capture-website": "^1.4.0",
-		"date-fns": "^2.16.1",
-		"filenamify": "^4.2.0",
-		"filenamify-url": "^2.1.1",
+		"array-differ": "^4.0.0",
+		"array-uniq": "^3.0.0",
+		"capture-website": "^3.1.0",
+		"date-fns": "^2.29.2",
+		"filenamify": "^5.1.1",
+		"filenamify-url": "^3.0.0",
 		"get-res": "^3.0.0",
 		"lodash.template": "^4.5.0",
-		"log-symbols": "^4.0.0",
+		"log-symbols": "^5.1.0",
 		"make-dir": "^3.1.0",
-		"p-map": "^4.0.0",
-		"p-memoize": "^4.0.1",
-		"plur": "^4.0.0",
-		"unused-filename": "^2.1.0",
+		"p-map": "^5.5.0",
+		"p-memoize": "^7.1.0",
+		"plur": "^5.1.0",
+		"type-fest": "^2.19.0",
+		"unused-filename": "^4.0.1",
 		"viewport-list": "^5.1.1"
 	},
 	"devDependencies": {
-		"@sindresorhus/tsconfig": "^0.7.0",
-		"@types/cookie": "^0.4.0",
-		"@types/filenamify-url": "^1.0.1",
+		"@sindresorhus/tsconfig": "^3.0.1",
+		"@types/cookie": "^0.5.1",
 		"@types/get-res": "^3.0.1",
-		"@types/lodash.template": "^4.5.0",
-		"@types/node": "^14.14.13",
-		"@types/pify": "^5.0.0",
-		"@types/png.js": "^0.2.0",
-		"@types/sinon": "^9.0.9",
+		"@types/lodash.template": "^4.5.1",
+		"@types/node": "^18.7.14",
+		"@types/pify": "^5.0.1",
+		"@types/png.js": "^0.2.1",
+		"@types/sinon": "^10.0.13",
 		"@types/viewport-list": "^5.1.1",
-		"ava": "^3.14.0",
-		"cookie": "^0.4.1",
-		"del-cli": "^3.0.1",
-		"file-type": "^12.3.0",
-		"get-port": "^5.1.1",
-		"image-size": "^0.9.3",
+		"ava": "^4.3.3",
+		"cookie": "^0.5.0",
+		"del-cli": "^5.0.0",
+		"file-type": "^18.0.0",
+		"get-port": "^6.1.2",
+		"image-size": "^1.0.2",
 		"nyc": "^15.1.0",
-		"path-exists": "^4.0.0",
-		"pify": "^5.0.0",
+		"path-exists": "^5.0.0",
+		"pify": "^6.0.0",
 		"png.js": "^0.2.1",
-		"sinon": "^9.2.2",
-		"ts-node": "^10.7.0",
-		"typescript": "^4.6.2",
-		"xo": "^0.38.2"
+		"sinon": "^14.0.0",
+		"ts-node": "^10.9.1",
+		"typescript": "^4.8.2",
+		"xo": "^0.52.2"
 	},
-	"types": "dist/index.d.ts",
 	"ava": {
-		"extensions": [
-			"ts"
-		],
-		"require": [
-			"ts-node/register"
+		"workerThreads": false,
+		"extensions": {
+			"ts": "module"
+		},
+		"nodeArguments": [
+			"--loader=ts-node/esm"
 		]
 	},
 	"xo": {
@@ -111,7 +113,10 @@
 		},
 		"rules": {
 			"no-await-in-loop": "off",
-			"@typescript-eslint/no-unused-vars": "off"
+			"@typescript-eslint/no-unused-vars": "off",
+			"@typescript-eslint/no-unsafe-assignment": "off",
+			"@typescript-eslint/no-unsafe-return": "off",
+			"@typescript-eslint/no-unsafe-call": "off"
 		}
 	},
 	"nyc": {
