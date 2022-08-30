@@ -21,10 +21,10 @@ Note to Linux users: If you get a "No usable sandbox!" error, you need to enable
 import Pageres from 'pageres';
 
 await new Pageres({delay: 2})
-	.src('https://github.com/sindresorhus/pageres', ['480x320', '1024x768'], {crop: true})
-	.src('https://sindresorhus.com', ['1280x1024', '1920x1080'])
-	.src('data:text/html,<h1>Awesome!</h1>', ['1024x768'])
-	.dest('screenshots')
+	.source('https://github.com/sindresorhus/pageres', ['480x320', '1024x768'], {crop: true})
+	.source('https://sindresorhus.com', ['1280x1024', '1920x1080'])
+	.source('data:text/html,<h1>Awesome!</h1>', ['1024x768'])
+	.destination('screenshots')
 	.run();
 
 console.log('Finished generating screenshots!');
@@ -197,14 +197,14 @@ await new Pageres({
 		await page.waitForSelector('.finished');
 	}
 })
-	.src('https://github.com/sindresorhus/pageres', ['480x320', '1024x768', 'iphone 5s'], {crop: true})
-	.dest(__dirname)
+	.source('https://github.com/sindresorhus/pageres', ['480x320', '1024x768', 'iphone 5s'], {crop: true})
+	.destination('screenshots')
 	.run();
 
 console.log('Finished generating screenshots!');
 ```
 
-### pageres.src(url, sizes, options?)
+### pageres.source(url, sizes, options?)
 
 Add a page to screenshot.
 
@@ -232,7 +232,7 @@ Type: `object`
 
 Options set here will take precedence over the ones set in the constructor.
 
-### pageres.dest(directory)
+### pageres.destination(directory)
 
 Set the destination directory.
 

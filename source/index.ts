@@ -179,8 +179,8 @@ export type Options = {
 			await page.waitForSelector('.finished');
 		}
 	})
-		.src('https://github.com/sindresorhus/pageres', ['480x320', '1024x768'], {crop: true})
-		.dest('screenshots')
+		.source('https://github.com/sindresorhus/pageres', ['480x320', '1024x768'], {crop: true})
+		.destination('screenshots')
 		.run();
 
 	console.log('Finished generating screenshots!');
@@ -190,7 +190,7 @@ export type Options = {
 };
 
 /**
-A page to screenshot added in {@link Pageres.src}.
+A page to screenshot added in {@link Pageres.source}.
 */
 export type Source = {
 	/**
@@ -210,7 +210,7 @@ export type Source = {
 };
 
 /**
-A destination directory set in {@link Pageres.dest}.
+A destination directory set in {@link Pageres.destination}.
 */
 export type Destination = string;
 
@@ -241,7 +241,7 @@ Capture screenshots of websites in various resolutions. A good way to make sure 
 */
 export default class Pageres extends EventEmitter {
 	readonly #options: Writable<Options>;
-	#stats: Stats = {} as Stats;
+	#stats: Stats = {} as Stats; // eslint-disable-line @typescript-eslint/consistent-type-assertions
 	readonly #items: Screenshot[] = [];
 	readonly #sizes: string[] = [];
 	readonly #urls: string[] = [];
@@ -266,7 +266,7 @@ export default class Pageres extends EventEmitter {
 
 	@returns List of pages that have been already been added.
 	*/
-	src(): Source[];
+	source(): Source[];
 
 	/**
 	Add a page to screenshot.
@@ -283,14 +283,14 @@ export default class Pageres extends EventEmitter {
 	import Pageres from 'pageres';
 
 	const pageres = new Pageres({delay: 2})
-		.src('https://github.com/sindresorhus/pageres', ['480x320', '1024x768'], {crop: true})
-		.src('https://sindresorhus.com', ['1280x1024', '1920x1080'])
-		.src('data:text/html,<h1>Awesome!</h1>', ['1024x768'], {delay: 1});
+		.source('https://github.com/sindresorhus/pageres', ['480x320', '1024x768'], {crop: true})
+		.source('https://sindresorhus.com', ['1280x1024', '1920x1080'])
+		.source('data:text/html,<h1>Awesome!</h1>', ['1024x768'], {delay: 1});
 	```
 	*/
-	src(url: string, sizes: readonly string[], options?: Options): this;
+	source(url: string, sizes: readonly string[], options?: Options): this;
 
-	src(url?: string, sizes?: readonly string[], options?: Options): this | Source[] {
+	source(url?: string, sizes?: readonly string[], options?: Options): this | Source[] {
 		if (url === undefined) {
 			return this.#_source;
 		}
@@ -311,7 +311,7 @@ export default class Pageres extends EventEmitter {
 	/**
 	Get the destination directory.
 	*/
-	dest(): Destination;
+	destination(): Destination;
 
 	/**
 	Set the destination directory.
@@ -321,13 +321,13 @@ export default class Pageres extends EventEmitter {
 	import Pageres from 'pageres';
 
 	const pageres = new Pageres()
-		.src('https://github.com/sindresorhus/pageres', ['480x320'])
-		.dest('screenshots');
+		.source('https://github.com/sindresorhus/pageres', ['480x320'])
+		.destination('screenshots');
 	```
 	*/
-	dest(directory: Destination): this;
+	destination(directory: Destination): this;
 
-	dest(directory?: Destination): this | Destination {
+	destination(directory?: Destination): this | Destination {
 		if (directory === undefined) {
 			return this.#_destination;
 		}
@@ -351,13 +351,13 @@ export default class Pageres extends EventEmitter {
 	import Pageres from 'pageres';
 
 	await new Pageres({delay: 2})
-		.src('https://sindresorhus.com', ['1280x1024'])
-		.dest('screenshots')
+		.source('https://sindresorhus.com', ['1280x1024'])
+		.destination('screenshots')
 		.run();
 	```
 	*/
 	async run(): Promise<Screenshot[]> {
-		await Promise.all(this.src().map(async (source: Source): Promise<void> => {
+		await Promise.all(this.source().map(async (source: Source): Promise<void> => {
 			const options = {
 				...this.#options,
 				...source.options,
@@ -393,7 +393,7 @@ export default class Pageres extends EventEmitter {
 		this.#stats.sizes = arrayUniq(this.#sizes).length;
 		this.#stats.screenshots = this.#items.length;
 
-		if (!this.dest()) {
+		if (!this.destination()) {
 			return this.#items;
 		}
 
@@ -410,8 +410,8 @@ export default class Pageres extends EventEmitter {
 	import Pageres from 'pageres';
 
 	const pageres = new Pageres({delay: 2})
-		.src('https://sindresorhus.com', ['1280x1024', '1920x1080'])
-		.dest('screenshots');
+		.source('https://sindresorhus.com', ['1280x1024', '1920x1080'])
+		.destination('screenshots');
 
 	await pageres.run();
 
@@ -450,8 +450,8 @@ export default class Pageres extends EventEmitter {
 
 	private async save(screenshots: Screenshot[]): Promise<void> {
 		await Promise.all(screenshots.map(async screenshot => {
-			await makeDir(this.dest());
-			const dest = path.join(this.dest(), screenshot.filename);
+			await makeDir(this.destination());
+			const dest = path.join(this.destination(), screenshot.filename);
 			await fsPromises.writeFile(dest, screenshot);
 		}));
 	}

@@ -10,7 +10,7 @@ async function cookieTest(input: string | Cookie, t: ExecutionContext): Promise<
 	const server = await createCookieServer();
 
 	const screenshots = await new Pageres({cookies: [input]})
-		.src(server.url, ['320x480'])
+		.source(server.url, ['320x480'])
 		.run();
 
 	server.close();

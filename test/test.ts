@@ -43,37 +43,28 @@ test('expose a constructor', t => {
 	t.is(typeof Pageres, 'function');
 });
 
-test('add a source', t => {
-	const pageres = new Pageres().src(server.url, ['1280x1024', '1920x1080']);
-	t.is((pageres as any)._source[0].url, server.url);
-});
-
-test('set destination directory', t => {
-	t.is((new Pageres().dest('tmp') as any)._destination, 'tmp');
-});
-
-test('`.src()` - error if no correct `url` is specified', t => {
+test('`.source()` - error if no correct `url` is specified', t => {
 	t.throws(() => {
-		new Pageres().src('', ['1280x1024', '1920x1080']);
+		new Pageres().source('', ['1280x1024', '1920x1080']);
 	}, {message: 'URL required'});
 });
 
-test('`.src()` - error if no `sizes` is specified', t => {
+test('`.source()` - error if no `sizes` is specified', t => {
 	t.throws(() => {
-		new Pageres().src(server.url, []);
+		new Pageres().source(server.url, []);
 	}, {message: 'Sizes required'});
 });
 
-test('`.dest()` - error if no correct `directory` is specified', t => {
+test('`.destination()` - error if no correct `directory` is specified', t => {
 	t.throws(() => {
-		new Pageres().dest('');
+		new Pageres().destination('');
 	}, {message: 'Directory required'});
 });
 
 test('generate screenshots', async t => {
 	const screenshots = await new Pageres()
-		.src(server.url, ['480x320', '1024x768', 'iphone 5s'])
-		.src(server.url, ['1280x1024', '1920x1080'])
+		.source(server.url, ['480x320', '1024x768', 'iphone 5s'])
+		.source(server.url, ['1280x1024', '1920x1080'])
 		.run();
 
 	t.is(screenshots.length, 5);
@@ -84,7 +75,7 @@ test('generate screenshots', async t => {
 
 test('generate screenshots - multiple sizes for one URL', async t => {
 	const screenshots = await new Pageres()
-		.src(server.url, ['1280x1024', '1920x1080'])
+		.source(server.url, ['1280x1024', '1920x1080'])
 		.run();
 
 	t.is(screenshots.length, 2);
@@ -95,12 +86,12 @@ test('generate screenshots - multiple sizes for one URL', async t => {
 
 test('save filename with hash', async t => {
 	const screenshots = await new Pageres()
-		.src('https://example.com#', ['480x320'])
-		.src('https://example.com/#/', ['480x320'])
-		.src('https://example.com/#/@user', ['480x320'])
-		.src('https://example.com/#/product/listing', ['480x320'])
-		.src('https://example.com/#!/bang', ['480x320'])
-		.src('https://example.com#readme', ['480x320'])
+		.source('https://example.com#', ['480x320'])
+		.source('https://example.com/#/', ['480x320'])
+		.source('https://example.com/#/@user', ['480x320'])
+		.source('https://example.com/#/product/listing', ['480x320'])
+		.source('https://example.com/#!/bang', ['480x320'])
+		.source('https://example.com#readme', ['480x320'])
 		.run();
 
 	t.is(screenshots.length, 6);
@@ -117,29 +108,30 @@ test('save filename with hash', async t => {
 	t.true(screenshots[0].length > 1000);
 });
 
-test('success message', async t => {
+test.serial('success message', async t => {
 	const stub = sinonStub(console, 'log');
-	const pageres = new Pageres().src(server.url, ['480x320', '1024x768', 'iphone 5s']);
+	const pageres = new Pageres().source(server.url, ['480x320', '1024x768', 'iphone 5s']);
 	await pageres.run();
 	pageres.successMessage();
-	t.true(stub.firstCall.args[0].includes('Generated 3 screenshots from 1 url and 1 size'));
+	const [message] = stub.firstCall.args;
+	t.true(message.includes('Generated 3 screenshots from 1 url and 1 size'), message); // eslint-disable-line ava/assertion-arguments
 	stub.restore();
 });
 
 test('remove special characters from the URL to create a valid filename', async t => {
-	const screenshots = await new Pageres().src(`${server.url}?query=pageres*|<>:"\\`, ['1024x768']).run();
+	const screenshots = await new Pageres().source(`${server.url}?query=pageres*|<>:"\\`, ['1024x768']).run();
 	t.is(screenshots.length, 1);
 	t.is(screenshots[0].filename, `${server.host}!${server.port}!query=pageres-1024x768.png`);
 });
 
 test('`delay` option', async t => {
 	const now = Date.now();
-	await new Pageres({delay: 2}).src(server.url, ['1024x768']).run();
+	await new Pageres({delay: 2}).source(server.url, ['1024x768']).run();
 	t.true(Date.now() - now > 2000);
 });
 
 test('`crop` option', async t => {
-	const screenshots = await new Pageres({crop: true}).src(server.url, ['1024x768']).run();
+	const screenshots = await new Pageres({crop: true}).source(server.url, ['1024x768']).run();
 	t.is(screenshots[0].filename, `${server.host}!${server.port}-1024x768-cropped.png`);
 
 	const size = imageSize(screenshots[0]) as any;
@@ -148,7 +140,7 @@ test('`crop` option', async t => {
 });
 
 test('`css` option', async t => {
-	const screenshots = await new Pageres({css: 'body { background-color: red !important; }'}).src(server.url, ['1024x768']).run();
+	const screenshots = await new Pageres({css: 'body { background-color: red !important; }'}).source(server.url, ['1024x768']).run();
 	const pixels = await getPngPixels(screenshots[0]);
 	t.is(pixels[0], 255);
 	t.is(pixels[1], 0);
@@ -158,7 +150,7 @@ test('`css` option', async t => {
 test('`script` option', async t => {
 	const screenshots = await new Pageres({
 		script: 'document.body.style.backgroundColor = \'red\';',
-	}).src(server.url, ['1024x768']).run();
+	}).source(server.url, ['1024x768']).run();
 	const pixels = await getPngPixels(screenshots[0]);
 	t.is(pixels[0], 255);
 	t.is(pixels[1], 0);
@@ -167,7 +159,7 @@ test('`script` option', async t => {
 
 test('`filename` option', async t => {
 	const screenshots = await new Pageres()
-		.src(server.url, ['1024x768'], {
+		.source(server.url, ['1024x768'], {
 			filename: '<%= date %> - <%= time %> - <%= url %>',
 		})
 		.run();
@@ -177,7 +169,7 @@ test('`filename` option', async t => {
 });
 
 test('`selector` option', async t => {
-	const screenshots = await new Pageres({selector: '#team'}).src(server.url, ['1024x768']).run();
+	const screenshots = await new Pageres({selector: '#team'}).source(server.url, ['1024x768']).run();
 	t.is(screenshots[0].filename, `${server.host}!${server.port}-1024x768.png`);
 
 	const size = imageSize(screenshots[0]) as any;
@@ -188,27 +180,27 @@ test('`selector` option', async t => {
 test.serial('support local relative files', async t => {
 	const _cwd = process.cwd();
 	process.chdir(__dirname);
-	const screenshots = await new Pageres().src('fixture.html', ['1024x768']).run();
+	const screenshots = await new Pageres().source('fixture.html', ['1024x768']).run();
 	t.is(screenshots[0].filename, 'fixture.html-1024x768.png');
 	t.true(screenshots[0].length > 1000);
 	process.chdir(_cwd);
 });
 
 test('support local absolute files', async t => {
-	const screenshots = await new Pageres().src(path.join(__dirname, 'fixture.html'), ['1024x768']).run();
+	const screenshots = await new Pageres().source(path.join(__dirname, 'fixture.html'), ['1024x768']).run();
 	t.is(screenshots[0].filename, 'fixture.html-1024x768.png');
 	t.true(screenshots[0].length > 1000);
 });
 
 /// test('fetch resolutions from w3counter', async t => {
-// 	const screenshots = await new Pageres().src(server.url, ['w3counter']).run();
+// 	const screenshots = await new Pageres().source(server.url, ['w3counter']).run();
 // 	t.is(screenshots.length, 10);
 // 	t.true(screenshots[0].length > 1000);
 // });
 
 test('save image', async t => {
 	try {
-		await new Pageres().src(server.url, ['1024x768']).dest(__dirname).run();
+		await new Pageres().source(server.url, ['1024x768']).destination(__dirname).run();
 		t.true(fs.existsSync(path.join(__dirname, `${server.host}!${server.port}-1024x768.png`)));
 	} finally {
 		await fsPromises.unlink(path.join(__dirname, `${server.host}!${server.port}-1024x768.png`));
@@ -217,7 +209,7 @@ test('save image', async t => {
 
 test('remove temporary files on error', async t => {
 	await t.throwsAsync(
-		new Pageres().src('https://this-is-a-error-site.io', ['1024x768']).dest(__dirname).run(),
+		new Pageres().source('https://this-is-a-error-site.io', ['1024x768']).destination(__dirname).run(),
 		{
 			message: /ERR_NAME_NOT_RESOLVED/,
 		},
@@ -229,7 +221,7 @@ test('auth using username and password', async t => {
 	const screenshots = await new Pageres({
 		username: 'user',
 		password: 'passwd',
-	}).src('https://httpbin.org/basic-auth/user/passwd', ['120x120']).run();
+	}).source('https://httpbin.org/basic-auth/user/passwd', ['120x120']).run();
 
 	t.is(screenshots.length, 1);
 	t.true(screenshots[0].length > 0);
@@ -239,7 +231,7 @@ test('`scale` option', async t => {
 	const screenshots = await new Pageres({
 		scale: 2,
 		crop: true,
-	}).src(server.url, ['120x120']).run();
+	}).source(server.url, ['120x120']).run();
 
 	const size = imageSize(screenshots[0]) as any;
 	t.is(size.width, 240);
@@ -247,13 +239,13 @@ test('`scale` option', async t => {
 });
 
 test('support data URL', async t => {
-	const screenshots = await new Pageres().src('data:text/html;base64,PGgxPkZPTzwvaDE+', ['100x100']).run();
+	const screenshots = await new Pageres().source('data:text/html;base64,PGgxPkZPTzwvaDE+', ['100x100']).run();
 	const fileType = await fileTypeFromBuffer(screenshots[0]);
 	t.is(fileType?.mime, 'image/png');
 });
 
 test('`format` option', async t => {
-	const screenshots = await new Pageres().src(server.url, ['100x100'], {format: 'jpg'}).run();
+	const screenshots = await new Pageres().source(server.url, ['100x100'], {format: 'jpg'}).run();
 	const fileType = await fileTypeFromBuffer(screenshots[0]);
 	t.is(fileType?.mime, 'image/jpeg');
 });
@@ -261,9 +253,9 @@ test('`format` option', async t => {
 test('when a file exists, append an incrementer', async t => {
 	const folderPath = process.cwd();
 	try {
-		await new Pageres({delay: 2}).src(server.url, ['1024x768', '480x320'], {incrementalName: true, filename: '<%= url %>'}).dest(folderPath).run();
+		await new Pageres({delay: 2}).source(server.url, ['1024x768', '480x320'], {incrementalName: true, filename: '<%= url %>'}).destination(folderPath).run();
 		t.true(fs.existsSync(path.join(folderPath, `${serverFileName}.png`)));
-		await new Pageres({delay: 2}).src(server.url, ['1024x768', '480x320'], {incrementalName: true, filename: '<%= url %>'}).dest(folderPath).run();
+		await new Pageres({delay: 2}).source(server.url, ['1024x768', '480x320'], {incrementalName: true, filename: '<%= url %>'}).destination(folderPath).run();
 		t.true(fs.existsSync(path.join(folderPath, `${serverFileName} (1).png`)));
 	} finally {
 		await fsPromises.unlink(path.join(folderPath, `${serverFileName}.png`));
