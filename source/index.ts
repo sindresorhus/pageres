@@ -14,7 +14,11 @@ import dateFns from 'date-fns';
 import getResolutions from 'get-res';
 import logSymbols from 'log-symbols';
 import makeDir from 'make-dir';
-import captureWebsite, {type LaunchOptions, BeforeScreenshot, Options as CaptureOptions} from 'capture-website';
+import captureWebsite, {
+	type Options as CaptureOptions,
+	type LaunchOptions,
+	type BeforeScreenshot,
+} from 'capture-website';
 import viewportList from 'viewport-list';
 import template from 'lodash.template';
 import plur from 'plur';
