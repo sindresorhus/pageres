@@ -5,7 +5,6 @@ import fs from 'node:fs';
 import fsPromises from 'node:fs/promises';
 import os from 'node:os';
 import {EventEmitter} from 'node:events';
-import type {BeforeScreenshot} from 'capture-website';
 import pMemoize from 'p-memoize';
 import filenamify from 'filenamify';
 import {unusedFilename} from 'unused-filename';
@@ -15,7 +14,7 @@ import dateFns from 'date-fns';
 import getResolutions from 'get-res';
 import logSymbols from 'log-symbols';
 import makeDir from 'make-dir';
-import captureWebsite, {type LaunchOptions} from 'capture-website';
+import captureWebsite, {type LaunchOptions, BeforeScreenshot, Options as CaptureOptions} from 'capture-website';
 import viewportList from 'viewport-list';
 import template from 'lodash.template';
 import plur from 'plur';
@@ -484,8 +483,7 @@ export default class Pageres extends EventEmitter {
 			filename = await unusedFilename(filename);
 		}
 
-		// TODO: Type this using the `capture-website` types
-		const finalOptions: any = {
+		const finalOptions: CaptureOptions = {
 			width: Number(width),
 			height: Number(height),
 			delay: options.delay,
