@@ -5,7 +5,7 @@ import fsPromises from 'node:fs/promises';
 import {fileURLToPath} from 'node:url';
 import path from 'node:path';
 import test from 'ava';
-import {imageSize} from 'image-size';
+import {imageDimensionsFromData} from 'image-dimensions';
 import dateFns from 'date-fns';
 import PNG from 'png.js';
 import pify from 'pify';
@@ -114,7 +114,7 @@ test.serial('success message', async t => {
 	await pageres.run();
 	pageres.successMessage();
 	const [message] = stub.firstCall.args;
-	t.true(message.includes('Generated 3 screenshots from 1 url and 1 size'), message); // eslint-disable-line ava/assertion-arguments
+	t.true(message.includes('Generated 3 screenshots from 1 url and 1 size'), message); // eslint-disable-line ava/assertion-arguments, @typescript-eslint/no-unsafe-argument
 	stub.restore();
 });
 
@@ -134,7 +134,7 @@ test('`crop` option', async t => {
 	const screenshots = await new Pageres({crop: true}).source(server.url, ['1024x768']).run();
 	t.is(screenshots[0].filename, `${server.host}!${server.port}-1024x768-cropped.png`);
 
-	const size = imageSize(screenshots[0]) as any;
+	const size = imageDimensionsFromData(screenshots[0]) as any;
 	t.is(size.width, 1024);
 	t.is(size.height, 768);
 });
@@ -172,7 +172,7 @@ test('`selector` option', async t => {
 	const screenshots = await new Pageres({selector: '#team'}).source(server.url, ['1024x768']).run();
 	t.is(screenshots[0].filename, `${server.host}!${server.port}-1024x768.png`);
 
-	const size = imageSize(screenshots[0]) as any;
+	const size = imageDimensionsFromData(screenshots[0]) as any;
 	t.is(size.width, 1024);
 	t.is(size.height, 80);
 });
@@ -233,7 +233,7 @@ test('`scale` option', async t => {
 		crop: true,
 	}).source(server.url, ['120x120']).run();
 
-	const size = imageSize(screenshots[0]) as any;
+	const size = imageDimensionsFromData(screenshots[0]) as any;
 	t.is(size.width, 240);
 	t.is(size.height, 240);
 });

@@ -11,13 +11,16 @@
 		"url": "https://sindresorhus.com"
 	},
 	"type": "module",
-	"exports": "./dist/index.js",
-	"types": "./dist/index.d.ts",
+	"exports": {
+		"types": "./dist/index.d.ts",
+		"default": "./dist/index.js"
+	},
+	"sideEffects": false,
 	"engines": {
-		"node": ">=14.16"
+		"node": ">=18"
 	},
 	"scripts": {
-		"test": "xo && nyc ava",
+		"test": "xo && tsc --noEmit && nyc ava",
 		"release": "np",
 		"build": "del-cli dist && tsc",
 		"prepare": "npm run build"
@@ -58,44 +61,44 @@
 	"dependencies": {
 		"array-differ": "^4.0.0",
 		"array-uniq": "^3.0.0",
-		"capture-website": "^3.2.0",
-		"date-fns": "^2.29.2",
-		"filenamify": "^5.1.1",
+		"capture-website": "^4.0.0",
+		"date-fns": "^2.30.0",
+		"filenamify": "^6.0.0",
 		"filenamify-url": "^3.0.0",
 		"get-res": "^3.0.0",
 		"lodash.template": "^4.5.0",
-		"log-symbols": "^5.1.0",
-		"make-dir": "^3.1.0",
-		"p-map": "^5.5.0",
-		"p-memoize": "^7.1.0",
+		"log-symbols": "^6.0.0",
+		"make-dir": "^4.0.0",
+		"p-map": "^6.0.0",
+		"p-memoize": "^7.1.1",
 		"plur": "^5.1.0",
-		"type-fest": "^3.1.0",
+		"type-fest": "^4.6.0",
 		"unused-filename": "^4.0.1",
 		"viewport-list": "^5.1.1"
 	},
 	"devDependencies": {
-		"@sindresorhus/tsconfig": "^3.0.1",
-		"@types/cookie": "^0.5.1",
-		"@types/get-res": "^3.0.1",
-		"@types/lodash.template": "^4.5.1",
-		"@types/node": "^18.7.14",
-		"@types/png.js": "^0.2.1",
-		"@types/sinon": "^10.0.13",
-		"@types/viewport-list": "^5.1.1",
-		"ava": "^4.3.3",
+		"@sindresorhus/tsconfig": "^5.0.0",
+		"@types/cookie": "^0.5.3",
+		"@types/get-res": "^3.0.2",
+		"@types/lodash.template": "^4.5.2",
+		"@types/node": "^20.8.10",
+		"@types/png.js": "^0.2.2",
+		"@types/sinon": "^17.0.0",
+		"@types/viewport-list": "^5.1.2",
+		"ava": "^5.3.1",
 		"cookie": "^0.5.0",
-		"del-cli": "^5.0.0",
-		"file-type": "^18.0.0",
-		"get-port": "^6.1.2",
-		"image-size": "^1.0.2",
+		"del-cli": "^5.1.0",
+		"file-type": "^18.6.0",
+		"get-port": "^7.0.0",
+		"image-dimensions": "^2.1.0",
 		"nyc": "^15.1.0",
 		"path-exists": "^5.0.0",
 		"pify": "^6.1.0",
 		"png.js": "^0.2.1",
-		"sinon": "^14.0.0",
+		"sinon": "^17.0.1",
 		"ts-node": "^10.9.1",
-		"typescript": "^4.8.2",
-		"xo": "^0.52.2"
+		"typescript": "^5.2.2",
+		"xo": "^0.56.0"
 	},
 	"ava": {
 		"workerThreads": false,
@@ -115,7 +118,8 @@
 			"@typescript-eslint/no-unused-vars": "off",
 			"@typescript-eslint/no-unsafe-assignment": "off",
 			"@typescript-eslint/no-unsafe-return": "off",
-			"@typescript-eslint/no-unsafe-call": "off"
+			"@typescript-eslint/no-unsafe-call": "off",
+			"unicorn/prefer-event-target": "off"
 		}
 	},
 	"nyc": {

@@ -1,11 +1,16 @@
+import process from 'node:process';
 import type {Buffer} from 'node:buffer';
-import {parse as parseUrl} from 'node:url';
 import path from 'node:path';
+import {pathToFileURL} from 'node:url';
 import fs from 'node:fs';
 import fsPromises from 'node:fs/promises';
 import os from 'node:os';
 import {EventEmitter} from 'node:events';
-import type {BeforeScreenshot} from 'capture-website';
+import captureWebsite, {
+	type Options as CaptureWebsiteOptions,
+	type BeforeScreenshot,
+	type LaunchOptions,
+} from 'capture-website';
 import pMemoize from 'p-memoize';
 import filenamify from 'filenamify';
 import {unusedFilename} from 'unused-filename';
@@ -15,7 +20,6 @@ import dateFns from 'date-fns';
 import getResolutions from 'get-res';
 import logSymbols from 'log-symbols';
 import makeDir from 'make-dir';
-import captureWebsite, {type LaunchOptions} from 'capture-website';
 import viewportList from 'viewport-list';
 import template from 'lodash.template';
 import plur from 'plur';
@@ -103,7 +107,7 @@ export type Options = {
 
 	@default []
 	*/
-	readonly hide?: readonly string[];
+	readonly hide?: string[];
 
 	/**
 	Username for authenticating with HTTP auth.
@@ -235,13 +239,12 @@ const getResolutionsMemoized = pMemoize(getResolutions);
 // @ts-expect-error - TS is not very smart.
 const viewportListMemoized = pMemoize(viewportList);
 
-// TODO: Use private class fields when targeting Node.js 12.
 /**
 Capture screenshots of websites in various resolutions. A good way to make sure your websites are responsive. It's speedy and generates 100 screenshots from 10 different websites in just over a minute. It can also be used to render SVG images.
 */
 export default class Pageres extends EventEmitter {
 	readonly #options: Writable<Options>;
-	#stats: Stats = {} as Stats; // eslint-disable-line @typescript-eslint/consistent-type-assertions
+	readonly #stats: Stats = {} as Stats; // eslint-disable-line @typescript-eslint/consistent-type-assertions
 	readonly #items: Screenshot[] = [];
 	readonly #sizes: string[] = [];
 	readonly #urls: string[] = [];
@@ -369,18 +372,18 @@ export default class Pageres extends EventEmitter {
 			this.#urls.push(source.url);
 
 			if (sizes.length === 0 && keywords.includes('w3counter')) {
-				return this.resolution(source.url, options);
+				return this.#resolution(source.url, options);
 			}
 
 			if (keywords.length > 0) {
-				return this.viewport({url: source.url, sizes, keywords}, options);
+				return this.#viewport({url: source.url, sizes, keywords}, options);
 			}
 
 			const screenshots = await pMap(
 				sizes,
 				async (size: string): Promise<Screenshot> => {
 					this.#sizes.push(size);
-					return this.create(source.url, size, options);
+					return this.#create(source.url, size, options);
 				},
 				{concurrency: cpuCount * 2},
 			);
@@ -397,7 +400,7 @@ export default class Pageres extends EventEmitter {
 			return this.#items;
 		}
 
-		await this.save(this.#items);
+		await this.#save(this.#items);
 
 		return this.#items;
 	}
@@ -430,25 +433,25 @@ export default class Pageres extends EventEmitter {
 		console.log(`\n${logSymbols.success} Generated ${screenshots} ${words.screenshots} from ${urls} ${words.urls} and ${sizes} ${words.sizes}`);
 	}
 
-	private async resolution(url: string, options: Options): Promise<void> {
+	async #resolution(url: string, options: Options): Promise<void> {
 		for (const item of await getResolutionsMemoized() as Array<{item: string}>) {
 			this.#sizes.push(item.item);
-			this.#items.push(await this.create(url, item.item, options));
+			this.#items.push(await this.#create(url, item.item, options));
 		}
 	}
 
-	private async viewport(viewport: Viewport, options: Options): Promise<void> {
+	async #viewport(viewport: Viewport, options: Options): Promise<void> {
 		for (const item of await viewportListMemoized(viewport.keywords) as Array<{size: string}>) {
 			this.#sizes.push(item.size);
 			viewport.sizes.push(item.size);
 		}
 
 		for (const size of arrayUniq(viewport.sizes)) {
-			this.#items.push(await this.create(viewport.url, size, options));
+			this.#items.push(await this.#create(viewport.url, size, options));
 		}
 	}
 
-	private async save(screenshots: Screenshot[]): Promise<void> {
+	async #save(screenshots: Screenshot[]): Promise<void> {
 		await Promise.all(screenshots.map(async screenshot => {
 			await makeDir(this.destination());
 			const dest = path.join(this.destination(), screenshot.filename);
@@ -456,10 +459,10 @@ export default class Pageres extends EventEmitter {
 		}));
 	}
 
-	private async create(url: string, size: string, options: Options): Promise<Screenshot> {
+	async #create(url: string, size: string, options: Options): Promise<Screenshot> {
 		const basename = fs.existsSync(url) ? path.basename(url) : url;
 
-		let hash = parseUrl(url).hash ?? '';
+		let hash = new URL(url, pathToFileURL(process.cwd())).hash ?? '';
 		// Strip empty hash fragments: `#` `#/` `#!/`
 		if (/^#!?\/?$/.test(hash)) {
 			hash = '';
@@ -484,17 +487,16 @@ export default class Pageres extends EventEmitter {
 			filename = await unusedFilename(filename);
 		}
 
-		// TODO: Type this using the `capture-website` types
-		const finalOptions: any = {
+		const finalOptions: Writable<CaptureWebsiteOptions> = {
 			width: Number(width),
 			height: Number(height),
 			delay: options.delay,
 			timeout: options.timeout,
 			fullPage: !options.crop,
-			styles: options.css && [options.css],
+			styles: options.css ? [options.css] : undefined,
 			defaultBackground: !options.transparent,
-			scripts: options.script && [options.script],
-			cookies: options.cookies, // TODO: Support string cookies in capture-website
+			scripts: options.script ? [options.script] : undefined,
+			cookies: options.cookies as any, // TODO: Support string cookies in capture-website
 			element: options.selector,
 			hideElements: options.hide,
 			scaleFactor: options.scale ?? 1,
