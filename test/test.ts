@@ -1,4 +1,3 @@
-import type {Buffer} from 'node:buffer';
 import process from 'node:process';
 import fs from 'node:fs';
 import fsPromises from 'node:fs/promises';
@@ -20,8 +19,8 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 const hasScreenshotsWithFilenames = (screenshots: readonly Screenshot[], filenames: readonly string[]): boolean => screenshots.some(screenshot => filenames.includes(screenshot.filename));
 
-const getPngPixels = async (buffer: Buffer): Promise<Buffer> => {
-	const png = new PNG(buffer);
+const getPngPixels = async (data: Uint8Array): Promise<Uint8Array> => {
+	const png = new PNG(data);
 	const {pixels} = await pify(png.parse.bind(png))();
 	return pixels;
 };

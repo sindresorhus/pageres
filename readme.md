@@ -242,7 +242,9 @@ Type: `string`
 
 ### pageres.run()
 
-Run pageres. Returns `Promise<Buffer[]>`.
+Run pageres.
+
+Returns `Promise<Uint8Array[]>`.
 
 ## Task runners
 

@@ -1,5 +1,4 @@
 import process from 'node:process';
-import type {Buffer} from 'node:buffer';
 import path from 'node:path';
 import {pathToFileURL} from 'node:url';
 import fs from 'node:fs';
@@ -231,9 +230,9 @@ type Stats = {
 };
 
 /**
-Buffer data representing a screenshot. Includes the filename from the template in {@link Options.filename}.
+Data representing a screenshot. Includes the filename from the template in {@link Options.filename}.
 */
-export type Screenshot = Buffer & {filename: string};
+export type Screenshot = Uint8Array & {filename: string};
 
 const getResolutionsMemoized = pMemoize(getResolutions);
 // @ts-expect-error - TS is not very smart.
@@ -347,7 +346,7 @@ export default class Pageres extends EventEmitter {
 	/**
 	Run pageres.
 
-	@returns List of screenshot buffer data.
+	@returns List of screenshot data.
 
 	@example
 	```
@@ -515,7 +514,7 @@ export default class Pageres extends EventEmitter {
 			};
 		}
 
-		const screenshot = await captureWebsite.buffer(url, finalOptions) as Screenshot;
+		const screenshot = new Uint8Array(await captureWebsite.buffer(url, finalOptions)) as Screenshot;
 		screenshot.filename = filename;
 		return screenshot;
 	}
