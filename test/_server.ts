@@ -17,9 +17,9 @@ export type TestServer = {
 	protocol: string;
 } & http.Server;
 
-const baseCreateServer = (fn: http.RequestListener): (() => Promise<TestServer>) => async (): Promise<TestServer> => {
+const baseCreateServer = (function_: http.RequestListener): (() => Promise<TestServer>) => async (): Promise<TestServer> => {
 	const port = await getPort();
-	const server = http.createServer(fn) as unknown as TestServer;
+	const server = http.createServer(function_) as unknown as TestServer;
 
 	server.host = host;
 	server.port = port;

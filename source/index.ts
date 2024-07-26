@@ -15,10 +15,10 @@ import filenamify from 'filenamify';
 import {unusedFilename} from 'unused-filename';
 import arrayUniq from 'array-uniq';
 import arrayDiffer from 'array-differ';
-import dateFns from 'date-fns';
+import {format as formatDate} from 'date-fns';
 import getResolutions from 'get-res';
 import logSymbols from 'log-symbols';
-import makeDir from 'make-dir';
+import {makeDirectory} from 'make-dir';
 import viewportList from 'viewport-list';
 import template from 'lodash.template';
 import plur from 'plur';
@@ -257,10 +257,10 @@ export default class Pageres extends EventEmitter {
 		this.setMaxListeners(Number.POSITIVE_INFINITY);
 
 		this.#options = {...options};
-		this.#options.filename = this.#options.filename ?? '<%= url %>-<%= size %><%= crop %>';
-		this.#options.format = this.#options.format ?? 'png';
-		this.#options.incrementalName = this.#options.incrementalName ?? false;
-		this.#options.launchOptions = this.#options.launchOptions ?? {};
+		this.#options.filename ??= '<%= url %>-<%= size %><%= crop %>';
+		this.#options.format ??= 'png';
+		this.#options.incrementalName ??= false;
+		this.#options.launchOptions ??= {};
 	}
 
 	/**
@@ -452,9 +452,9 @@ export default class Pageres extends EventEmitter {
 
 	async #save(screenshots: Screenshot[]): Promise<void> {
 		await Promise.all(screenshots.map(async screenshot => {
-			await makeDir(this.destination());
-			const dest = path.join(this.destination(), screenshot.filename);
-			await fsPromises.writeFile(dest, screenshot);
+			await makeDirectory(this.destination());
+			const destination = path.join(this.destination(), screenshot.filename);
+			await fsPromises.writeFile(destination, screenshot);
 		}));
 	}
 
@@ -474,8 +474,8 @@ export default class Pageres extends EventEmitter {
 		const now = Date.now();
 		let filename = filenameTemplate({
 			crop: options.crop ? '-cropped' : '',
-			date: dateFns.format(now, 'yyyy-MM-dd'),
-			time: dateFns.format(now, 'HH-mm-ss'),
+			date: formatDate(now, 'yyyy-MM-dd'),
+			time: formatDate(now, 'HH-mm-ss'),
 			size,
 			width,
 			height,

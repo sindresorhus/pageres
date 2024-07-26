@@ -5,15 +5,14 @@ import {fileURLToPath} from 'node:url';
 import path from 'node:path';
 import test from 'ava';
 import {imageDimensionsFromData} from 'image-dimensions';
-import dateFns from 'date-fns';
+import {format as formatDate} from 'date-fns';
 import PNG from 'png.js';
 import pify from 'pify';
 import {pathExists} from 'path-exists';
 import {stub as sinonStub} from 'sinon';
 import {fileTypeFromBuffer} from 'file-type';
 import Pageres, {type Screenshot} from '../source/index.js';
-import type {TestServer} from './_server.js';
-import {createServer} from './_server.js';
+import {type TestServer, createServer} from './_server.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
@@ -113,7 +112,7 @@ test.serial('success message', async t => {
 	await pageres.run();
 	pageres.successMessage();
 	const [message] = stub.firstCall.args;
-	t.true(message.includes('Generated 3 screenshots from 1 url and 1 size'), message); // eslint-disable-line ava/assertion-arguments, @typescript-eslint/no-unsafe-argument
+	t.true(message.includes('Generated 3 screenshots from 1 url and 1 size'), message); // eslint-disable-line ava/assertion-arguments
 	stub.restore();
 });
 
@@ -164,7 +163,7 @@ test('`filename` option', async t => {
 		.run();
 
 	t.is(screenshots.length, 1);
-	t.regex(screenshots[0].filename, new RegExp(`${dateFns.format(Date.now(), 'yyyy-MM-dd')} - \\d{2}-\\d{2}-\\d{2} - ${server.host}!${server.port}.png`));
+	t.regex(screenshots[0].filename, new RegExp(`${formatDate(Date.now(), 'yyyy-MM-dd')} - \\d{2}-\\d{2}-\\d{2} - ${server.host}!${server.port}.png`));
 });
 
 test('`selector` option', async t => {

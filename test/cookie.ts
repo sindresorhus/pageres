@@ -15,7 +15,7 @@ async function cookieTest(input: string | Cookie, t: ExecutionContext): Promise<
 
 	server.close();
 
-	const png = new PNG(screenshots[0]!);
+	const png = new PNG(screenshots[0]);
 	const {pixels} = await pify(png.parse.bind(png))();
 
 	t.is(pixels[0], 0);
