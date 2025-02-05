@@ -17,7 +17,6 @@ async function cookieTest(input: string | Cookie, t: ExecutionContext): Promise<
 
 	const screenshots = await new Pageres({cookies: [input]})
 		.source(server.url, [width + 'x' + height])
-		.destination('screenshots')
 		.run();
 
 	server.close();
