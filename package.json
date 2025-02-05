@@ -20,7 +20,7 @@
 		"node": ">=18"
 	},
 	"scripts": {
-		"test": "xo && tsc --noEmit && nyc ava",
+		"test": "xo && tsc --noEmit && nyc ava --timeout=2m",
 		"release": "np",
 		"build": "del-cli dist && tsc",
 		"prepare": "npm run build"
