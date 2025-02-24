@@ -471,7 +471,7 @@ export default class Pageres extends EventEmitter {
 
 		const now = Date.now();
 		const eta = new Eta({
-			//To get rid of the Eta's `it` in the template, all option names must be listed here
+			// To get rid of the Eta's `it` in the template, all option names must be listed here
 			functionHeader: 'const crop=it.crop, date=it.date, time=it.time, size=it.size, width=it.width, height=it.height, url=it.url',
 		});
 		let filename = eta.renderString(`${options.filename!}.${options.format!}`, {
