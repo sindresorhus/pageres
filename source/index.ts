@@ -20,7 +20,7 @@ import getResolutions from 'get-res';
 import logSymbols from 'log-symbols';
 import {makeDirectory} from 'make-dir';
 import viewportList from 'viewport-list';
-import template from 'lodash.template';
+import {Eta} from 'eta';
 import plur from 'plur';
 import filenamifyUrl from 'filenamify-url';
 import pMap from 'p-map';
@@ -469,10 +469,12 @@ export default class Pageres extends EventEmitter {
 
 		const [width, height] = size.split('x');
 
-		const filenameTemplate = template(`${options.filename!}.${options.format!}`);
-
 		const now = Date.now();
-		let filename = filenameTemplate({
+		const eta = new Eta({
+			//To get rid of the Eta's `it` in the template, all option names must be listed here
+			functionHeader: 'const crop=it.crop, date=it.date, time=it.time, size=it.size, width=it.width, height=it.height, url=it.url',
+		});
+		let filename = eta.renderString(`${options.filename!}.${options.format!}`, {
 			crop: options.crop ? '-cropped' : '',
 			date: formatDate(now, 'yyyy-MM-dd'),
 			time: formatDate(now, 'HH-mm-ss'),
