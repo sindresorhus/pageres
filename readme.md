@@ -77,7 +77,7 @@ Apply custom JavaScript to the webpage. Specify some JavaScript or the path to a
 
 Type: `Array<string | object>`
 
-A string with the same format as a [browser cookie](https://developer.mozilla.org/en-US/docs/Web/HTTP/Cookies) or [an object](https://github.com/GoogleChrome/puppeteer/blob/master/docs/api.md#pagesetcookiecookies).
+A string with the same format as a [browser cookie](https://developer.mozilla.org/docs/Web/HTTP/Cookies) or [an object](https://github.com/GoogleChrome/puppeteer/blob/master/docs/api.md#pagesetcookiecookies).
 
 Tip: Go to the website you want a cookie for and [copy-paste it from DevTools](https://stackoverflow.com/a/24961735/64949).
 
