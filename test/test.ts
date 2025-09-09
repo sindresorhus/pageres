@@ -177,15 +177,41 @@ test('`selector` option', async t => {
 
 test('`clickElement` option', async t => {
 	// Test without clickElement - red modal should be visible
-	const screenshotWithModal = await new Pageres().source(path.join(__dirname, 'fixture-clickable.html'), ['300x200']).run();
+	const screenshotWithModal = await new Pageres({delay: 1}).source(path.join(__dirname, 'fixture-clickable.html'), ['300x200']).run();
 	const pixelsWithModal = await getPngPixels(screenshotWithModal[0]);
 
 	// Test with clickElement - modal should be hidden after clicking close button
-	const screenshotWithoutModal = await new Pageres({clickElement: '#close-button'}).source(path.join(__dirname, 'fixture-clickable.html'), ['300x200']).run();
+	const screenshotWithoutModal = await new Pageres({clickElement: '#close-button', delay: 1}).source(path.join(__dirname, 'fixture-clickable.html'), ['300x200']).run();
 	const pixelsWithoutModal = await getPngPixels(screenshotWithoutModal[0]);
 
-	// The screenshots should be different (modal hidden vs visible)
-	t.not(pixelsWithModal[0], pixelsWithoutModal[0]);
+	// Look for red pixels (modal background) in the first screenshot
+	let hasRedPixels = false;
+	for (let i = 0; i < pixelsWithModal.length; i += 4) {
+		const r = pixelsWithModal[i];
+		const g = pixelsWithModal[i + 1];
+		const b = pixelsWithModal[i + 2];
+		if (r > 200 && g < 50 && b < 50) { // Red pixel
+			hasRedPixels = true;
+			break;
+		}
+	}
+
+	// Look for red pixels in the second screenshot (should be fewer/none)
+	let hasRedPixelsAfterClick = false;
+	for (let i = 0; i < pixelsWithoutModal.length; i += 4) {
+		const r = pixelsWithoutModal[i];
+		const g = pixelsWithoutModal[i + 1];
+		const b = pixelsWithoutModal[i + 2];
+		if (r > 200 && g < 50 && b < 50) { // Red pixel
+			hasRedPixelsAfterClick = true;
+			break;
+		}
+	}
+
+	// The first screenshot should have red pixels (modal visible)
+	// The second screenshot should have fewer or no red pixels (modal hidden)
+	t.true(hasRedPixels, 'Modal should be visible before clicking');
+	t.false(hasRedPixelsAfterClick, 'Modal should be hidden after clicking close button');
 });
 
 test.serial('support local relative files', async t => {

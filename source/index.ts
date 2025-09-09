@@ -489,12 +489,20 @@ export default class Pageres extends EventEmitter {
 	}
 
 	async #create(url: string, size: string, options: InternalOptions): Promise<Screenshot> {
-		const basename = fs.existsSync(url) ? path.basename(url) : url;
+		let basename: string;
+		let hash = '';
 
-		let hash = new URL(url, pathToFileURL(process.cwd())).hash ?? '';
-		// Strip empty hash fragments: `#` `#/` `#!/`
-		if (/^#!?\/?$/.test(hash)) {
-			hash = '';
+		// Handle HTML input differently from URLs
+		if (options.inputType === 'html') {
+			basename = 'html';
+		} else {
+			basename = fs.existsSync(url) ? path.basename(url) : url;
+
+			hash = new URL(url, pathToFileURL(process.cwd())).hash ?? '';
+			// Strip empty hash fragments: `#` `#/` `#!/`
+			if (/^#!?\/?$/.test(hash)) {
+				hash = '';
+			}
 		}
 
 		const [width, height] = size.split('x');
@@ -509,7 +517,7 @@ export default class Pageres extends EventEmitter {
 			size,
 			width,
 			height,
-			url: `${filenamifyUrl(basename)}${filenamify(hash)}`,
+			url: options.inputType === 'html' ? `${filenamify(basename)}${filenamify(hash)}` : `${filenamifyUrl(basename)}${filenamify(hash)}`,
 		});
 
 		if (options.incrementalName) {
