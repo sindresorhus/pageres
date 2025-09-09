@@ -255,6 +255,20 @@ test('support data URL', async t => {
 	t.is(fileType?.mime, 'image/png');
 });
 
+test('support HTML input directly using sourceHtml', async t => {
+	const htmlString = '<html><body style="background: blue; width: 100px; height: 50px;"><h1>Direct HTML</h1></body></html>';
+	const screenshots = await new Pageres().sourceHtml(htmlString, ['100x100']).run();
+
+	t.is(screenshots.length, 1);
+	t.true(screenshots[0].length > 0);
+
+	const fileType = await fileTypeFromBuffer(screenshots[0]);
+	t.is(fileType?.mime, 'image/png');
+
+	// The filename should be derived from HTML content (or some default)
+	t.true(screenshots[0].filename.includes('.png'));
+});
+
 test('`format` option', async t => {
 	const screenshots = await new Pageres().source(server.url, ['100x100'], {format: 'jpg'}).run();
 	const fileType = await fileTypeFromBuffer(screenshots[0]);

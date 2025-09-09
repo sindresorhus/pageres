@@ -24,6 +24,7 @@ await new Pageres({delay: 2})
 	.source('https://github.com/sindresorhus/pageres', ['480x320', '1024x768'], {crop: true})
 	.source('https://sindresorhus.com', ['1280x1024', '1920x1080'])
 	.source('data:text/html,<h1>Awesome!</h1>', ['1024x768'])
+	.sourceHtml('<h1>Direct HTML!</h1>', ['1024x768'])
 	.destination('screenshots')
 	.run();
 
@@ -220,6 +221,34 @@ Add a page to screenshot.
 Type: `string`
 
 URL or local path to the website you want to screenshot. You can also use a data URI.
+
+#### sizes
+
+*Required*\
+Type: `string[]`
+
+Use a `<width>x<height>` notation or a keyword.
+
+A keyword is a version of a device from [this list](https://github.com/kevva/viewport-list/blob/master/data.json).
+
+You can also pass in the `w3counter` keyword to use the ten most popular resolutions from [w3counter](http://www.w3counter.com/globalstats.php).
+
+#### options
+
+Type: `object`
+
+Options set here will take precedence over the ones set in the constructor.
+
+### pageres.sourceHtml(html, sizes, options?)
+
+Capture a screenshot of rendered HTML.
+
+#### html
+
+*Required*\
+Type: `string`
+
+HTML string to render and screenshot.
 
 #### sizes
 

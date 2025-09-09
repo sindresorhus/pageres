@@ -198,6 +198,13 @@ export type Options = {
 };
 
 /**
+Internal options that include inputType for HTML sources.
+*/
+type InternalOptions = Options & {
+	readonly inputType?: 'url' | 'html';
+};
+
+/**
 A page to screenshot added in {@link Pageres.source}.
 */
 export type Source = {
@@ -214,7 +221,7 @@ export type Source = {
 	/**
 	Options which will take precedence over the ones set in the constructor.
 	*/
-	readonly options?: Options;
+	readonly options?: InternalOptions;
 };
 
 /**
@@ -311,6 +318,41 @@ export default class Pageres extends EventEmitter {
 		}
 
 		this.#_source.push({url, sizes, options});
+
+		return this;
+	}
+
+	/**
+	Capture a screenshot of rendered HTML.
+	@param html - HTML string to render and screenshot.
+	@param sizes - Use a `<width>x<height>` notation or a keyword.
+
+	A keyword is a version of a device from [this list](https://github.com/kevva/viewport-list/blob/master/data.json).
+
+	You can also pass in the `w3counter` keyword to use the ten most popular resolutions from [w3counter](http://www.w3counter.com/globalstats.php).
+	@param options - Options set here will take precedence over the ones set in the constructor.
+
+	@example
+	```
+	import Pageres from 'pageres';
+
+	const pageres = new Pageres({delay: 2})
+		.sourceHtml('<h1>Hello World</h1>', ['480x320', '1024x768'])
+		.sourceHtml('<div style="background: red;">Test</div>', ['1280x1024', '1920x1080']);
+	```
+	*/
+	sourceHtml(html: string, sizes: readonly string[], options?: Options): this {
+		if (!(typeof html === 'string' && html.length > 0)) {
+			throw new TypeError('HTML required');
+		}
+
+		if (!(Array.isArray(sizes) && sizes.length > 0)) {
+			throw new TypeError('Sizes required');
+		}
+
+		// Add the HTML source with inputType set to 'html'
+		const optionsWithHtmlType = {...options, inputType: 'html' as const};
+		this.#_source.push({url: html, sizes, options: optionsWithHtmlType});
 
 		return this;
 	}
@@ -463,7 +505,7 @@ export default class Pageres extends EventEmitter {
 		}));
 	}
 
-	async #create(url: string, size: string, options: Options): Promise<Screenshot> {
+	async #create(url: string, size: string, options: InternalOptions): Promise<Screenshot> {
 		const basename = fs.existsSync(url) ? path.basename(url) : url;
 
 		let hash = new URL(url, pathToFileURL(process.cwd())).hash ?? '';
@@ -492,6 +534,7 @@ export default class Pageres extends EventEmitter {
 		}
 
 		const finalOptions: Writable<CaptureWebsiteOptions> = {
+			inputType: options.inputType,
 			width: Number(width),
 			height: Number(height),
 			delay: options.delay,
