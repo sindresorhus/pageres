@@ -4,7 +4,6 @@ import http from 'node:http';
 import {fileURLToPath} from 'node:url';
 import cookie from 'cookie';
 import getPort from 'get-port';
-import pify from 'pify';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
@@ -15,7 +14,18 @@ export type TestServer = {
 	port: number;
 	url: string;
 	protocol: string;
-} & http.Server;
+	close: () => Promise<void>;
+} & Omit<http.Server, 'close'>;
+
+const promisifyClose = (originalClose: http.Server['close']): (() => Promise<void>) => async () => new Promise((resolve, reject) => {
+	originalClose((error?: Error) => {
+		if (error) {
+			reject(error);
+		} else {
+			resolve();
+		}
+	});
+});
 
 const baseCreateServer = (function_: http.RequestListener): (() => Promise<TestServer>) => async (): Promise<TestServer> => {
 	const port = await getPort();
@@ -26,8 +36,8 @@ const baseCreateServer = (function_: http.RequestListener): (() => Promise<TestS
 	server.url = `http://${host}:${port}`;
 	server.protocol = 'http';
 	server.listen(port);
-	// @ts-expect-error - The `pify` types are not strict.
-	server.close = pify(server.close) as typeof server.close;
+	const originalClose = (server as unknown as http.Server).close.bind(server);
+	server.close = promisifyClose(originalClose);
 
 	return server;
 };

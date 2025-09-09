@@ -20,7 +20,7 @@
 		"node": ">=20"
 	},
 	"scripts": {
-		"test": "xo && tsc --noEmit && nyc ava --timeout=2m",
+		"test": "xo && tsc --noEmit && tsx --test test/*.ts",
 		"release": "np",
 		"build": "del-cli dist && tsc",
 		"prepare": "npm run build"
@@ -79,30 +79,16 @@
 		"@types/lodash": "^4.17.20",
 		"@types/node": "^24.3.1",
 		"@types/png.js": "^0.2.3",
-		"@types/sinon": "^17.0.4",
-		"ava": "^6.4.1",
 		"cookie": "^1.0.2",
 		"del-cli": "^6.0.0",
 		"file-type": "^21.0.0",
 		"get-port": "^7.1.0",
 		"image-dimensions": "^2.5.0",
-		"nyc": "^17.1.0",
 		"path-exists": "^5.0.0",
-		"pify": "^6.1.0",
 		"png.js": "^0.2.1",
-		"sinon": "^21.0.0",
 		"tsx": "^4.20.5",
 		"typescript": "^5.9.2",
 		"xo": "^1.2.2"
-	},
-	"ava": {
-		"workerThreads": false,
-		"extensions": {
-			"ts": "module"
-		},
-		"nodeArguments": [
-			"--import=tsx/esm"
-		]
 	},
 	"xo": {
 		"rules": {
@@ -115,14 +101,5 @@
 			"n/file-extension-in-import": "off",
 			"@typescript-eslint/no-unsafe-argument": "off"
 		}
-	},
-	"nyc": {
-		"reporter": [
-			"text",
-			"lcov"
-		],
-		"extension": [
-			".ts"
-		]
 	}
 }

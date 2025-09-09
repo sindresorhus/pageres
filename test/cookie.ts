@@ -1,12 +1,25 @@
-import test, {type ExecutionContext} from 'ava';
+import {test, describe} from 'node:test';
+import assert from 'node:assert/strict';
 import PNG from 'png.js';
-import pify from 'pify';
 import Pageres from '../source/index.js';
 import {createCookieServer} from './_server.js';
 
 type Cookie = Record<string, string>;
 
-async function cookieTest(input: string | Cookie, t: ExecutionContext): Promise<void> {
+const parsePng = async (data: Uint8Array): Promise<{pixels: Uint8Array}> => {
+	const png = new PNG(data);
+	return new Promise((resolve, reject) => {
+		png.parse((error: Error | undefined, result: any) => {
+			if (error) {
+				reject(error);
+			} else {
+				resolve(result);
+			}
+		});
+	});
+};
+
+async function cookieTest(input: string | Cookie): Promise<void> {
 	const server = await createCookieServer();
 	// Width of the screenshot
 	const width = 320;
@@ -15,28 +28,35 @@ async function cookieTest(input: string | Cookie, t: ExecutionContext): Promise<
 	// Bits per pixel
 	const bpp = 24;
 
-	const screenshots = await new Pageres({cookies: [input]})
-		.source(server.url, [width + 'x' + height])
-		.run();
+	try {
+		const screenshots = await new Pageres({cookies: [input]})
+			.source(server.url, [width + 'x' + height])
+			.run();
 
-	server.close();
+		const {pixels} = await parsePng(screenshots[0]);
 
-	const png = new PNG(screenshots[0]);
-	const {pixels} = await pify(png.parse.bind(png))();
+		// Validate image size
+		assert.equal(pixels.length, width * height * bpp / 8);
 
-	// Validate image size
-	t.is(pixels.length, width * height * bpp / 8);
-
-	// Validate pixel color
-	t.is(pixels[0], 64);
-	t.is(pixels[1], 128);
-	t.is(pixels[2], 255);
+		// Validate pixel color
+		assert.equal(pixels[0], 64);
+		assert.equal(pixels[1], 128);
+		assert.equal(pixels[2], 255);
+	} finally {
+		await server.close();
+	}
 }
 
-test('send cookie', cookieTest.bind(null, 'pageresColor=rgb(64 128 255); Path=/; Domain=localhost'));
+void describe('cookies', () => {
+	void test('send cookie', async () => {
+		await cookieTest('pageresColor=rgb(64 128 255); Path=/; Domain=localhost');
+	});
 
-test('send cookie using an object', cookieTest.bind(null, {
-	name: 'pageresColor',
-	value: 'rgb(64 128 255)',
-	domain: 'localhost',
-}));
+	void test('send cookie using an object', async () => {
+		await cookieTest({
+			name: 'pageresColor',
+			value: 'rgb(64 128 255)',
+			domain: 'localhost',
+		});
+	});
+});
