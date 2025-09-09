@@ -203,12 +203,6 @@ test('support local absolute files', async t => {
 	t.true(screenshots[0].length > 1000);
 });
 
-/// test('fetch resolutions from w3counter', async t => {
-// 	const screenshots = await new Pageres().source(server.url, ['w3counter']).run();
-// 	t.is(screenshots.length, 10);
-// 	t.true(screenshots[0].length > 1000);
-// });
-
 test('save image', async t => {
 	try {
 		await new Pageres().source(server.url, ['1024x768']).destination(__dirname).run();

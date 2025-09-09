@@ -16,7 +16,6 @@ import {unusedFilename} from 'unused-filename';
 import arrayUniq from 'array-uniq';
 import arrayDiffer from 'array-differ';
 import {format as formatDate} from 'date-fns';
-import getResolutions from 'get-res';
 import logSymbols from 'log-symbols';
 import {makeDirectory} from 'make-dir';
 import viewportList from 'viewport-list';
@@ -246,7 +245,6 @@ Data representing a screenshot. Includes the filename from the template in {@lin
 */
 export type Screenshot = Uint8Array & {filename: string};
 
-const getResolutionsMemoized = pMemoize(getResolutions);
 // @ts-expect-error - TS is not very smart.
 const viewportListMemoized = pMemoize(viewportList);
 
@@ -288,8 +286,6 @@ export default class Pageres extends EventEmitter {
 	@param sizes - Use a `<width>x<height>` notation or a keyword.
 
 	A keyword is a version of a device from [this list](https://github.com/kevva/viewport-list/blob/master/data.json).
-
-	You can also pass in the `w3counter` keyword to use the ten most popular resolutions from [w3counter](http://www.w3counter.com/globalstats.php).
 	@param options - Options set here will take precedence over the ones set in the constructor.
 
 	@example
@@ -328,8 +324,6 @@ export default class Pageres extends EventEmitter {
 	@param sizes - Use a `<width>x<height>` notation or a keyword.
 
 	A keyword is a version of a device from [this list](https://github.com/kevva/viewport-list/blob/master/data.json).
-
-	You can also pass in the `w3counter` keyword to use the ten most popular resolutions from [w3counter](http://www.w3counter.com/globalstats.php).
 	@param options - Options set here will take precedence over the ones set in the constructor.
 
 	@example
@@ -417,10 +411,6 @@ export default class Pageres extends EventEmitter {
 
 			this.#urls.push(source.url);
 
-			if (sizes.length === 0 && keywords.includes('w3counter')) {
-				return this.#resolution(source.url, options);
-			}
-
 			if (keywords.length > 0) {
 				return this.#viewport({url: source.url, sizes, keywords}, options);
 			}
@@ -477,13 +467,6 @@ export default class Pageres extends EventEmitter {
 		};
 
 		console.log(`\n${logSymbols.success} Generated ${screenshots} ${words.screenshots} from ${urls} ${words.urls} and ${sizes} ${words.sizes}`);
-	}
-
-	async #resolution(url: string, options: Options): Promise<void> {
-		for (const item of await getResolutionsMemoized() as Array<{item: string}>) {
-			this.#sizes.push(item.item);
-			this.#items.push(await this.#create(url, item.item, options));
-		}
 	}
 
 	async #viewport(viewport: Viewport, options: Options): Promise<void> {
