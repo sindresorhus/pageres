@@ -109,6 +109,11 @@ export type Options = {
 	readonly hide?: string[];
 
 	/**
+	Click the DOM element matching the given CSS selector.
+	*/
+	readonly clickElement?: string;
+
+	/**
 	Username for authenticating with HTTP auth.
 	*/
 	readonly username?: string;
@@ -498,6 +503,7 @@ export default class Pageres extends EventEmitter {
 			cookies: options.cookies as any, // TODO: Support string cookies in capture-website
 			element: options.selector,
 			hideElements: options.hide,
+			clickElement: options.clickElement,
 			scaleFactor: options.scale ?? 1,
 			type: options.format === 'jpg' ? 'jpeg' : 'png',
 			userAgent: options.userAgent,

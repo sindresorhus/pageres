@@ -118,6 +118,12 @@ Type: `string[]`
 
 Hide an array of DOM elements matching CSS selectors.
 
+##### clickElement
+
+Type: `string`
+
+Click the DOM element matching the given CSS selector.
+
 ##### username
 
 Type: `string`

@@ -175,6 +175,19 @@ test('`selector` option', async t => {
 	t.is(size.height, 80);
 });
 
+test('`clickElement` option', async t => {
+	// Test without clickElement - red modal should be visible
+	const screenshotWithModal = await new Pageres().source(path.join(__dirname, 'fixture-clickable.html'), ['300x200']).run();
+	const pixelsWithModal = await getPngPixels(screenshotWithModal[0]);
+
+	// Test with clickElement - modal should be hidden after clicking close button
+	const screenshotWithoutModal = await new Pageres({clickElement: '#close-button'}).source(path.join(__dirname, 'fixture-clickable.html'), ['300x200']).run();
+	const pixelsWithoutModal = await getPngPixels(screenshotWithoutModal[0]);
+
+	// The screenshots should be different (modal hidden vs visible)
+	t.not(pixelsWithModal[0], pixelsWithoutModal[0]);
+});
+
 test.serial('support local relative files', async t => {
 	const _cwd = process.cwd();
 	process.chdir(__dirname);

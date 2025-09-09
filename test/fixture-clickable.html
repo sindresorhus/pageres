@@ -1,0 +1,23 @@
+<html>
+<head>
+	<style>
+	body { margin: 0; padding: 20px; }
+	#modal { background: red; width: 200px; height: 100px; position: absolute; top: 20px; left: 20px; }
+	#close-button { background: blue; color: white; border: none; padding: 10px; cursor: pointer; }
+	#content { background: green; width: 100px; height: 50px; margin-top: 10px; }
+	.hidden { display: none !important; }
+	</style>
+</head>
+<body>
+	<div id="modal">
+		<button id="close-button" onclick="closeModal()">Close Modal</button>
+	</div>
+	<div id="content">Content underneath</div>
+	
+	<script>
+	function closeModal() {
+		document.getElementById('modal').classList.add('hidden');
+	}
+	</script>
+</body>
+</html>
