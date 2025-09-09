@@ -61,7 +61,7 @@ test('`.destination()` - error if no correct `directory` is specified', t => {
 
 test('generate screenshots', async t => {
 	const screenshots = await new Pageres()
-		.source(server.url, ['480x320', '1024x768', 'iphone 5s'])
+		.source(server.url, ['480x320', '1024x768', '320x568'])
 		.source(server.url, ['1280x1024', '1920x1080'])
 		.run();
 
@@ -108,11 +108,11 @@ test('save filename with hash', async t => {
 
 test.serial('success message', async t => {
 	const stub = sinonStub(console, 'log');
-	const pageres = new Pageres().source(server.url, ['480x320', '1024x768', 'iphone 5s']);
+	const pageres = new Pageres().source(server.url, ['480x320', '1024x768', '320x568']);
 	await pageres.run();
 	pageres.successMessage();
 	const [message] = stub.firstCall.args;
-	t.true(message.includes('Generated 3 screenshots from 1 url and 1 size'), message); // eslint-disable-line ava/assertion-arguments
+	t.true(message.includes('Generated 3 screenshots from 1 url and 3 sizes'), message); // eslint-disable-line ava/assertion-arguments
 	stub.restore();
 });
 

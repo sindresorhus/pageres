@@ -10,7 +10,6 @@ import captureWebsite, {
 	type BeforeScreenshot,
 	type LaunchOptions,
 } from 'capture-website';
-import pMemoize from 'p-memoize';
 import filenamify from 'filenamify';
 import {unusedFilename} from 'unused-filename';
 import arrayUniq from 'array-uniq';
@@ -18,7 +17,6 @@ import arrayDiffer from 'array-differ';
 import {format as formatDate} from 'date-fns';
 import logSymbols from 'log-symbols';
 import {makeDirectory} from 'make-dir';
-import viewportList from 'viewport-list';
 import _ from 'lodash';
 import plur from 'plur';
 import filenamifyUrl from 'filenamify-url';
@@ -213,7 +211,7 @@ export type Source = {
 	readonly url: string;
 
 	/**
-	Size of screenshot. Uses `<width>x<height>` notation or a keyword.
+	Size of screenshot. Uses `<width>x<height>` notation.
 	*/
 	readonly sizes: string[];
 
@@ -228,12 +226,6 @@ A destination directory set in {@link Pageres.destination}.
 */
 export type Destination = string;
 
-export type Viewport = {
-	readonly url: string;
-	readonly sizes: string[];
-	readonly keywords: string[];
-};
-
 type Stats = {
 	urls: number;
 	sizes: number;
@@ -244,9 +236,6 @@ type Stats = {
 Data representing a screenshot. Includes the filename from the template in {@link Options.filename}.
 */
 export type Screenshot = Uint8Array & {filename: string};
-
-// @ts-expect-error - TS is not very smart.
-const viewportListMemoized = pMemoize(viewportList);
 
 /**
 Capture screenshots of websites in various resolutions. A good way to make sure your websites are responsive. It's speedy and generates 100 screenshots from 10 different websites in just over a minute. It can also be used to render SVG images.
@@ -283,9 +272,7 @@ export default class Pageres extends EventEmitter {
 	/**
 	Add a page to screenshot.
 	@param url - URL or local path to the website you want to screenshot. You can also use a data URI.
-	@param sizes - Use a `<width>x<height>` notation or a keyword.
-
-	A keyword is a version of a device from [this list](https://github.com/kevva/viewport-list/blob/master/data.json).
+	@param sizes - Use a `<width>x<height>` notation.
 	@param options - Options set here will take precedence over the ones set in the constructor.
 
 	@example
@@ -321,9 +308,7 @@ export default class Pageres extends EventEmitter {
 	/**
 	Capture a screenshot of rendered HTML.
 	@param html - HTML string to render and screenshot.
-	@param sizes - Use a `<width>x<height>` notation or a keyword.
-
-	A keyword is a version of a device from [this list](https://github.com/kevva/viewport-list/blob/master/data.json).
+	@param sizes - Use a `<width>x<height>` notation.
 	@param options - Options set here will take precedence over the ones set in the constructor.
 
 	@example
@@ -407,13 +392,13 @@ export default class Pageres extends EventEmitter {
 			};
 
 			const sizes = arrayUniq(source.sizes.filter(size => /^\d{2,4}x\d{2,4}$/i.test(size)));
-			const keywords = arrayDiffer(source.sizes, sizes);
+			const invalidSizes = arrayDiffer(source.sizes, sizes);
+
+			if (invalidSizes.length > 0) {
+				throw new Error(`Invalid size specifications: ${invalidSizes.join(', ')}. Only direct size specifications like '1024x768' are supported.`);
+			}
 
 			this.#urls.push(source.url);
-
-			if (keywords.length > 0) {
-				return this.#viewport({url: source.url, sizes, keywords}, options);
-			}
 
 			const screenshots = await pMap(
 				sizes,
@@ -467,17 +452,6 @@ export default class Pageres extends EventEmitter {
 		};
 
 		console.log(`\n${logSymbols.success} Generated ${screenshots} ${words.screenshots} from ${urls} ${words.urls} and ${sizes} ${words.sizes}`);
-	}
-
-	async #viewport(viewport: Viewport, options: Options): Promise<void> {
-		for (const item of await viewportListMemoized(viewport.keywords) as Array<{size: string}>) {
-			this.#sizes.push(item.size);
-			viewport.sizes.push(item.size);
-		}
-
-		for (const size of arrayUniq(viewport.sizes)) {
-			this.#items.push(await this.#create(viewport.url, size, options));
-		}
 	}
 
 	async #save(screenshots: Screenshot[]): Promise<void> {

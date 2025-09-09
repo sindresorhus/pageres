@@ -204,7 +204,7 @@ await new Pageres({
 		await page.waitForSelector('.finished');
 	}
 })
-	.source('https://github.com/sindresorhus/pageres', ['480x320', '1024x768', 'iphone 5s'], {crop: true})
+	.source('https://github.com/sindresorhus/pageres', ['480x320', '1024x768'], {crop: true})
 	.destination('screenshots')
 	.run();
 
@@ -227,9 +227,7 @@ URL or local path to the website you want to screenshot. You can also use a data
 *Required*\
 Type: `string[]`
 
-Use a `<width>x<height>` notation or a keyword.
-
-A keyword is a version of a device from [this list](https://github.com/kevva/viewport-list/blob/master/data.json).
+Use a `<width>x<height>` notation.
 
 #### options
 
@@ -253,9 +251,7 @@ HTML string to render and screenshot.
 *Required*\
 Type: `string[]`
 
-Use a `<width>x<height>` notation or a keyword.
-
-A keyword is a version of a device from [this list](https://github.com/kevva/viewport-list/blob/master/data.json).
+Use a `<width>x<height>` notation.
 
 #### options
 

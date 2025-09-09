@@ -69,11 +69,9 @@
 		"log-symbols": "^7.0.1",
 		"make-dir": "^5.0.0",
 		"p-map": "^7.0.3",
-		"p-memoize": "^8.0.0",
 		"plur": "^5.1.0",
 		"type-fest": "^4.41.0",
-		"unused-filename": "^4.0.1",
-		"viewport-list": "^5.1.1"
+		"unused-filename": "^4.0.1"
 	},
 	"devDependencies": {
 		"@sindresorhus/tsconfig": "^8.0.1",
@@ -82,7 +80,6 @@
 		"@types/node": "^24.3.1",
 		"@types/png.js": "^0.2.3",
 		"@types/sinon": "^17.0.4",
-		"@types/viewport-list": "^5.1.3",
 		"ava": "^6.4.1",
 		"cookie": "^1.0.2",
 		"del-cli": "^6.0.0",
