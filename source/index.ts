@@ -19,7 +19,7 @@ import {format as formatDate} from 'date-fns';
 import logSymbols from 'log-symbols';
 import {makeDirectory} from 'make-dir';
 import viewportList from 'viewport-list';
-import template from 'lodash.template';
+import _ from 'lodash';
 import plur from 'plur';
 import filenamifyUrl from 'filenamify-url';
 import pMap from 'p-map';
@@ -499,7 +499,7 @@ export default class Pageres extends EventEmitter {
 
 		const [width, height] = size.split('x');
 
-		const filenameTemplate = template(`${options.filename!}.${options.format!}`);
+		const filenameTemplate = _.template(`${options.filename!}.${options.format!}`);
 
 		const now = Date.now();
 		let filename = filenameTemplate({
